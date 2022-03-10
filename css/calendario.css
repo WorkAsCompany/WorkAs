@@ -1,0 +1,211 @@
+#calendarioFestivos {
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    align-items: center;
+    width: 1300px;
+    height: 700px;
+    margin: 0 auto;
+    box-shadow: 6px 6px 12px black;
+    border-radius: 25px 0px 0px 25px;
+}
+
+#tituloCal {
+    color: #00365A;
+    text-align: center;
+    margin-bottom: 0.3em;
+}
+
+#calendarioInfo {
+    width: 500px;
+    height: 700px;
+    padding: 1em;
+    color: white;
+    background-color: #008b8b;
+    border-radius: 25px 0px 0px 25px;
+    font-size: 17px;
+}
+
+#calendarioInfo>div:first-of-type {
+    text-align: end;
+    font-size: 35px;
+    margin-bottom: 3.5em;
+    padding: 0em;
+}
+
+#calendarioInfo div div {
+    padding: .5em;
+}
+
+#calendarioGeneral {
+    width: 800px;
+    height: 700px;
+    padding: 3em;
+    background-color: rgb(240, 196, 196);
+}
+
+#calendarioGeneral h2 {
+    text-align: end;
+    font-size: 32px;
+    color: #008b8b;
+}
+
+#calendarioGeneral .enlMesesCalendario {
+    margin: 5em 0em 1em 0em;
+    text-align: center;
+    background-color: lightseagreen;
+    padding: .5em;
+    border-radius: 10px;
+}
+
+#calendarioGeneral .enlMesesCalendario span {
+    padding: 0em .3em;
+    font-weight: bold;
+    font-size: 17px;
+    color: black;
+}
+
+#calendarioGeneral .enlMesesCalendario span:hover {
+    color: darkviolet;
+    cursor: pointer;
+}
+
+#infoDiaSelec div {
+    padding: 1em;
+}
+
+#calendarioMes {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.calendarioDia {
+    width: 150px;
+    display: flex;
+    justify-content: center;
+    margin: 2em;
+}
+
+.atributo {
+    font-weight: bold;
+    font-size: 19px;
+}
+
+.calendario {
+    /* el contenedor */
+    color: #000;
+    background: #EDEDEF;
+    background: -webkit-gradient(linear, left top, left bottom, from(#EDEDEF), to(#CCC));
+    background: -moz-linear-gradient(top, #EDEDEF, #CCC);
+    font-family: Arial Black, Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    padding-top: 5px;
+    position: relative;
+    text-align: center;
+    text-shadow: #FFF 0 1px 0;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    -moz-box-shadow: 0 2px 2px #888;
+    -webkit-box-shadow: 0 2px 2px #888;
+    box-shadow: 0 2px 2px #888;
+    /* esto define el tamaño */
+    font-size: 30px;
+    line-height: 60px;
+    width: 80px;
+    /* si se quiere mas pequeño, se pueden usar otros valores: 20px 40px y 50px respectivamente */
+}
+
+.calendario:hover {
+    cursor: pointer;
+    box-shadow: 4px 4px 8px black;
+    -webkit-transform: scale(1.1);
+    transform: scale(1.15);
+    transition: .5s;
+}
+
+.calendario em {
+    /* el mes */
+    background: #04599A;
+    background: -webkit-gradient(linear, left top, left bottom, from(#04599A), to(#00365A));
+    background: -moz-linear-gradient(top, #04599A, #00365A);
+    color: #FFF;
+    display: block;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    text-shadow: #00365A 0 -1px 0;
+    -moz-border-radius-bottomright: 3px;
+    -webkit-border-bottom-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    -moz-border-radius-bottomleft: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-top: 1px solid #00365A;
+    line-height: 30px;
+    /* esto define la altura */
+}
+
+.calendario:before,
+.calendario:after {
+    /* los anillos superiores */
+    background: #111;
+    content: '';
+    float: left;
+    position: absolute;
+    z-index: 1;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    -moz-box-shadow: 0 1px 1px #FFF;
+    -webkit-box-shadow: 0 1px 1px #FFF;
+    box-shadow: 0 1px 1px #FFF;
+    /* esto define el tamaño */
+    height: 8px;
+    top: 5px;
+    width: 8px;
+    /* si se quiere mas pequeño, se pueden usar otros valores: 6px 4px y 6px respectivamente */
+}
+
+.calendario:before {
+    left: 11px;
+    /* o 7px si es pequeño */
+}
+
+.calendario:after {
+    right: 11px;
+    /* o 7px si es pequeño */
+}
+
+.calendario em:before,
+.calendario em:after {
+    /*los círculos */
+    background: #DADADA;
+    background: -webkit-gradient(linear, left top, left bottom, from(#F1F1F1), to(#AAA));
+    background: -moz-linear-gradient(top, #F1F1F1, #AAA);
+    content: '';
+    float: left;
+    position: absolute;
+    z-index: 2;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    /* esto define el tamaño */
+    height: 14px;
+    top: -5px;
+    width: 4px;
+    /* si se quiere mas pequeño, se pueden usar otros valores: 10px -3px y 2px respectivamente */
+}
+
+.calendarioBIG em:before {
+    left: 13px;
+    /* o 9px si es pequeño */
+}
+
+.calendarioBIG em:after {
+    right: 13px;
+    /* o 9px si es pequeño */
+}
