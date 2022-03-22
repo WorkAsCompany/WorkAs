@@ -23,6 +23,7 @@ window.onload = function() {
             workas.asignarEvComprobarFormTiempoReal();
             workas.asignarEvComprobarInputRequeridos();
             workas.asignarEvIniciarSesionRegistro("inicioEmpleado");
+            workas.loguearTeclaEnter();
         },
         false
     );
@@ -36,9 +37,12 @@ window.onload = function() {
             workas.asignarEvComprobarFormTiempoReal();
             workas.asignarEvComprobarInputRequeridos();
             workas.asignarEvIniciarSesionRegistro("inicioEmpresa");
+            workas.loguearTeclaEnter();
         },
         false
     );
+
     workas.asignarEvIniciarSesionRegistro("inicioEmpresa");
     workas.cambiarFormRegistrarLogin();
+    workas.loguearTeclaEnter();
 };

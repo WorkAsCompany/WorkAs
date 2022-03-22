@@ -18,6 +18,18 @@ class Workas extends BD_Firebase {
         super();
     }
 
+    //Permite iniciar sesión o registrarse con la tecla enter.
+    loguearTeclaEnter() {
+        var inputs = doc.getElementsByClassName("inputForm");
+        for (let i = 0; i < inputs.length; i++) {
+            inputs[i].addEventListener("keypress", function onEvent(event) {
+                if (event.key === "Enter") {
+                    doc.getElementById("btnLoginRegistrar").click();
+                }
+            });
+        }
+    }
+
     //Muestra el botón empresa como seleccionado y el de empleado como no seleccionado.
     selecBtnEmpresa(btnEmpleado, btnEmpresa) {
         btnEmpleado.classList.remove("seleccionado");
@@ -520,6 +532,7 @@ class Workas extends BD_Firebase {
                 this.cambiarFormRegistrarLogin()
                 this.asignarEvComprobarFormTiempoReal();
                 this.asignarEvComprobarInputRequeridos();
+                this.loguearTeclaEnter();
             },
             false
         );
@@ -543,6 +556,7 @@ class Workas extends BD_Firebase {
                 this.cambiarFormRegistrarLoginEmpleado()
                 this.asignarEvComprobarFormTiempoReal();
                 this.asignarEvComprobarInputRequeridos();
+                this.loguearTeclaEnter();
             },
             false
         );
