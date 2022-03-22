@@ -1,0 +1,98 @@
+* {
+    margin: 0px;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+}
+
+#cabecera {
+    background-color: #08274C;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .5rem 2rem;
+    position: fixed;
+    width: 100%;
+    padding: 0px;
+    padding-left: 40px;
+    z-index: 10;
+}
+
+.navMenu ul {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 750px;
+    flex-direction: row;
+    padding: 0px;
+    text-align: center;
+}
+
+.navMenu ul li {
+    font-weight: bold;
+    width: 100%;
+    position: relative;
+    float: left;
+    margin: 0;
+    padding: 0;
+}
+
+.navMenu ul li a {
+    color: white;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    padding-top: 30px;
+    height: 80px;
+}
+
+.navMenu ul li a:hover {
+    color: white;
+    background-color: #1f4675;
+}
+
+.navMenu ul ul {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    padding: 0;
+}
+
+.navMenu ul ul li {
+    float: none;
+    width: 150px;
+    background-color: #08274C;
+}
+
+.navMenu ul ul a {
+    line-height: 120%;
+    padding: 10px 15px;
+}
+
+.navMenu ul li:hover>ul {
+    display: block;
+    width: 0px;
+}
+
+.logotipo img {
+    width: 60px;
+}
+
+#iconoPerfil img {
+    width: 60px;
+    border: 2px solid rgb(231, 231, 231);
+    border-radius: 100%;
+    background-color: rgb(231, 231, 231);
+    padding: .1em;
+}
+
+#principal {
+    padding-top: 6em;
+}
+
+.nombreEmpresa,
+.nombreEmpleado {
+    color: #BFAC69;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}

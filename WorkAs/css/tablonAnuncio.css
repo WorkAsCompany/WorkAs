@@ -1,0 +1,81 @@
+.tablonAnuncio {
+    width: 850px;
+    min-height: 400px;
+    margin: 0 auto;
+    border: 2px solid #08274c;
+    padding: 2em 3em 2em 3em;
+    border-radius: 30px;
+    box-shadow: 6px 6px 12px black;
+    margin-bottom: 3em;
+    background-color: rgb(248, 255, 255);
+}
+
+.divTituloTablon {
+    padding-bottom: 1em;
+    text-align: center;
+    color: #08274c;
+}
+
+.divImagenTablonIzq {
+    float: left;
+    margin-right: 15px;
+    width: 400px;
+    border-radius: 5px;
+    padding: 0.25em 1em 1em 0em;
+}
+
+.divImagenTablonDrch {
+    float: right;
+    margin-left: 15px;
+    width: 400px;
+    border-radius: 5px;
+    padding: 0.25em 0em 1em 1em;
+}
+
+.divImagenTablonIzq img,
+.divImagenTablonDrch img {
+    width: 100%;
+    border: 5px solid #bfac69;
+    border-radius: 10px;
+}
+
+.divContenido {
+    font-style: italic;
+}
+
+.divContenido:first-letter {
+    float: left;
+    color: #08274c;
+    background-color: rgb(248, 255, 255);
+    font-size: 80px;
+    line-height: 60px;
+    padding: 2px;
+    font-family: times;
+    margin-right: 5px;
+    font-style: initial;
+}
+
+.divFooterTablon {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5em;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 14px;
+    clear: both;
+}
+
+.btnEliminarTablon {
+    position: absolute;
+    background-color: red;
+    padding: .2em;
+    border-radius: 10px;
+    width: 35px;
+}
+
+.btnEliminarTablon:hover {
+    cursor: pointer;
+    background-color: brown;
+    transition: .5s;
+}
