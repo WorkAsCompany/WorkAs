@@ -146,6 +146,12 @@
     width: 100%;
 }
 
+#tablaEmpleados_info {
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow: clip;
+}
+
 ul.dtr-details {
     margin: 0 auto;
 }
