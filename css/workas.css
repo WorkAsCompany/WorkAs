@@ -1,14 +1,161 @@
+* {
+    margin: 0px;
+    box-sizing: border-box;
+    text-decoration: none !important;
+    list-style: none;
+}
+
+*:hover {
+    text-decoration: none;
+}
+
+#contenido {
+ 
+}
+
+.noColapsarContenido {
+    /*resize: both;
+    overflow: auto;*/
+    display: grid;
+    width: 100%;
+    min-height: 100vh;
+    height: 100%;
+    grid-template-rows: 80px repeat(3,1fr);
+    grid-template-columns: 250px repeat(3, 1fr);
+    grid-template-areas:
+    "menu menu menu menu"
+    "asidePrincipal main main main"
+    "asidePrincipal main main main"
+    "asidePrincipal main main main"; 
+}
+
+.colapsarContenido {
+    /*resize: both;
+    overflow: auto;*/
+    display: grid;
+    width: 100%;
+    min-height: 100vh;
+    height: 100%;
+    grid-template-rows: 80px repeat(3,1fr);
+    grid-template-columns: 60px repeat(3,1fr);
+    grid-template-areas:
+    "menu menu menu menu"
+    "asidePrincipal main main main"
+    "asidePrincipal main main main"
+    "asidePrincipal main main main"; 
+}
+
+#tablaEmpleados_wrapper {
+    width: 100%;
+}
+
+@media only screen and (max-width: 991px) {
+    #contenido {
+        grid-template-rows: 80px repeat(3,1fr) 70px;
+        grid-template-columns: repeat(4,1fr);
+        height: 200vh;
+        grid-template-areas:
+        "menu menu menu menu"
+        "main main main main"
+        "main main main main"
+        "main main main main"
+        "asidePrincipal asidePrincipal asidePrincipal asidePrincipal";  
+    }
+
+    .noColapsarContenido {
+        all: unset;
+    }
+
+    .colapsarContenido {
+        all: unset;
+    }
+}
+
+/* TABLA  EMPLEADOS */
+
+#tablaEmpleados_wrapper .row {
+    padding: 20px 0px;
+}
+
+#tablaEmpleados input[type=image] {
+    width: 35px;
+    height: 35px;
+}
+
+#tablaEmpleados thead, #tablaEmpleados tbody tr {
+    height: 55px;
+    width: auto;
+}
+
+#tablaEmpleados thead {
+    background-color: #055759;
+    color: white;
+}
+
+#tablaEmpleados thead th {
+    padding-left: 20px;
+    text-align: center;
+}
+
+#tablaEmpleados thead th:last-child {
+    cursor: unset;
+    width: 10px;   
+}
+
+#tablaEmpleados tbody td:last-child {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+#tablaEmpleados thead th:last-child::before {
+    content: '';
+}
+
+#tablaEmpleados thead th:last-child::after {
+    content: '';
+}
+
+#tablaEmpleados tbody td {
+    text-align: center;
+}
+
+#tablaEmpleados {
+    background-color: white;
+}
+
+/*#tablaEmpleados tbody > tr:nth-child(even) {
+    background: #aaa
+}
+
+#tablaEmpleados tbody > tr:nth-child(odd) {
+    background: #fff
+}*/
+
+#tablaEmpleados td.child {
+    background-color: white;
+}
+
+#tablaEmpleados td.child ul {
+    width: 100%;
+}
+
+#tablaEmpleados td.child li {
+    text-align: left;
+    padding-left: 15px;
+    width: 100%;
+}
+
+ul.dtr-details {
+    margin: 0 auto;
+}
+
+
+/*
 .error {
     color: red;
     text-align: center;
     padding-bottom: 1em;
-}
-
-#imgInicioWorkas {
-    display: block;
-    padding-top: 3em;
-    width: 700px;
-    margin: 0 auto;
 }
 
 .infoMensajeCorrecto {
@@ -71,51 +218,43 @@
 .celda:last-child {
     width: 60px;
 }
-
+*/
 .divBtnEmpleado {
     height: 65px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    flex-direction: row;
     margin-right: .5em;
     width: 70px;
 }
 
-.divBtnEmpleado img {
-    width: 30px;
-    display: flex;
-}
-
 .divBtnEmpleado button {
-    border: none;
-    padding: 0px;
-    margin: 0px;
-    border-radius: 30px;
+
 }
 
-.divBtnEmpleado button:hover {
+.divBtnEmpleado input:hover {
     cursor: pointer;
-    box-shadow: 3px 3px 6px black;
-    transition: .5s;
 }
 
-.btnEditar img {
-    background-color: purple;
-    padding: .2em;
-    border-radius: 10px;
+.btnEditar {
+    background-color: rgb(161, 79, 202);
+    padding: .5em;
+    border-radius: 10px 0px 0px 10px;
+    transition: 0.3s;
 }
 
-.btnEliminar img {
+.btnEliminar {
+    background-color: rgb(255, 81, 81);
+    padding: .5em;
+    border-radius: 0px 10px 10px 0px;
+    transition: 0.3s;
+}
+
+.btnEditar:hover {
+    background-color: rgb(154, 57, 202);
+}
+
+.btnEliminar:hover {
     background-color: red;
-    padding: .2em;
-    border-radius: 10px;
-}
-
-.btnConfirmar img {
-    background-color: green;
-    padding: .2em;
-    border-radius: 10px;
 }
 
 .mensajeInfo {
@@ -123,7 +262,7 @@
     font-size: 20px;
     font-weight: bold;
 }
-
+/*
 #formCrearEmpleado {
     display: flex;
     flex-direction: column;
@@ -288,4 +427,9 @@
     color: #00365A;
     text-align: center;
     margin-bottom: 0.3em;
+}
+*/
+#exampleModal {
+
+    position: absolute;
 }

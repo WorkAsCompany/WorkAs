@@ -1,0 +1,121 @@
+#principal {
+    grid-area: main;
+    padding: 30px;
+    padding-bottom: 7em;
+    background-color: rgb(245, 245, 245);
+    width: 100%;
+    min-height: 100vh;
+    height: 100%;
+}
+
+
+
+/* PERFIL DATOS */
+#cardMostrarDatosEmpresa {
+    margin: 0 auto;
+    letter-spacing: 1.5px;
+    box-shadow: 4px 4px 8px black;
+}
+
+#divImgIconoPerfilDatos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #044546;
+
+}
+
+
+#imgIconoPerfilDatos {
+    border-radius: 100%;
+    width: 200px;
+    height: 200px;
+    border: 2px solid white;
+    background-color: white;
+    margin: 20px;
+}
+
+#cardMostrarDatosEmpresa span {
+    font-weight: bold;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media only screen and (min-width: 992px) {
+    #btnChat {
+        position: fixed;
+        bottom: 30px;
+        right: 45px;
+        background-color: #055759;
+        border-radius: 100%;
+        color: white;
+        padding: 5px 10px;
+        transition: 0.3s;
+        z-index: 100;
+    }
+    
+    #btnChat input { 
+        width: 50px;
+        height: 50px;
+        filter: invert(1);
+    }
+}
+
+#btnChat:hover {
+    transition: 0.3s;
+    background-color: #044647;
+}
+
+#inputBuscar {
+    border: 1px solid black;
+}
+
+#inputBuscar:focus {
+    box-shadow: 0px 0px 0px black;
+    background-color: aliceblue;
+}
+
+#divBtnBuscarInput {
+    background-color: #055759;
+    border: 1px solid black;
+    border-radius: 0px 20px 20px 0px;
+    height: 40px;
+    width: 60px;
+}
+
+#divBtnBuscarInput:hover {
+    background-color: #044546;
+}
+
+#btnBuscarInput {
+    height: 100%;
+    padding: .5em 1em;
+    filter: invert(1);
+}
+
+#slcFiltrarEmpleado {
+    border: 1px solid black;
+}
+
+.modal-header {
+    background-color: #044647;
+    color: white;
+}
+
+.btn-close {
+    filter: invert(1);
+}

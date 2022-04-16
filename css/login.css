@@ -1,406 +1,410 @@
-    * {
-        margin: 0px;
-        box-sizing: border-box;
-        text-decoration: none;
-        list-style: none;
+* {
+    margin: 0px;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+}
+
+.bodyFondo::before {
+    background: none;
+}
+
+@media only screen and (min-width: 750px) {
+    body::before {
+        content: '';
+        background: url(../img/carrusel1.jpg) no-repeat;
+        background-size: cover;
+        filter: blur(10px) brightness(50%);
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: -5;
     }
-    
-    @media only screen and (min-width: 750px) {
-        body::before {
-            content: '';
-            background: url(../img/carrusel1.jpg) no-repeat;
-            background-size: cover;
-            filter: blur(10px) brightness(50%);
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: -5;
-        }
-    }
-    
-    .ocultar {
-        visibility: hidden;
-    }
-    
-    .desaparecer {
-        display: none;
-    }
-    
-    #contenido {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        max-width: 1900px;
-    }
-    
+}
+
+.ocultar {
+    visibility: hidden;
+}
+
+.desaparecer {
+    display: none;
+}
+
+#contenidoFormulario {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    max-width: 1900px;
+}
+
+#infoLogin {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    background: url(../img/fondoEmpresa.jpeg) rgba(8, 39, 76, 0.97);
+    background-size: 100% 100%;
+    background-blend-mode: multiply;
+    width: 32%;
+    height: 800px;
+    border-radius: 20px 0px 0px 20px;
+    color: white;
+    text-align: center;
+    box-shadow: 10px 10px 20px black;
+    padding: 0px 15px;
+}
+
+#infoLogin img {
+    width: 150px;
+}
+
+#btnVolver {
+    transition: .5s;
+    border: 3px solid #BFAC69;
+    background-color: #BFAC69;
+    padding: .5em 3.5em;
+    color: white;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 25px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#btnVolver:hover {
+    transition: .5s;
+    cursor: pointer;
+    color: white;
+    background-color: #806e30;
+    border: 3px solid #806e30;
+    box-shadow: 3px 3px 6px black;
+}
+
+#formLogin {
+    background-color: white;
+    width: 32%;
+    height: 800px;
+    border-radius: 0px 20px 20px 0px;
+    box-shadow: 10px 10px 20px black;
+}
+
+#formLogin .navEmpleadoEmpresa ul {
+    display: flex;
+    justify-content: end;
+    padding: 15px;
+}
+
+#formLogin .navEmpleadoEmpresa ul {
+    display: flex;
+    justify-content: end;
+    padding: 20px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+#enlaceEmpleado {
+    padding: 10px 20px;
+    border-radius: 20px 0px 0px 20px;
+    color: white;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -ms-user-select: none;
+    transition: .1s;
+}
+
+#enlaceEmpleado:hover {
+    cursor: pointer;
+    transition: .1s;
+}
+
+#enlaceEmpresa {
+    padding: 10px 25px;
+    border-radius: 0px 20px 20px 0px;
+    color: white;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -ms-user-select: none;
+    transition: .1s;
+}
+
+#enlaceEmpresa:hover {
+    cursor: pointer;
+    transition: .1s;
+}
+
+.seleccionado {
+    background-color: #BFAC69;
+}
+
+.seleccionado:hover {
+    border: 2px solid #BFAC69;
+}
+
+.noSeleccionado {
+    background-color: #08274c;
+}
+
+.noSeleccionado:hover {
+    border: 2px solid #08274c;
+}
+
+#formulario {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    padding: 0px 20px;
+    height: 600px;
+    margin-top: 50px;
+    min-width: 530px;
+}
+
+#formulario h2 {
+    color: #08274C;
+    font-size: 25px;
+    padding-bottom: 9px;
+}
+
+#formulario fieldset {
+    border: none;
+}
+
+#formulario legend {
+    font-weight: bold;
+    font-size: 17px;
+    color: #2C8CA4;
+}
+
+#formulario input[type="text"],
+#formulario input[type="password"],
+#formulario input[type="email"] {
+    font-size: 15px;
+    width: 90%;
+    border: 0;
+    border-bottom: 2px solid black;
+    outline: none;
+    box-shadow: none;
+}
+
+#formulario input[type="text"]:hover,
+#formulario input[type="password"]:hover,
+#formulario input[type="email"]:hover {
+    box-shadow: none;
+    border-bottom: 2px solid #BFAC69;
+}
+
+#formulario input[type="text"]:focus,
+#formulario input[type="password"]:focus,
+#formulario input[type="email"]:focus {
+    border-bottom: 2px solid #BFAC69;
+    box-shadow: 0px 10px 5px -5px #BFAC69;
+}
+
+#formulario .correcto {
+    border-bottom: 2px solid green !important;
+}
+
+#formulario .incorrecto {
+    border-bottom: 2px solid darkred !important;
+}
+
+#formulario img {
+    width: 15px;
+}
+
+#cpDir fieldset {
+    float: left;
+}
+
+#cpDir fieldset:nth-of-type(1) {
+    width: 57%;
+}
+
+#cpDir fieldset:nth-of-type(2) {
+    width: 36%;
+}
+
+#cpDir fieldset:nth-of-type(2) img {
+    width: 15px;
+    height: 15px;
+}
+
+#formulario .mostrarPsswd {
+    width: 25px;
+    cursor: pointer;
+    border-radius: 100%;
+    padding: 2px;
+    position: relative;
+}
+
+#formulario .mostrarPsswd:hover {
+    box-shadow: 0px 0px 6px 2px #08274c;
+}
+
+#formulario span {
+    color: red;
+    font-size: 13px;
+    font-style: italic;
+    display: block;
+}
+
+#aceptarPoliticas {
+    padding: 10px 0px 0px 10px;
+}
+
+#btnForm {
+    text-align: center;
+}
+
+#btnLoginRegistrar {
+    transition: .5s;
+    border: 3px solid #BFAC69;
+    background-color: azure;
+    color: black;
+    width: 70%;
+    height: 50px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 20px;
+    font-family: 'Times New Roman', Times, serif;
+    margin-bottom: 20px;
+}
+
+#btnLoginRegistrar:hover {
+    transition: .5s;
+    cursor: pointer;
+    color: white;
+    background-color: #BFAC69;
+    box-shadow: 3px 3px 6px black;
+}
+
+#enlRegistrarLogin {
+    text-align: center;
+}
+
+#enlRegistrarLogin a,
+#aceptarPoliticas a {
+    color: #08274C;
+    font-weight: bold;
+}
+
+#enlRegistrarLogin a:hover,
+#aceptarPoliticas a:hover {
+    cursor: pointer;
+    color: indigo;
+}
+
+#checkAceptarPoliticas:hover {
+    cursor: pointer;
+}
+
+#errorLoginSingup {
+    text-align: center;
+}
+
+@media only screen and (max-width: 1650px) {
     #infoLogin {
+        width: 40%;
+    }
+    #formLogin {
+        width: 40%;
+    }
+}
+
+@media only screen and (max-width: 1250px) {
+    #infoLogin {
+        width: 45%;
+    }
+    #formLogin {
+        width: 45%;
+    }
+}
+
+@media only screen and (max-width: 1100px) {
+    #contenidoFormulario {
         display: flex;
-        justify-content: space-around;
-        flex-direction: column;
-        background: url(../img/fondoEmpresa.jpeg) rgba(8, 39, 76, 0.97);
-        background-size: 100% 100%;
-        background-blend-mode: multiply;
-        width: 32%;
+        flex-direction: column-reverse;
+        height: 100%;
+    }
+    #infoLogin {
+        border-radius: 0px;
+        box-shadow: 5px 0px 10px black;
+        width: 70%;
+    }
+    #formLogin {
+        box-shadow: 5px 0px 10px black;
+        border-radius: 0px;
+        width: 70%;
+    }
+}
+
+@media only screen and (max-width: 750px) {
+    #formulario {
+        min-width: 0px;
+    }
+    #infoLogin {
+        box-shadow: 0px 0px 0px black;
+        width: 100%;
+    }
+    #formLogin {
+        box-shadow: 0px 0px 0px black;
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 535px) {
+    #formulario {
         height: 800px;
-        border-radius: 20px 0px 0px 20px;
-        color: white;
-        text-align: center;
-        box-shadow: 10px 10px 20px black;
         padding: 0px 15px;
     }
-    
-    #infoLogin img {
-        width: 150px;
+    #formLogin .navEmpleadoEmpresa ul {
+        justify-content: center;
     }
-    
-    #btnVolver {
-        transition: .5s;
-        border: 3px solid #BFAC69;
-        background-color: #BFAC69;
-        padding: .5em 3.5em;
-        color: white;
-        border-radius: 15px;
-        font-weight: bold;
-        font-size: 25px;
-        font-family: 'Times New Roman', Times, serif;
+    #infoLogin {
+        height: 700px;
     }
-    
-    #btnVolver:hover {
-        transition: .5s;
-        cursor: pointer;
-        color: white;
-        background-color: #806e30;
-        border: 3px solid #806e30;
-        box-shadow: 3px 3px 6px black;
-    }
-    
     #formLogin {
-        background-color: white;
-        width: 32%;
-        height: 800px;
-        border-radius: 0px 20px 20px 0px;
-        box-shadow: 10px 10px 20px black;
+        height: 1000px;
     }
-    
-    #formLogin .navEmpleadoEmpresa ul {
-        display: flex;
-        justify-content: end;
-        padding: 15px;
-    }
-    
-    #formLogin .navEmpleadoEmpresa ul {
-        display: flex;
-        justify-content: end;
-        padding: 20px;
-        font-weight: bold;
-        font-size: 15px;
-    }
-    
-    #enlaceEmpleado {
-        padding: 10px 20px;
-        border-radius: 20px 0px 0px 20px;
-        color: white;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -khtml-user-select: none;
-        -ms-user-select: none;
-        transition: .1s;
-    }
-    
-    #enlaceEmpleado:hover {
-        cursor: pointer;
-        transition: .1s;
-    }
-    
+    #enlaceEmpleado,
     #enlaceEmpresa {
-        padding: 10px 25px;
-        border-radius: 0px 20px 20px 0px;
-        color: white;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -khtml-user-select: none;
-        -ms-user-select: none;
-        transition: .1s;
+        font-size: 13px;
     }
-    
-    #enlaceEmpresa:hover {
-        cursor: pointer;
-        transition: .1s;
+    #cpDir fieldset {
+        float: none;
     }
-    
-    .seleccionado {
-        background-color: #BFAC69;
+    #cpDir fieldset:nth-of-type(1) {
+        width: 100%;
     }
-    
-    .seleccionado:hover {
-        border: 2px solid #BFAC69;
+    #cpDir fieldset:nth-of-type(2) {
+        width: 100%;
     }
-    
-    .noSeleccionado {
-        background-color: #08274c;
+    #formulario span {
+        text-align: start;
     }
-    
-    .noSeleccionado:hover {
-        border: 2px solid #08274c;
+    #btnVolver {
+        padding: .5em 2.5em;
+        font-size: 20px;
     }
-    
-    #formulario {
-        display: flex;
-        justify-content: space-evenly;
-        flex-direction: column;
-        padding: 0px 20px;
-        height: 600px;
-        margin-top: 50px;
-        min-width: 530px;
-    }
-    
-    #formulario h2 {
-        color: #08274C;
-        font-size: 25px;
-        padding-bottom: 9px;
-    }
-    
-    #formulario fieldset {
-        border: none;
-    }
-    
-    #formulario legend {
-        font-weight: bold;
-        font-size: 17px;
-        color: #2C8CA4;
-    }
-    
     #formulario input[type="text"],
     #formulario input[type="password"],
     #formulario input[type="email"] {
-        font-size: 15px;
-        width: 90%;
-        border: 0;
-        border-bottom: 2px solid black;
-        outline: none;
-        box-shadow: none;
+        width: 84%;
     }
-    
-    #formulario input[type="text"]:hover,
-    #formulario input[type="password"]:hover,
-    #formulario input[type="email"]:hover {
-        box-shadow: none;
-        border-bottom: 2px solid #BFAC69;
+}
+
+@media only screen and (max-width: 230px) {
+    #formulario {
+        height: 950px;
+        padding: 0px 15px;
     }
-    
-    #formulario input[type="text"]:focus,
-    #formulario input[type="password"]:focus,
-    #formulario input[type="email"]:focus {
-        border-bottom: 2px solid #BFAC69;
-        box-shadow: 0px 10px 5px -5px #BFAC69;
+    #formLogin {
+        height: 1150px;
     }
-    
-    #formulario .correcto {
-        border-bottom: 2px solid green !important;
+    #enlaceEmpleado,
+    #enlaceEmpresa {
+        font-size: 11px;
     }
-    
-    #formulario .incorrecto {
-        border-bottom: 2px solid darkred !important;
-    }
-    
-    #formulario img {
-        width: 15px;
-    }
-    
-    #cpDir fieldset {
-        float: left;
-    }
-    
-    #cpDir fieldset:nth-of-type(1) {
-        width: 57%;
-    }
-    
-    #cpDir fieldset:nth-of-type(2) {
-        width: 36%;
-    }
-    
-    #cpDir fieldset:nth-of-type(2) img {
-        width: 15px;
-        height: 15px;
-    }
-    
-    #formulario .mostrarPsswd {
-        width: 25px;
-        cursor: pointer;
-        border-radius: 100%;
-        padding: 2px;
-        position: relative;
-    }
-    
-    #formulario .mostrarPsswd:hover {
-        box-shadow: 0px 0px 6px 2px #08274c;
-    }
-    
-    #formulario span {
-        color: red;
-        font-size: 13px;
-        font-style: italic;
-        display: block;
-    }
-    
-    #aceptarPoliticas {
-        padding: 10px 0px 0px 10px;
-    }
-    
-    #btnForm {
-        text-align: center;
-    }
-    
-    #btnLoginRegistrar {
-        transition: .5s;
-        border: 3px solid #BFAC69;
-        background-color: azure;
-        color: black;
-        width: 70%;
-        height: 50px;
-        border-radius: 20px;
-        font-weight: bold;
-        font-size: 20px;
-        font-family: 'Times New Roman', Times, serif;
-        margin-bottom: 20px;
-    }
-    
-    #btnLoginRegistrar:hover {
-        transition: .5s;
-        cursor: pointer;
-        color: white;
-        background-color: #BFAC69;
-        box-shadow: 3px 3px 6px black;
-    }
-    
-    #enlRegistrarLogin {
-        text-align: center;
-    }
-    
-    #enlRegistrarLogin a,
-    #aceptarPoliticas a {
-        color: #08274C;
-        font-weight: bold;
-    }
-    
-    #enlRegistrarLogin a:hover,
-    #aceptarPoliticas a:hover {
-        cursor: pointer;
-        color: indigo;
-    }
-    
-    #checkAceptarPoliticas:hover {
-        cursor: pointer;
-    }
-    
-    #errorLoginSingup {
-        text-align: center;
-    }
-    
-    @media only screen and (max-width: 1650px) {
-        #infoLogin {
-            width: 40%;
-        }
-        #formLogin {
-            width: 40%;
-        }
-    }
-    
-    @media only screen and (max-width: 1250px) {
-        #infoLogin {
-            width: 45%;
-        }
-        #formLogin {
-            width: 45%;
-        }
-    }
-    
-    @media only screen and (max-width: 1100px) {
-        #contenido {
-            display: flex;
-            flex-direction: column-reverse;
-            height: 100%;
-        }
-        #infoLogin {
-            border-radius: 0px;
-            box-shadow: 5px 0px 10px black;
-            width: 70%;
-        }
-        #formLogin {
-            box-shadow: 5px 0px 10px black;
-            border-radius: 0px;
-            width: 70%;
-        }
-    }
-    
-    @media only screen and (max-width: 750px) {
-        #formulario {
-            min-width: 0px;
-        }
-        #infoLogin {
-            box-shadow: 0px 0px 0px black;
-            width: 100%;
-        }
-        #formLogin {
-            box-shadow: 0px 0px 0px black;
-            width: 100%;
-        }
-    }
-    
-    @media only screen and (max-width: 535px) {
-        #formulario {
-            height: 800px;
-            padding: 0px 15px;
-        }
-        #formLogin .navEmpleadoEmpresa ul {
-            justify-content: center;
-        }
-        #infoLogin {
-            height: 700px;
-        }
-        #formLogin {
-            height: 1000px;
-        }
-        #enlaceEmpleado,
-        #enlaceEmpresa {
-            font-size: 13px;
-        }
-        #cpDir fieldset {
-            float: none;
-        }
-        #cpDir fieldset:nth-of-type(1) {
-            width: 100%;
-        }
-        #cpDir fieldset:nth-of-type(2) {
-            width: 100%;
-        }
-        #formulario span {
-            text-align: start;
-        }
-        #btnVolver {
-            padding: .5em 2.5em;
-            font-size: 20px;
-        }
-        #formulario input[type="text"],
-        #formulario input[type="password"],
-        #formulario input[type="email"] {
-            width: 84%;
-        }
-    }
-    
-    @media only screen and (max-width: 230px) {
-        #formulario {
-            height: 950px;
-            padding: 0px 15px;
-        }
-        #formLogin {
-            height: 1150px;
-        }
-        #enlaceEmpleado,
-        #enlaceEmpresa {
-            font-size: 11px;
-        }
-    }
+}

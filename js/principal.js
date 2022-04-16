@@ -1,29 +1,32 @@
 "use strict";
 import { Workas } from "./clases/workas.js";
+import { Formulario } from "./clases/formulario.js";
 import * as Plantilla from "./bibliotecas/plantilla.js";
 window.onload = function() {
     var doc = document;
+
     var workas = new Workas();
+    var formulario = new Formulario();
 
     var btnEmpleado = doc.getElementById("enlaceEmpleado");
     var btnEmpresa = doc.getElementById("enlaceEmpresa");
 
-    workas.selecBtnEmpresa(btnEmpleado, btnEmpresa);
-    Plantilla.RemplazarElemHijo(doc.getElementById("formLogin"), doc.getElementById("formulario"), workas.crearFormLoginEmpresa());
-    workas.asignarEvComprobarInputRequeridos();
-    workas.asignarEvComprobarFormTiempoReal();
+    formulario.selecBtnEmpresa(btnEmpleado, btnEmpresa);
+    Plantilla.RemplazarElemHijo(doc.getElementById("formLogin"), doc.getElementById("formulario"), formulario.crearFormLoginEmpresa());
+    formulario.asignarEvComprobarInputRequeridos();
+    formulario.asignarEvComprobarFormTiempoReal();
 
     //Asignamos el evento para cambiar de formulario al clicar el botón empleado
     btnEmpleado.addEventListener(
         "click",
         (e) => {
-            workas.selecBtnEmpleado(btnEmpleado, btnEmpresa);
-            Plantilla.RemplazarElemHijo(doc.getElementById("formLogin"), doc.getElementById("formulario"), workas.crearFormLoginEmpleado());
-            workas.cambiarFormRegistrarLoginEmpleado();
-            workas.asignarEvComprobarFormTiempoReal();
-            workas.asignarEvComprobarInputRequeridos();
-            workas.asignarEvIniciarSesionRegistro("inicioEmpleado");
-            workas.loguearTeclaEnter();
+            formulario.selecBtnEmpleado(btnEmpleado, btnEmpresa);
+            Plantilla.RemplazarElemHijo(doc.getElementById("formLogin"), doc.getElementById("formulario"), formulario.crearFormLoginEmpleado());
+            formulario.cambiarFormRegistrarLoginEmpleado();
+            formulario.asignarEvComprobarFormTiempoReal();
+            formulario.asignarEvComprobarInputRequeridos();
+            formulario.asignarEvIniciarSesionRegistro("inicioEmpleado");
+            formulario.loguearTeclaEnter("btnLoginRegistrar");
         },
         false
     );
@@ -31,18 +34,19 @@ window.onload = function() {
     btnEmpresa.addEventListener(
         "click",
         (e) => {
-            workas.selecBtnEmpresa(btnEmpleado, btnEmpresa);
-            Plantilla.RemplazarElemHijo(doc.getElementById("formLogin"), doc.getElementById("formulario"), workas.crearFormLoginEmpresa());
-            workas.cambiarFormRegistrarLogin();
-            workas.asignarEvComprobarFormTiempoReal();
-            workas.asignarEvComprobarInputRequeridos();
-            workas.asignarEvIniciarSesionRegistro("inicioEmpresa");
-            workas.loguearTeclaEnter();
+            formulario.selecBtnEmpresa(btnEmpleado, btnEmpresa);
+            Plantilla.RemplazarElemHijo(doc.getElementById("formLogin"), doc.getElementById("formulario"), formulario.crearFormLoginEmpresa());
+            formulario.cambiarFormRegistrarLogin();
+            formulario.asignarEvComprobarFormTiempoReal();
+            formulario.asignarEvComprobarInputRequeridos();
+            formulario.asignarEvIniciarSesionRegistro("inicioEmpresa");
+            formulario.loguearTeclaEnter("btnLoginRegistrar");
         },
         false
     );
 
-    workas.asignarEvIniciarSesionRegistro("inicioEmpresa");
-    workas.cambiarFormRegistrarLogin();
-    workas.loguearTeclaEnter();
+    formulario.asignarEvIniciarSesionRegistro("inicioEmpresa");
+    formulario.cambiarFormRegistrarLogin();
+    formulario.loguearTeclaEnter("btnLoginRegistrar");
+
 };

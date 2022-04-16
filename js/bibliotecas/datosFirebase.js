@@ -21,5 +21,6 @@ const firebaseConfig = {
 // Crear el enlace a la aplicación
 const app = initializeApp(firebaseConfig);
 const autentificacion = getAuth(app);
+
 // Exportar el objeto aplicación.
 export { app, autentificacion };

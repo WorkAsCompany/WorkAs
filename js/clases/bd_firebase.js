@@ -1,5 +1,6 @@
 "use strict";
 import { app, autentificacion } from "../bibliotecas/datosFirebase.js";
+import { getStorage, ref, uploadBytes, getDownloadURL  } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
 import {
     getFirestore,
     collection,
@@ -17,7 +18,7 @@ import {
     arrayUnion,
     arrayRemove,
     deleteDoc,
-    deleteField,
+    deleteField
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 /*  --- CLASE BD_FIREBASE ---  */
 //Tenemos todas las fuciones o procedimientos de la clase BD_FIREBASE que nos pueden ser utiles para atacar a la base de datos de firebase.
@@ -25,7 +26,9 @@ import {
 class BD_Firebase {
     constructor() {
         this.db = getFirestore(app);
+        this.almacen = getStorage(app);
         this.usu = "";
+
     }
 
     //Devuelve la conexión al servicio Firestone.
@@ -165,6 +168,37 @@ class BD_Firebase {
             where("idEmpresa", "==", `${idEmpresa}`)
         );
         return getDocs(consulta);
+    }
+
+    //Modifica la imagen de perfil de una empresa.
+    actualizarImgPerfilEmpresa(idEmpresa, ruta) {
+        var idRef = doc(this.devolverEnlace("empresa"), idEmpresa);
+        updateDoc(idRef, {
+            iconoPerfil: ruta
+        });
+    }
+
+    //Modifica la imagen de perfil de un empleado.
+    actualizarImgPerfilEmpleado(idEmpleado, ruta) {
+        var idRef = doc(this.devolverEnlace("empleado"), idEmpleado);
+        updateDoc(idRef, {
+            iconoPerfil: ruta
+        });
+    }
+
+    //Sube una imagen al storage que ofrece firebase.
+    subirImgBD(ruta, file) {
+        console.log("almacen")
+        var almacenRef = ref(this.almacen, ruta);
+        console.log(this.almacen)
+        console.log(almacenRef)
+        return uploadBytes(almacenRef, file);
+    }
+
+    //Descarga una imagen del storage de firebase.
+    descargarImgBD(ruta) {
+        var almacenRef = ref(this.almacen, ruta);
+        return getDownloadURL(almacenRef)
     }
 }
 

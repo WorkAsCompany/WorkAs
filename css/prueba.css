@@ -1,0 +1,523 @@
+/* ESTRUCTURA */
+* {
+    margin: 0px;
+    box-sizing: border-box;
+    text-decoration: none !important;
+    list-style: none;
+}
+
+*:hover {
+    text-decoration: none;
+}
+
+#contenido {
+ 
+}
+
+.noColapsarContenido {
+    /*resize: both;
+    overflow: auto;*/
+    display: grid;
+    width: 100%;
+    height: 100vh;
+    grid-template-rows: 80px repeat(3,1fr);
+    grid-template-columns: 250px repeat(3,1fr);
+    grid-template-areas:
+    "menu menu menu menu"
+    "asidePrincipal main main main"
+    "asidePrincipal main main main"
+    "asidePrincipal main main main"; 
+}
+
+.colapsarContenido {
+    /*resize: both;
+    overflow: auto;*/
+    display: grid;
+    width: 100%;
+    height: 100vh;
+    grid-template-rows: 80px repeat(3,1fr);
+    grid-template-columns: 60px repeat(3,1fr);
+    grid-template-areas:
+    "menu menu menu menu"
+    "asidePrincipal main main main"
+    "asidePrincipal main main main"
+    "asidePrincipal main main main"; 
+}
+
+/* CABECERA */
+
+#navBarPrincipal {
+    background-color: #08274C !important;
+    grid-area: menu;
+}
+
+#navBarPrincipal .container-fluid {
+    background-color: #08274C;
+}
+
+#navBarPrincipal ul {
+    display: flex;
+    align-items: center;
+}
+
+#navBarPrincipal ul li {
+    padding: 0px 15px;
+    color: white !important;
+}
+
+.divLogotipo {
+    width: 170px;
+}
+
+.divLogotipo a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.divLogotipo img {
+    width: 60px;
+    height: 60px;
+}
+
+.tituloNav {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color: white;
+    font-size: 28px;
+}
+
+@media only screen and (min-width: 992px) {
+    #iconoPerfil img {
+        width: 55px;
+        height: 55px;
+        border: 1px solid rgb(231, 231, 231);
+        border-radius: 100%;
+        background-color: rgb(231, 231, 231);
+    }
+    
+    #iconoPerfil img:hover {
+        cursor: pointer;
+    }
+}
+
+/* ASIDE */
+#asidePrincipal {
+    grid-area: asidePrincipal;
+    position: sticky;
+    display: inline-block;
+    top: 0px;
+    background-color: #041C32;
+    color: lightgray;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+    transition: .3s;
+    font-size: 14px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+@media only screen and (min-width: 992px) {
+    #asidePrincipal:hover {
+        position: sticky;
+        display: inline-block;
+        top: 0px;
+        z-index: 2;
+        width: 250px;
+        height: 100vh;
+        transition: .3s;
+    }
+    #asidePrincipal div {
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        align-items: center;
+        height: 90px;
+        padding: 10px;
+    }
+
+    #asidePrincipal .divServicioAside:hover {
+        cursor: pointer;
+        background-color: #08274C;
+        border-top: 1px solid gray;
+        border-bottom: 1px solid gray;
+    }
+
+    #iconoPerfilAside {
+        display: none;
+    }
+    
+    #iconoPerfilAside img {
+        display: none;
+    }
+}
+
+#asidePrincipal h3 {
+    color: white;
+}
+
+/*#asidePrincipal .asideElInfo {
+    visibility: hidden;
+}
+
+#asidePrincipal:hover .asideElInfo {
+    visibility: visible;
+}*/
+
+#asidePrincipal .ocultarAsideHover {
+    position: absolute;
+    top: -9999px;
+}
+
+#asidePrincipal:hover .ocultarAsideHover {
+    position: static;
+}
+
+#asidePrincipal .ocultarAsideClic {
+    position: static;
+}
+
+#asidePrincipal h3 {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#asidePrincipal .divServicioAside {
+    border-top: 1px solid rgb(0, 0, 0, 0);
+    border-bottom: 1px solid rgb(0, 0, 0, 0);
+}
+
+#asidePrincipal .asideTitulo {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 70px;
+    padding-left: 15px;
+}
+
+#asidePrincipal .asideTitulo img {
+    filter: invert(.85);
+    width: 25px;
+    height: 25px;
+}
+
+#asidePrincipal .asideTitulo img:hover {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, .4);
+    border-radius: 5px;
+}
+
+.asideCollapse {
+    transform: rotate(90deg);
+    transition: 0.3s;
+}
+
+.asideNoCollapse {
+    transform: rotate(-90deg);
+    transition: 0.3s;
+}
+
+#asidePrincipal .divServicioAside img {
+    transition: .5s;
+    transform: scale(1);
+}
+
+#asidePrincipal .divServicioAside:hover img {
+    transition: .5s;
+    transform: scale(1.15);
+}
+
+#asidePrincipal .divServicioAside img {
+   width: 40px; 
+   height: 40px;
+   filter: invert(1);
+}
+
+#asidePrincipal .divServicioAside .asideElInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+#asidePrincipal .divServicioAside .asideElInfo p {
+    margin: 0px;
+    white-space:nowrap;
+}
+
+#asidePrincipal .divServicioAside .asideElInfo p:first-child {
+    color: white;
+    font-size: 17px;
+}
+
+@media only screen and (max-width: 991px) {
+    #contenido {
+        grid-template-rows: 80px repeat(3,1fr) 70px;
+        grid-template-columns: repeat(4,1fr);
+        height: 200vh;
+        grid-template-areas:
+        "menu menu menu menu"
+        "main main main main"
+        "main main main main"
+        "main main main main"
+        "asidePrincipal asidePrincipal asidePrincipal asidePrincipal";  
+    }
+
+    #navBarPrincipal {
+        grid-area: menu;
+    }
+
+    #principal {
+        grid-area: main;
+    }
+
+    #asidePrincipal {
+        all: unset;
+        grid-area: asidePrincipal;
+        background-color: #041C32;
+        color: lightgray;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        font-family: Arial, Helvetica, sans-serif;
+        position: fixed;
+        bottom: 0;
+
+    }
+
+    #asidePrincipal .asideElInfo {
+        visibility: visible;
+        padding: 0px;
+    }
+    
+    #asidePrincipal .asideTitulo {
+        display: none;
+    }
+    
+    #asidePrincipal > div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 5px;
+        width: 20%;
+        gap: 5px;
+    }
+    
+    #asidePrincipal .divServicioAside:hover {
+        cursor: pointer;
+        background-color: #08274C;
+    }
+
+    #asidePrincipal .divServicioAside img {
+        transition: .5s;
+        transform: scale(1);
+        width: 30px; 
+        height: 30px;
+        filter: invert(1);
+    }
+    
+    #asidePrincipal .divServicioAside:hover img {
+        transition: .5s;
+        transform: scale(1.15);
+    }
+
+    #asidePrincipal .asideElInfo {
+        position: static;
+    }
+    
+    #asidePrincipal .divServicioAside .asideElInfo p:first-child {
+        color: white;
+        font-size: 16px;
+    }
+
+    #asidePrincipal .divServicioAside .asideElInfo p:nth-child(2) {
+        display: none;
+    }
+
+    #iconoPerfilAside img {
+        width: 60px;
+        height: 60px;
+        border: 1px solid rgb(231, 231, 231);
+        border-radius: 100%;
+        background-color: rgb(231, 231, 231);
+    }
+    
+    #iconoPerfilAside img:hover {
+        cursor: pointer;
+    }
+
+    #btnChat {
+        outline: 5px solid rgb(245, 245, 245);
+        border-radius: 50%;
+        position: fixed;
+        height:60px;
+        width: 60px;
+        left:50%;
+        margin-left:-30px;
+        bottom:50px;
+        margin-top:-30px;
+        color: white;
+        padding: 5px 10px;
+        transition: 0.3s;
+        background-color: #055759;
+    }
+
+    #btnChat input { 
+        width: 45px;
+        height: 45px;
+        filter: invert(1);
+    }
+}
+
+@media only screen and (max-width: 530px) {
+    #asidePrincipal .divServicioAside img {
+        transition: .5s;
+        transform: scale(1);
+        width: 20px; 
+        height: 20px;
+        filter: invert(1);
+    }
+    
+    #asidePrincipal .divServicioAside:hover img {
+        transition: .5s;
+        transform: scale(1.15);
+    }
+    
+    #asidePrincipal .divServicioAside .asideElInfo p:first-child {
+        color: white;
+        font-size: 13px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    #iconoPerfilAside img {
+        width: 47px;
+        height: 47px;
+    }
+
+    #btnChat {
+        height: 50px;
+        width: 50px;
+        bottom: 50px;
+    }
+
+    #btnChat input {
+        width: 35px;
+        height: 35px;
+        filter: invert(1);
+    }
+}
+
+@media only screen and (max-width: 300px) {
+    #asidePrincipal .divServicioAside img {
+        width: 15px; 
+        height: 15px;
+    }
+    #iconoPerfilAside img {
+        width: 35px;
+        height: 35px;
+    }
+    #asidePrincipal .divServicioAside .asideElInfo p:first-child {
+        font-size: 11px;
+    }
+
+    #btnChat {
+        height: 40px;
+        width: 40px;
+        bottom: 45px;
+    }
+
+    #btnChat input {
+        width: 25px;
+        height: 25px;
+        filter: invert(1);
+    }
+}
+
+/* PRINCIPAL */
+
+#principal {
+    grid-area: main;
+    padding: 30px;
+    background-color: rgb(245, 245, 245);
+}
+
+/* CHAT*/
+@media only screen and (min-width: 992px) {
+    #btnChat {
+        position: fixed;
+        bottom: 30px;
+        right: 45px;
+        background-color: #055759;
+        border-radius: 100%;
+        color: white;
+        padding: 5px 10px;
+        transition: 0.3s;
+    }
+    
+    #btnChat input { 
+        width: 50px;
+        height: 50px;
+        filter: invert(1);
+    }
+}
+
+#btnChat:hover {
+    transition: 0.3s;
+    background-color: #044647;
+}
+
+
+/* GENERAL */
+.container {
+}
+
+/* INPUT BUSCAR */
+#inputBuscar {
+    border: 1px solid black;
+}
+
+#inputBuscar:focus {
+    box-shadow: 0px 0px 0px black;
+    background-color: aliceblue;
+}
+
+#divBtnBuscarInput {
+    background-color: #055759;
+    border: 1px solid black;
+    border-radius: 0px 20px 20px 0px;
+    height: 40px;
+    width: 60px;
+}
+
+#divBtnBuscarInput:hover {
+    background-color: #044546;
+}
+
+#btnBuscarInput {
+    height: 100%;
+    padding: .5em 1em;
+    filter: invert(1);
+}
+
+#slcFiltrarEmpleado {
+    border: 1px solid black;
+}
+
+/* MODAL */
+
+.modal-header {
+    background-color: #044647;
+    color: white;
+}
+
+.btn-close {
+    filter: invert(1);
+}
+
