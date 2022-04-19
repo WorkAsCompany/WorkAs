@@ -188,10 +188,7 @@ class BD_Firebase {
 
     //Sube una imagen al storage que ofrece firebase.
     subirImgBD(ruta, file) {
-        console.log("almacen")
         var almacenRef = ref(this.almacen, ruta);
-        console.log(this.almacen)
-        console.log(almacenRef)
         return uploadBytes(almacenRef, file);
     }
 
@@ -200,6 +197,15 @@ class BD_Firebase {
         var almacenRef = ref(this.almacen, ruta);
         return getDownloadURL(almacenRef)
     }
+
+    modificarTurnoEmpleado(empleado, turno) {
+        var idRef = doc(this.devolverEnlace("empleado"), empleado.id);
+        console.log(1)
+        return updateDoc(idRef, {
+            turno: turno
+        });
+    }
+
 }
 
 //Exportamos.

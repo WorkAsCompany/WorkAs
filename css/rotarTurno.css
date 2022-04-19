@@ -1,0 +1,97 @@
+/* INPUT BUSCAR */
+#inputBuscarPorPuesto {
+    border: 1px solid black;
+}
+
+#inputBuscarPorPuesto:focus {
+    box-shadow: 0px 0px 0px black;
+    background-color: aliceblue;
+}
+
+#divBtnBuscarEmpleadoPuesto {
+    background-color: #055759;
+    border: 1px solid black;
+    border-radius: 0px 20px 20px 0px;
+    height: 40px;
+    width: 60px;
+}
+
+#divBtnBuscarEmpleadoPuesto:hover {
+    background-color: #044546;
+}
+
+#btnBuscarEmpleadoPuesto {
+    height: 100%;
+    padding: .5em 1em;
+    filter: invert(1);
+}
+
+/* CARD TURNO */
+
+#divCardRotarTurno {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    width: 100%;
+}
+
+.cardTurno {
+    width: min(400px, 30%);
+    border-radius: 50px 50px 0px 0px !important;
+}
+
+.cardTurnoImg {
+    width: 100%;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50px 50px 0px 0px;
+}
+
+.cardTurnoImg img {
+    width: 200px;
+    height: 200px;
+    padding: 1.5em;
+    background-color: rgba(255, 255, 255, .4);
+    border-radius: 100%;
+}
+
+#cardTurnoDiurno .cardTurnoImg {
+    background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+}
+
+#cardTurnoDiurno .cardTurnoImg img {
+
+}
+
+#cardTurnoMixto .cardTurnoImg {
+    background-image: linear-gradient(to right, #ed6ea0 0%, #ec8c69 100%);
+}
+
+#cardTurnoMixto .cardTurnoImg img {
+    padding: 0px;
+}
+
+#cardTurnoNocturno .cardTurnoImg {
+    background-image: linear-gradient(-225deg, #3D4E81 0%, #5753C9 48%, #6E7FF3 100%);
+}
+
+#cardTurnoNocturno .cardTurnoImg img {
+
+}
+
+.divCardEmpleados {
+    height: 300px;
+    border-radius: 10px;
+    background-color: red;
+}
+
+.divCardEmpleados p {
+text-align: center;
+}
+
+.divBtnCambiarTurno input {
+    width: 40px;
+}
+

@@ -11,12 +11,26 @@ var opAside;
 var arrayEmpleados = [];
 var empleadoEnEdicion;
 
+var arrayTurnoDiurno = [];
+var arrayTurnoMixto = [];
+var arrayTurnoNocturno = [];
+
 class Workas extends BD_Firebase {
     constructor() {
         super();
     }
 
-
+    desactivarActivarBotones(clase, desactivar) {
+        if(desactivar) {
+            for (let i = 0; i < doc.getElementsByClassName(clase).length; i++) {
+                doc.getElementsByClassName(clase)[i].setAttribute("disabled","disabled")
+            }
+        } else {
+            for (let i = 0; i < doc.getElementsByClassName(clase).length; i++) {
+                doc.getElementsByClassName(clase)[i].removeAttribute("disabled")
+            }
+        }
+    }
 
     //Recoge los datos del formulario y si son correctos crea un nuevo empleado y lo añade a la empresa correspondiente.
     opAnyadirEmpleado = async() => {
@@ -459,9 +473,7 @@ class Workas extends BD_Firebase {
         divIconoEmpresa.innerHTML += Plantilla.crearDivInfoDatosEmpresa(empresa);
     }
 
-    modificarPaginaOpNavEmpleados() {
-        opAside.innerHTML = Plantilla.crearOpAsideNavEmpleados();
-
+    administrarEmpleados() {
         doc.getElementById("principal").innerHTML = `<div id="divPrincipalTabla"></div>`;
         doc.getElementById("principal").innerHTML += `<div id="divModales"></div>`;
 
@@ -471,6 +483,179 @@ class Workas extends BD_Firebase {
         this.opListarEmpleados();
         this.asignarBtnEvTerminarEditarEmpleado();
         this.asignarEvAnyadirEmpleado();
+    }
+
+    asignarEvAdministrarEmpleados() {
+        var btn = doc.getElementById("asideAdministrarEmpleado");
+        btn.addEventListener(
+            "click",
+            (e) => {
+                this.administrarEmpleados();
+            },
+            false
+        );
+    }
+
+
+
+
+
+
+
+
+
+
+
+    
+
+    modificarTurno = (btn) => {
+        this.desactivarActivarBotones("btnTurno", true);
+        var promesas = []; 
+
+        if (btn === "diurnoToMixto") {
+            for (let empleado of arrayTurnoDiurno) {
+                var promesa = this.modificarTurnoEmpleado(empleado, "Mixto")
+                promesas.push(promesa);
+            }
+            for (let empleado of arrayTurnoMixto) {
+                var promesa = this.modificarTurnoEmpleado(empleado, "Diurno")
+                promesas.push(promesa);
+            }
+
+        } else if (btn === "diurnoToNocturno") {
+             this.modificarTurnoEmpleado(arrayTurnoDiurno, "Nocturno");
+             this.modificarTurnoEmpleado(arrayTurnoNocturno, "Diurno");
+
+        } else if (btn === "mixtoToDiurno") {
+             this.modificarTurnoEmpleado(arrayTurnoMixto, "Diurno");
+             this.modificarTurnoEmpleado(arrayTurnoDiurno, "Mixto");
+
+        } else if (btn === "mixtoToNocturno") {
+             this.modificarTurnoEmpleado(arrayTurnoMixto, "Nocturno");
+             this.modificarTurnoEmpleado(arrayTurnoNocturno, "Mixto");
+
+        } else if (btn === "nocturnoToDiurno") {
+             this.modificarTurnoEmpleado(arrayTurnoNocturno, "Diurno");
+             this.modificarTurnoEmpleado(arrayTurnoDiurno, "Nocturno");
+
+        } else if (btn === "nocturnoToMixto") {
+             this.modificarTurnoEmpleado(arrayTurnoNocturno, "Mixto");
+             this.modificarTurnoEmpleado(arrayTurnoMixto, "Nocturno");
+
+        }
+        
+        return Promise.all(promesas);
+
+
+        /*console.log("fddf")
+        
+        console.log(arrayTurnoDiurno)
+        console.log(arrayTurnoMixto)
+        console.log(arrayTurnoNocturno)*/
+    }
+
+    asigarEvBtnModificarTurno(puesto) {
+        var btn = doc.getElementsByClassName("btnTurno");
+        for (let i = 0; i < btn.length; i++) {
+            btn[i].addEventListener(
+                "click",
+                async(e) => {
+                    var ye = await this.modificarTurno(e.target.id);
+                    console.log(ye)
+                    console.log(2)
+                    this.crearArrayTurno(puesto, true);
+                    console.log(arrayTurnoDiurno)
+                    console.log(arrayTurnoMixto)
+                    console.log(arrayTurnoNocturno)
+                    arrayTurnoDiurno = [];
+                    arrayTurnoMixto = [];
+                    arrayTurnoNocturno = [];
+
+                },
+                false
+            );
+        }
+    }
+
+    crearArrayTurno = async(puesto, sobreescribir) =>  {
+        var empleados = await this.devolverEmpleadosEmpresa(this.getUsu().id);
+        empleados = empleados.docs.filter(empleado => empleado.data().puestoTrabajo.toLowerCase() === puesto.toLowerCase());
+
+        empleados.map((empleado) => {
+            console.log(empleado.data().turno)
+            if (empleado.data().turno === "Diurno") {
+                arrayTurnoDiurno.push(empleado);
+            } else if (empleado.data().turno === "Mixto") {
+                arrayTurnoMixto.push(empleado);
+            } else if (empleado.data().turno === "Nocturno") {
+                arrayTurnoNocturno.push(empleado);
+            }
+        });
+
+        if(sobreescribir) {
+            doc.getElementById("cardTurnoDiurno").getElementsByClassName("divCardEmpleados")[0].innerHTML = Plantilla.crearFilasCardRotarTurno(arrayTurnoDiurno);
+            doc.getElementById("cardTurnoMixto").getElementsByClassName("divCardEmpleados")[0].innerHTML = Plantilla.crearFilasCardRotarTurno(arrayTurnoMixto);
+            doc.getElementById("cardTurnoNocturno").getElementsByClassName("divCardEmpleados")[0].innerHTML = Plantilla.crearFilasCardRotarTurno(arrayTurnoNocturno);
+        }
+        this.desactivarActivarBotones("btnTurno", false);
+
+    }
+
+    buscarEmpleadoPorPuesto = async(puesto) =>  {
+        var div = doc.getElementById("divCardRotarTurno");
+        div.innerHTML = "";
+        var inputBuscar = doc.getElementById("inputBuscarPorPuesto");
+
+        if(puesto != undefined) {
+            inputBuscar.value = puesto;
+        }
+
+        await this.crearArrayTurno(inputBuscar.value, false)
+
+        div.innerHTML += Plantilla.crearCardRotarTurno("diurno", inputBuscar.value, arrayTurnoDiurno);
+        div.innerHTML += Plantilla.crearCardRotarTurno("mixto", inputBuscar.value, arrayTurnoMixto);
+        div.innerHTML += Plantilla.crearCardRotarTurno("nocturno", inputBuscar.value, arrayTurnoNocturno);
+
+        this.asigarEvBtnModificarTurno(inputBuscar.value);
+        inputBuscar.value = "";
+    }
+
+    asignarEvBuscarEmpleadoPorPuesto() {
+        var btn = doc.getElementById("btnBuscarEmpleadoPuesto");
+        btn.addEventListener(
+            "click",
+            (e) => {
+                this.buscarEmpleadoPorPuesto();
+                arrayTurnoDiurno = [];
+                arrayTurnoMixto = [];
+                arrayTurnoNocturno = [];
+            },
+            false
+        );
+    }
+
+    rotarEmpleados() {
+        doc.getElementById("principal").innerHTML = Plantilla.crearDivRotarTurno();
+        this.asignarEvBuscarEmpleadoPorPuesto();
+    }
+
+    asignarEvRotarEmpleados() {
+        var btn = doc.getElementById("asideRotarTurno");
+        btn.addEventListener(
+            "click",
+            (e) => {
+                this.rotarEmpleados();
+            },
+            false
+        );
+    }
+
+    modificarPaginaOpNavEmpleados() {
+
+        opAside.innerHTML = Plantilla.crearOpAsideNavEmpleados();
+        this.asignarEvAdministrarEmpleados();
+        this.administrarEmpleados();
+        this.asignarEvRotarEmpleados();
     }
 
     modificarPaginaOpNavIconoPerfil = async() => {
@@ -508,9 +693,6 @@ class Workas extends BD_Firebase {
         var imgPerfil = (empresa.data().iconoPerfil === "") ? "./img/empresaIcono.png" : await this.descargarImgBD(empresa.data().iconoPerfil);
 
         doc.getElementById("contenidoFormulario").id = "contenido";
-        doc.body.classList.add("animate__animated")
-        doc.body.classList.add("animate__fadeIn")
-        doc.body.classList.add("animate__slow")
         doc.getElementById("contenido").classList.add("colapsarContenido");
         doc.getElementById("contenido").innerHTML = Plantilla.crearPaginaInicialEmpresa(empresa, imgPerfil);
         opAside = doc.getElementById("asideOpciones");

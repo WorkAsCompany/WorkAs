@@ -71,12 +71,6 @@ export const devolverFormRegistroEmpresa = () => {
                         src="./././img/incorrecto.png"><span class="error ocultar">Este campo es obligatorio</span>
                 </fieldset>
             </div>
-
-            <fieldset>
-                <legend>C.P.*</legend><label for="cod_postal"></label><input accept="image/png,image/jpeg" type="file"><img
-                    class="desaparecer" src="./././img/correcto.png"><img class="desaparecer"
-                    src="./././img/incorrecto.png"><span class="error ocultar">Este campo es obligatorio</span>
-            </fieldset>
             <fieldset>
                 <legend>Contraseña*</legend><label for="contrasenya"></label><input id="contrasenya"
                     class="inputForm inputPsswd" name="contrasenya" type="password" required="required"
@@ -303,13 +297,13 @@ export const crearPaginaInicialEmpresa = (usu, imgPerfil) => {
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <div class="navbar-nav me-auto mb-2 mb-lg-0"></div>
                         <ul class="navbar-nav">
-                            <li id="opNavEmpleados" class="nav-item">
+                            <li id="opNavEmpleados" class="nav-item" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
                                 <a class="nav-link active" aria-current="page">Empleados</a>
                             </li>
-                            <li id="opNavCalendario" class="nav-item">
+                            <li id="opNavCalendario" class="nav-item" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
                                 <a class="nav-link active" aria-current="page">Calendario</a>
                             </li>
-                            <li id="opNavTablon" class="nav-item">
+                            <li id="opNavTablon" class="nav-item" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
                                 <a class="nav-link active" aria-current="page">Tablón</a>
                             </li>
                             <li id="iconoPerfil" class="divIconoPerfil collapse navbar-collapse">
@@ -565,6 +559,110 @@ export const crearDivInfoDatosEmpleado = (empleado) => {
                 <div class="turno">Turno: <span>${empleado.data().turno}</span></div>
             </div>`;
 }
+
+
+export const crearDivRotarTurno = () => {
+    return `<div class="offset-2 offset-sm-0 col-8 col-sm-3 col-xxl-2">
+                <div class="input-group mb-3 align-items-center">
+                    <input id="inputBuscarPorPuesto" type="text" class="form-control" placeholder="Buscar empleado por puesto"
+                        aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <div id="divBtnBuscarEmpleadoPuesto">
+                        <input id="btnBuscarEmpleadoPuesto" type="image" src="./img/lupa.png">
+                    </div>
+                </div>
+            </div>
+            <div id="divCardRotarTurno"></div>`;
+}
+
+export const crearFilasCardRotarTurno = (empleados) => {
+    var filas = "";
+
+    if(empleados.length === 0 ) {
+        filas = "No hay empleados";
+    } else {
+        
+        for (let i = 0; i < empleados.length; i++) {
+            filas += `<p>${i+1}. ${empleados[i].data().dni}: ${empleados[i].data().nombre}</p>`;
+        }
+    
+    }
+
+    return filas;
+}
+
+export const crearCardRotarTurno = (turno, puestoTrabajo, empleados) => {
+    var imgTurno, divBotones, tituloTurno, idCard;
+    var filas = "<div>"
+    var imgDiurno = "./img/imgTurnoDiurno.png";
+    var imgMixto = "./img/imgTurnoMixto.png";
+    var imgNocturno = "./img/imgTurnoNocturno.png";
+
+    for (let i = 0; i < empleados.length; i++) {
+        filas += `<p>${i+1}.º  ${empleados[i].data().dni}: ${empleados[i].data().nombre}</p>`;
+    }
+    filas += "</div>"
+
+    if (turno === "diurno") {
+        idCard = "cardTurnoDiurno";
+        imgTurno = imgDiurno;
+        tituloTurno = `Diurno - ${puestoTrabajo}`;
+        divBotones = `<div class="divBtnCambiarTurno">
+                        <input id="diurnoToMixto" class="btnTurno btnMixto" type="image" src="${imgMixto}">
+                        <input id="diurnoToNocturno" class="btnTurno btnNocturno" type="image" src="${imgNocturno}">
+                      </div>`;
+    } else if (turno === "mixto") {
+        idCard = "cardTurnoMixto";
+        imgTurno = imgMixto;
+        tituloTurno = `Mixto - ${puestoTrabajo}`;
+        divBotones = `<div class="divBtnCambiarTurno">
+                        <input id="mixtoToDiurno" class="btnTurno btnDiurno" type="image" src="${imgDiurno}">
+                        <input id="mixtoToNocturno" class="btnTurno btnNocturno" type="image" src="${imgNocturno}">
+                      </div>`;
+    } else if (turno === "nocturno") {
+        idCard= "cardTurnoNocturno";
+        imgTurno = imgNocturno;
+        tituloTurno = `Nocturno - ${puestoTrabajo}`;
+        divBotones = `<div class="divBtnCambiarTurno">
+                        <input id="nocturnoToDiurno" class="btnTurno btnDiurno" type="image" src="${imgDiurno}">
+                        <input id="nocturnoToMixto" class="btnTurno btnMixto" type="image" src="${imgMixto}">
+                      </div>`;
+    } else {
+        return "";
+    }
+
+    return `<div id="${idCard}" class="card cardTurno animate__animated animate__backInDown">
+                <div class="cardTurnoImg">
+                    <img src="${imgTurno}" class="card-img-top" alt="imagen turno">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">${tituloTurno}</h5>
+                    <div class="divCardEmpleados">
+                        ${filas}
+                    </div>
+                </div>
+                <div class="card-body">
+                    ${divBotones}
+                </div>
+            </div>`;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //Crea un div con datos del día festivo pasado por parámetro.
 export const crearDiaCalendario = (dia, mes) => {
