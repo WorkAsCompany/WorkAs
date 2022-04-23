@@ -227,7 +227,7 @@ export const devolverEditarEmpleadoForm = () => {
                             </div>
                             <div class="mb-3">
                                 <label for="txtEditarEmail" class="form-label">Correo Electrónico</label>
-                                <input type="email" class="form-control" id="txtEditarEmail" placeholder="Introduce el email">
+                                <input type="email" class="form-control" id="txtEditarEmail" placeholder="Introduce el email" disabled>
                                 <div id="emailMsgError" class="form-text">We'll never share your email with
                                     anyone else.</div>
                             </div>
@@ -285,7 +285,7 @@ export const crearPaginaInicialEmpresa = (usu, imgPerfil) => {
                 <div class="container-fluid">
                     <div class="divLogotipo navbar-brand">
                         <a href="./index.html">
-                            <img src="./img/logoSinFondo.svg" alt="icono empresa">
+                            <img src="./img/logoSinFondo.svg" alt="icono WorkAs">
                             <span class="tituloNav">WorkAs</span>
                         </a>
                     </div>
@@ -297,15 +297,18 @@ export const crearPaginaInicialEmpresa = (usu, imgPerfil) => {
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <div class="navbar-nav me-auto mb-2 mb-lg-0"></div>
                         <ul class="navbar-nav">
-                            <li id="opNavEmpleados" class="nav-item" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+                            <li id="opNavEmpleados" class="nav-item">
                                 <a class="nav-link active" aria-current="page">Empleados</a>
                             </li>
-                            <li id="opNavCalendario" class="nav-item" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+                            <li id="opNavCalendario" class="nav-item">
                                 <a class="nav-link active" aria-current="page">Calendario</a>
                             </li>
-                            <li id="opNavTablon" class="nav-item" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+                            <li id="opNavTablon" class="nav-item">
                                 <a class="nav-link active" aria-current="page">Tablón</a>
                             </li>
+                            <li id="opNavLogout" class="nav-item">
+                                <a href="" class="nav-link active" aria-current="page">Cerrar sesión</a>
+                            </li>                            
                             <li id="iconoPerfil" class="divIconoPerfil collapse navbar-collapse">
                                 <img class="imgIconoPerfil" src="${imgPerfil}" alt="">
                             </li>
@@ -335,21 +338,46 @@ export const crearPaginaInicialEmpresa = (usu, imgPerfil) => {
 };
 
 //Añade al DOM lo que sería la estructura de la página web si se ha iniciado sesión como empleado.
-export const crearPaginaInicialEmpleado = (usu) => {
-    return `<header id="cabecera">
-                <div class="logotipo">
-                    <a href="./index.html"><img src="./img/logoSinFondo.svg" alt=""></a>
+export const crearPaginaInicialEmpleado = (usu, imgPerfil) => {
+    return `<nav id="navBarPrincipal" class="navbar navbar-expand-lg navbar-dark">
+                <div class="container-fluid">
+                    <div class="divLogotipo navbar-brand">
+                        <a href="./index.html">
+                            <img src="./img/logoSinFondo.svg" alt="icono WorkAs">
+                            <span class="tituloNav">WorkAs</span>
+                        </a>
+                    </div>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <div class="navbar-nav me-auto mb-2 mb-lg-0"></div>
+                        <ul class="navbar-nav">
+                            <li id="opNavCalendario" class="nav-item">
+                                <a class="nav-link active" aria-current="page">Calendario</a>
+                            </li>
+                            <li id="opNavTablon" class="nav-item">
+                                <a class="nav-link active" aria-current="page">Tablón</a>
+                            </li>
+                            <li id="opNavLogout" class="nav-item">
+                                <a href="" class="nav-link active" aria-current="page">Cerrar sesión</a>
+                            </li>
+                            <li id="iconoPerfil" class="divIconoPerfil collapse navbar-collapse">
+                                <img class="imgIconoPerfil" src="${imgPerfil}" alt="">
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <h1 class="nombreEmpleado">Empleado: ${usu.data().nombre}</h1>
-                <nav class="navMenu">
-                    <ul>
-                        <li><a id="enlCalendario">Calendario</a></li>
-                        <li><a id="enlTablonAnuncio">Tablón Anuncio</a></li>
-                        <li><a href="">Cerrar Sesión</a></li>
-                        <li id="iconoPerfil"><img src="./img/empleadoIcono.png" alt=""></li>
-                    </ul>
-                </nav>
-            </header>
+                <button id="btnChat" type="button" class="btn">
+                    <input type="image" src="./img/chatServicio.png">
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        99+
+                        <span class="visually-hidden">unread messages</span>
+                    </span>
+                </button>
+            </nav>
             <aside id="asidePrincipal">
                 <div class="asideTitulo">
                     <h3 class="asideElInfo ocultarAsideHover ocultarElAside">Opciones</h3>
@@ -357,11 +385,11 @@ export const crearPaginaInicialEmpleado = (usu) => {
                 </div>
                 <div id="asideOpciones">
                 </div>
-                <div id="iconoPerfilAside">
-                    <img src="./img/miFotoPerfil.jpg" alt="">
+                <div id="iconoPerfilAside" class="divIconoPerfil">
+                    <img class="imgIconoPerfil" src="${imgPerfil}" alt="">
                 </div>
             </aside>
-            <div id="principal"><img id="imgInicioWorkas" src="././././img/imgInicioWorkas.png" alt=""></div>`;
+            <div id="principal"></div>`;
 };
 
 //Devuelve la estructura de las opciones de empleados.
@@ -548,23 +576,64 @@ export const crearDivInfoDatosEmpresa = (empresa, iconoPerfil, nEmpleados) => {
             </div>`;
 }
 
-//Crea un div que mostrará datos del empleado que ha iniciado sesión, estará oculto.
-export const crearDivInfoDatosEmpleado = (empleado) => {
-    return `<div class="infoPerfil ocultar">
-                <div class="imgPerfil"><img src="./img/empleadoIcono.png" alt=""></div>
-                <div class="nombreCompleto">${empleado.data().nombre} ${empleado.data().apellidos}</div>
-                <div class="dni">Dni: <span>${empleado.data().dni}</span></div>
-                <div class="correo">Correo: <span>${empleado.data().correo}</span></div>
-                <div class="puestoTrabajo">Puesto Trabajo: <span>${empleado.data().puestoTrabajo}</span></div>
-                <div class="turno">Turno: <span>${empleado.data().turno}</span></div>
+//Crea un div que mostrará datos del empleado que ha iniciado sesión.
+export const crearDivInfoDatosEmpleado = (empleado, iconoPerfil, empresaEmpleado) => {
+    return `<div id="cardMostrarDatosEmpresa" class="card mb-3" style="max-width: 800px;">
+                <div class="row g-0">
+                <div id="divImgIconoPerfilDatos" class="col-md-4">
+                    <img id="imgIconoPerfilDatos" class="imgIconoPerfil" src="${iconoPerfil}" class="img-fluid rounded-start" alt="icono perfil">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <div class="nombreCompleto">${empleado.data().nombre} ${empleado.data().apellidos}</div>
+                        </h5>
+                        <p class="card-text">
+                            <div class="empresaEmpleado">Empresa: <span>${empresaEmpleado.data().rznSocial}</span></div>
+                        </p>
+                        <p class="card-text">
+                            <div class="dni">Dni: <span>${empleado.data().dni}</span></div>
+                        </p>
+                        <p class="card-text">
+                            <div class="correo">Correo: <span>${empleado.data().correo}</span></div>
+                        </p>
+                        <p class="card-text">
+                            <div class="puestoTrabajo">Puesto Trabajo: <span>${empleado.data().puestoTrabajo}</span></div>
+                        </p>
+                        <p class="card-text">
+                            <div class="turno">Turno: <span>${empleado.data().turno}</span></div>
+                        </p>
+                    </div>
+                </div>
+                </div>
+            </div>
+    
+            <div id="modalIconoPerfil" class="modal fade" tabindex="-1" aria-labelledby="modalIconoPerfilLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalIconoPerfilLabel">Modificar Icono Perfil</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">                      
+                            Subir icono perfil:<br>
+                            <input id="inputAnyadirImg" type="file" accept="image/*" name="archivosubido">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button id="btnActualizarImgPerfil" type="button" class="btn btn-primary" data-bs-dismiss="modal">Guardar cambios</button>
+                        </div>
+                    </div>
+                </div>
             </div>`;
 }
 
-
 export const crearDivRotarTurno = () => {
-    return `<div class="offset-2 offset-sm-0 col-8 col-sm-3 col-xxl-2">
-                <div class="input-group mb-3 align-items-center">
-                    <input id="inputBuscarPorPuesto" type="text" class="form-control" placeholder="Buscar empleado por puesto"
+    return `<h2 id='tituloListEmpleado'>Rotar Turno de Empleados</h2><hr>
+            <div id="divBuscadorPuesto" class="offset-2 offset-sm-0 col-8 col-sm-3 col-xxl-2">
+                <div id="msgPuestoTrabajo">Mostrando resultados de <span id="spanPuestoTrabajo">.....</span></div>
+                <div class="input-group align-items-center">
+                    <input id="inputBuscarPorPuesto" type="text" placeholder="Buscar puesto"
                         aria-label="Recipient's username" aria-describedby="button-addon2">
                     <div id="divBtnBuscarEmpleadoPuesto">
                         <input id="btnBuscarEmpleadoPuesto" type="image" src="./img/lupa.png">
@@ -575,56 +644,51 @@ export const crearDivRotarTurno = () => {
 }
 
 export const crearFilasCardRotarTurno = (empleados) => {
-    var filas = "";
+    var filas = `<div class='animate__animated animate__fadeIn animate__faster'><table>
+                 <tr><th></th><th>Dni</th><th>Nombre</th></tr>`;
 
     if(empleados.length === 0 ) {
         filas = "No hay empleados";
     } else {
         
         for (let i = 0; i < empleados.length; i++) {
-            filas += `<p>${i+1}. ${empleados[i].data().dni}: ${empleados[i].data().nombre}</p>`;
+            filas += `<tr><td>${i+1}.</td><td>${empleados[i].data().dni}</td> <td>${empleados[i].data().nombre}</td></tr>`;
         }
-    
     }
 
+    filas += "</table></div>";
     return filas;
 }
 
-export const crearCardRotarTurno = (turno, puestoTrabajo, empleados) => {
+export const crearCardRotarTurno = (turno) => {
     var imgTurno, divBotones, tituloTurno, idCard;
-    var filas = "<div>"
     var imgDiurno = "./img/imgTurnoDiurno.png";
     var imgMixto = "./img/imgTurnoMixto.png";
     var imgNocturno = "./img/imgTurnoNocturno.png";
 
-    for (let i = 0; i < empleados.length; i++) {
-        filas += `<p>${i+1}.º  ${empleados[i].data().dni}: ${empleados[i].data().nombre}</p>`;
-    }
-    filas += "</div>"
-
     if (turno === "diurno") {
         idCard = "cardTurnoDiurno";
         imgTurno = imgDiurno;
-        tituloTurno = `Diurno - ${puestoTrabajo}`;
+        tituloTurno = `Diurno`;
         divBotones = `<div class="divBtnCambiarTurno">
-                        <input id="diurnoToMixto" class="btnTurno btnMixto" type="image" src="${imgMixto}">
-                        <input id="diurnoToNocturno" class="btnTurno btnNocturno" type="image" src="${imgNocturno}">
+                        <button id="diurnoToMixto" class="btnTurno btnMixto"><img src="${imgMixto}" alt="" />Mixto</button>
+                        <button id="diurnoToNocturno" class="btnTurno btnNocturno"><img src="${imgNocturno}" alt="" />Nocturno</button>
                       </div>`;
     } else if (turno === "mixto") {
         idCard = "cardTurnoMixto";
         imgTurno = imgMixto;
-        tituloTurno = `Mixto - ${puestoTrabajo}`;
+        tituloTurno = `Mixto`;
         divBotones = `<div class="divBtnCambiarTurno">
-                        <input id="mixtoToDiurno" class="btnTurno btnDiurno" type="image" src="${imgDiurno}">
-                        <input id="mixtoToNocturno" class="btnTurno btnNocturno" type="image" src="${imgNocturno}">
+                        <button id="mixtoToDiurno" class="btnTurno btnDiurno"><img src="${imgDiurno}" alt="" />Diurno</button>
+                        <button id="mixtoToNocturno" class="btnTurno btnNocturno"><img src="${imgNocturno}" alt="" />Nocturno</button>
                       </div>`;
     } else if (turno === "nocturno") {
         idCard= "cardTurnoNocturno";
         imgTurno = imgNocturno;
-        tituloTurno = `Nocturno - ${puestoTrabajo}`;
+        tituloTurno = `Nocturno`;
         divBotones = `<div class="divBtnCambiarTurno">
-                        <input id="nocturnoToDiurno" class="btnTurno btnDiurno" type="image" src="${imgDiurno}">
-                        <input id="nocturnoToMixto" class="btnTurno btnMixto" type="image" src="${imgMixto}">
+                        <button id="nocturnoToDiurno" class="btnTurno btnDiurno"><img src="${imgDiurno}" alt="" />Diurno</button>
+                        <button id="nocturnoToMixto" class="btnTurno btnMixto"><img src="${imgMixto}" alt="" />Mixto</button>
                       </div>`;
     } else {
         return "";
@@ -637,7 +701,7 @@ export const crearCardRotarTurno = (turno, puestoTrabajo, empleados) => {
                 <div class="card-body">
                     <h5 class="card-title">${tituloTurno}</h5>
                     <div class="divCardEmpleados">
-                        ${filas}
+                        <p>No hay empleados</p>
                     </div>
                 </div>
                 <div class="card-body">

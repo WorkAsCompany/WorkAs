@@ -170,17 +170,9 @@ class BD_Firebase {
         return getDocs(consulta);
     }
 
-    //Modifica la imagen de perfil de una empresa.
-    actualizarImgPerfilEmpresa(idEmpresa, ruta) {
-        var idRef = doc(this.devolverEnlace("empresa"), idEmpresa);
-        updateDoc(idRef, {
-            iconoPerfil: ruta
-        });
-    }
-
-    //Modifica la imagen de perfil de un empleado.
-    actualizarImgPerfilEmpleado(idEmpleado, ruta) {
-        var idRef = doc(this.devolverEnlace("empleado"), idEmpleado);
+    //Modifica la imagen de perfil según el usuario.
+    actualizarImgPerfil(id, ruta, usuario) {
+        var idRef = doc(this.devolverEnlace(usuario), id);
         updateDoc(idRef, {
             iconoPerfil: ruta
         });
@@ -200,7 +192,6 @@ class BD_Firebase {
 
     modificarTurnoEmpleado(empleado, turno) {
         var idRef = doc(this.devolverEnlace("empleado"), empleado.id);
-        console.log(1)
         return updateDoc(idRef, {
             turno: turno
         });

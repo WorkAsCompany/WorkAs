@@ -1,7 +1,9 @@
 "use strict";
 import { BD_Firebase } from "./bd_firebase.js";
+import { RotarTurno } from "./rotarTurno.js";
+
 import * as Plantilla from "../bibliotecas/plantilla.js";
-import * as Calendario from "../bibliotecas/calendario.js";
+import * as General from "../bibliotecas/general.js";
 
 /*  --- BIBLIOTECA WORKAS ---  */
 //Tenemos todas las fuciones o procedimientos que nos pueden ser utiles para trabajar con nuestra aplicación principal.
@@ -11,30 +13,48 @@ var opAside;
 var arrayEmpleados = [];
 var empleadoEnEdicion;
 
-var arrayTurnoDiurno = [];
-var arrayTurnoMixto = [];
-var arrayTurnoNocturno = [];
-
-class Workas extends BD_Firebase {
+class Workas extends RotarTurno {
     constructor() {
         super();
     }
 
-    desactivarActivarBotones(clase, desactivar) {
-        if(desactivar) {
-            for (let i = 0; i < doc.getElementsByClassName(clase).length; i++) {
-                doc.getElementsByClassName(clase)[i].setAttribute("disabled","disabled")
+    colapsarAside(btn) {
+        if (btn.classList.contains("asideNoCollapse")) {
+            btn.classList.add("asideCollapse");
+            btn.classList.remove("asideNoCollapse");
+            doc.getElementById("contenido").classList.add("noColapsarContenido");
+            doc.getElementById("contenido").classList.remove("colapsarContenido");
+            for (let i = 0; i < doc.getElementById("asidePrincipal").getElementsByClassName("ocultarElAside").length; i++) {
+                doc.getElementById("asidePrincipal").getElementsByClassName("ocultarElAside")[i].classList.add("ocultarAsideClic");
+                doc.getElementById("asidePrincipal").getElementsByClassName("ocultarElAside")[i].classList.remove("ocultarAsideHover");
             }
         } else {
-            for (let i = 0; i < doc.getElementsByClassName(clase).length; i++) {
-                doc.getElementsByClassName(clase)[i].removeAttribute("disabled")
+            btn.classList.add("asideNoCollapse");
+            btn.classList.remove("asideCollapse");
+            doc.getElementById("contenido").classList.add("colapsarContenido");
+            doc.getElementById("contenido").classList.remove("noColapsarContenido");
+            for (let i = 0; i < doc.getElementById("asidePrincipal").getElementsByClassName("ocultarElAside").length; i++) {
+                doc.getElementById("asidePrincipal").getElementsByClassName("ocultarElAside")[i].classList.remove("ocultarAsideClic");
+                doc.getElementById("asidePrincipal").getElementsByClassName("ocultarElAside")[i].classList.add("ocultarAsideHover");
             }
         }
+    }
+
+    asignarEvColapsarAside() {
+        var btnColapsar = doc.getElementById("btnColapsarAside");
+            btnColapsar.addEventListener(
+                "click",
+                (e) => {
+                    this.colapsarAside(e.target);
+                },
+                false
+            );
     }
 
     //Recoge los datos del formulario y si son correctos crea un nuevo empleado y lo añade a la empresa correspondiente.
     opAnyadirEmpleado = async() => {
         var div = doc.getElementById("divPrincipalTabla");
+        var alert;
 
         var dni = doc.getElementById("txtDni").value.trim();
         var nombre = doc.getElementById("txtNombre").value.trim();
@@ -60,18 +80,19 @@ class Workas extends BD_Firebase {
             var existeEmpleado = await this.devolverConsultaFiltrarEmpleadoCorreo(empleado.correo);
 
             if (existeEmpleado.docs.length > 0) {
-                div.getElementsByClassName("error")[0].innerHTML = "(*) Error, ya existe el empleado.";
-                div.getElementsByClassName("error")[0].classList.remove("ocultar");
+                alert = General.crearAlert("Error, ya existe el empleado.", "errorAlert");
+                div.insertBefore(alert, doc.getElementById("tituloListEmpleado"));
+
             } else {
+                alert = General.crearAlert("Empleado creado correctamente.", "exitoAlert");
                 doc.getElementById("formCrearEmpleado").reset();
                 await this.anyadirEmpleado(empleado);
-                div.innerHTML = `<p class="infoMensajeCorrecto">Empleado creado correctamente.</p>`;
                 this.opListarEmpleados();
-            }
+                div.insertBefore(alert, doc.getElementById("tituloListEmpleado"));            }
         } else {
-            div.getElementsByClassName("error")[0].innerHTML = "(*) Error en la introducción de datos.";
-            div.getElementsByClassName("error")[0].classList.remove("ocultar");
-        }
+            alert = General.crearAlert("Error en la introducción de datos.", "errorAlert");
+            div.insertBefore(alert, doc.getElementById("tituloListEmpleado"));
+        }   
     }
 
     //Asigna el evento de crear usuario al botón del formulario.
@@ -80,6 +101,15 @@ class Workas extends BD_Firebase {
         btn.addEventListener(
             "click",
             (e) => {
+
+                if(doc.getElementById("divPrincipalTabla") == null) {
+                    var divTabla = doc.createElement("div")
+                    divTabla.id = "divPrincipalTabla";
+                    doc.getElementById("divPrincipalRotarTurno").remove();
+                    doc.getElementById("principal").appendChild(divTabla);
+                    this.opListarEmpleados();
+                }
+
                 this.opAnyadirEmpleado();
             },
             false
@@ -89,7 +119,7 @@ class Workas extends BD_Firebase {
     //Lista los empleados de una empresa en una tabla, con funciones de modificar y eliminar a este.
     opListarEmpleados = async() => {
         var div = doc.getElementById("divPrincipalTabla");
-        div.innerHTML = "<h2 id='tituloListEmpleado'>Listado de Empleados</h2>";
+        div.innerHTML = "<h2 id='tituloListEmpleado'>Listado de Empleados</h2><hr>";
 
         var filas = "";
         var empleados = await this.devolverEmpleadosEmpresa(this.getUsu().id);
@@ -160,9 +190,14 @@ class Workas extends BD_Firebase {
         //var divEmpleado = btn.parentNode.parentNode.parentNode;
         var div = doc.getElementById("divPrincipalTabla");
         div.innerHTML = "";
+        var alert;
 
+        var empleado = await this.devolverEmpleado(btn.parentNode.parentNode.id)
         await this.eliminarEmpleadoEmpresa(btn.parentNode.parentNode.id);
+        
         this.opListarEmpleados();
+        alert = General.crearAlert(`El empleado ${empleado.data().nombre} ${empleado.data().apellidos} se ha eliminado correctamente.`, "exitoAlert");
+        div.insertBefore(alert, doc.getElementById("tituloListEmpleado"));
     }
 
     //Asigna el evento de borrar un empleado a los botones de elimiar.
@@ -199,17 +234,35 @@ class Workas extends BD_Firebase {
 
     //Permite confirmar los cambios de la edición del empleado y añadirlos a la bd, cogiendo los valores de los inputs del modal.
     terminarEditarEmpleado = async() => {
-        
-        var empleadoMod = {
-            dni: doc.getElementById("txtEditarDni").value,
-            nombre: doc.getElementById("txtEditarNombre").value,
-            apellidos: doc.getElementById("txtEditarApellidos").value,
-            correo: doc.getElementById("txtEditarEmail").value,
-            puestoTrabajo: doc.getElementById("txtEditarPuestoTrabajo").value,
-            turno: doc.getElementById("turnoEditarJornada").value
-        }
+        var div = doc.getElementById("divPrincipalTabla");
+        var alert;
 
-        await this.actualizarEmpleado( empleadoEnEdicion.id, empleadoMod);
+        var dni = doc.getElementById("txtEditarDni").value.trim();
+        var nombre = doc.getElementById("txtEditarNombre").value.trim();
+        var apellidos = doc.getElementById("txtEditarApellidos").value.trim();
+        var puestoTrabajo = doc.getElementById("txtEditarPuestoTrabajo").value.trim();
+        var turno = doc.getElementById("turnoEditarJornada").value;
+
+        if (this.comprobarDni(dni) && this.comprobarRazSocial(nombre) && this.comprobarRazSocial(apellidos) && this.comprobarRazSocial(puestoTrabajo) && turno !== "noSelec") {
+            var empleadoMod = {
+                dni: dni,
+                nombre: nombre,
+                apellidos: apellidos,
+                puestoTrabajo: puestoTrabajo,
+                turno: turno
+            }
+    
+            await this.actualizarEmpleado( empleadoEnEdicion.id, empleadoMod);
+            this.opListarEmpleados();
+
+            alert = General.crearAlert(`El empleado ${nombre} ${apellidos} se ha modificado correctamente.`, "exitoAlert");
+            div.insertBefore(alert, doc.getElementById("tituloListEmpleado"));
+
+        } else {
+            alert = General.crearAlert(`El empleado ${empleadoEnEdicion.data().nombre} ${empleadoEnEdicion.data().apellidos} se ha modificado correctamente.`, "errorAlert");
+            div.insertBefore(alert, doc.getElementById("tituloListEmpleado"));
+
+        }
     }
 
     //Asigna el evento guardar la edición de los datos del empleado en la bd.
@@ -219,9 +272,7 @@ class Workas extends BD_Firebase {
         btnEditar.addEventListener(
             "click",
             (e) => {
-
                 this.terminarEditarEmpleado();
-                this.opListarEmpleados();
             },
             false
         );
@@ -244,31 +295,222 @@ class Workas extends BD_Firebase {
         }
     }
 
+    //Añadirá al DOM un div con información del empleado que ha iniciado sesión.
+    mostrarDatosEmpleado = async() => {
+        var empleado = await this.devolverEmpleado(this.getUsu().id);
+        var divIconoEmpleado = doc.getElementById("iconoPerfil");
+        divIconoEmpleado.innerHTML += Plantilla.crearDivInfoDatosEmpleado(empleado);
+    }
+
+    //Añadirá al DOM un div con información de la empresa que ha iniciado sesión.
+    mostrarDatosEmpresa = async() => {
+        var empresa = await this.devolverEmpresa(this.getUsu().id);
+        var divIconoEmpresa = doc.getElementById("iconoPerfil");
+        divIconoEmpresa.innerHTML += Plantilla.crearDivInfoDatosEmpresa(empresa);
+    }
+
+    administrarEmpleados() {
+        doc.getElementById("principal").innerHTML = `<div id="divPrincipalTabla"></div>`;
+        doc.getElementById("principal").innerHTML += `<div id="divModales"></div>`;
+
+        doc.getElementById("divModales").innerHTML += Plantilla.devolverCrearEmpleadoForm();
+        doc.getElementById("divModales").innerHTML += Plantilla.devolverEditarEmpleadoForm();
+
+        this.opListarEmpleados();
+        this.asignarBtnEvTerminarEditarEmpleado();
+        this.asignarEvAnyadirEmpleado();
+    }
+
+    asignarEvAdministrarEmpleados() {
+        var btn = doc.getElementById("asideAdministrarEmpleado");
+        btn.addEventListener(
+            "click",
+            (e) => {
+                this.administrarEmpleados();
+            },
+            false
+        );
+    }
+
+    modificarPaginaOpNavEmpleados() {
+        opAside.innerHTML = Plantilla.crearOpAsideNavEmpleados();
+
+        this.asignarEvAdministrarEmpleados();
+        this.administrarEmpleados();
+        this.asignarEvRotarEmpleados();
+    }
+
+    //Modifica el icono de perfil del usuario.
+    modificarPaginaOpNavIconoPerfil = async(tipoUsuario) => {
+        opAside.innerHTML = Plantilla.crearOpAsideNavPerfil();
+
+        if(tipoUsuario === "empresa") {
+            var empresa = await this.devolverEmpresa(this.getUsu().id);
+            var imgPerfil = (empresa.data().iconoPerfil === "") ? "./img/empresaIcono.png" : await this.descargarImgBD(empresa.data().iconoPerfil);
+            var nEmpleados = await this.devolverEmpleadosEmpresa(this.getUsu().id);
+            doc.getElementById("principal").innerHTML = Plantilla.crearDivInfoDatosEmpresa(await this.devolverEmpresa(this.getUsu().id), imgPerfil, nEmpleados.docs.length);
+
+
+        } else if(tipoUsuario === "empleado") {
+            var empleado = await this.devolverEmpleado(this.getUsu().id);
+            var empleadoEmpresa = await this.devolverEmpresa(empleado.data().idEmpresa);
+            var imgPerfil = (empleado.data().iconoPerfil === "") ? "./img/empleadoIcono.png" : await this.descargarImgBD(empleado.data().iconoPerfil);
+            doc.getElementById("principal").innerHTML = Plantilla.crearDivInfoDatosEmpleado(await this.devolverEmpleado(this.getUsu().id), imgPerfil, empleadoEmpresa);
+
+        }
+
+        doc.getElementById("btnActualizarImgPerfil").addEventListener(
+            "click",
+            async(e) => {
+                var file = ($('#inputAnyadirImg'))[0].files[0];
+                var nombreImg = `${this.getUsu().id}.${file.name.substr( (file.name.lastIndexOf(".")+1 - file.name.length) )}`;
+
+                await this.subirImgBD(`iconosPerfil/${nombreImg}`, file);
+                await this.actualizarImgPerfil(this.getUsu().id, `iconosPerfil/${nombreImg}`, tipoUsuario);
+
+                var ruta = await this.descargarImgBD(`iconosPerfil/${nombreImg}`);
+
+                for (let i = 0; i < document.getElementsByClassName("imgIconoPerfil").length; i++) {
+                    document.getElementsByClassName("imgIconoPerfil")[i].src = ruta;
+                }
+            },
+            false
+        );
+    }
+
+    //Muestra la página principal con todas las funciones correspondientes si se ha iniciado sesión como empresa.
+    crearPaginaInicialWorkasEmpresa = async() => {
+        var iconoPerfil = doc.getElementsByClassName("imgIconoPerfil");
+        var empresa = await this.devolverEmpresa(this.getUsu().id);
+
+        var imgPerfil = (empresa.data().iconoPerfil === "") ? "./img/empresaIcono.png" : await this.descargarImgBD(empresa.data().iconoPerfil);
+
+        doc.getElementById("contenidoFormulario").id = "contenido";
+        doc.getElementById("contenido").classList.add("colapsarContenido");
+        doc.getElementById("contenido").innerHTML = Plantilla.crearPaginaInicialEmpresa(empresa, imgPerfil);
+        opAside = doc.getElementById("asideOpciones");
+
+        //this.mostrarDatosEmpresa();
+        this.modificarPaginaOpNavEmpleados();
+        this.asignarEvColapsarAside();
+        
+        doc.getElementById("opNavEmpleados").addEventListener(
+            "click",
+            (e) => {
+                this.modificarPaginaOpNavEmpleados();
+            },
+            false
+        );
+
+        for (let i = 0; i < iconoPerfil.length; i++) {
+            iconoPerfil[i].addEventListener(
+                "click",
+                async(e) => {
+                    await this.modificarPaginaOpNavIconoPerfil("empresa");
+                },
+                false
+            );
+        }
+
+
+        /*//Añade las funciones a los elementos de menú de empleado.
+        var opcionTablonAnuncio = doc.getElementsByClassName("listOpcionesTablonAnuncio");
+        var opPerfil = doc.getElementById("iconoPerfil");
+        var opCalendario = doc.getElementById("enlCalendario");
+        for (let i = 0; i < opcionEmpleados.length; i++) {
+            if (opcionEmpleados[i].id === "listAnyadirEmp") {
+                this.asignarEvOpAnyadirEmpleado(opcionEmpleados[i]);
+            } else if (opcionEmpleados[i].id === "listListarEmp") {
+                this.asignarEvOpListarEmpleados(opcionEmpleados[i]);
+            }
+        }
+
+        //Añade las funciones a los elementos de menú de tablón de anuncio.
+        for (let i = 0; i < opcionTablonAnuncio.length; i++) {
+            if (opcionTablonAnuncio[i].id === "listCrearTablonAnuncio") {
+                this.asignarEvOpCrearTablonAnuncio(opcionTablonAnuncio[i]);
+            } else if (opcionTablonAnuncio[i].id === "listListarTablonAnuncio") {
+                this.asignarEvOpListarTablonAnuncio(opcionTablonAnuncio[i]);
+            }
+        }
+
+        opCalendario.addEventListener(
+            "click",
+            () => {
+                var calendario = doc.createElement("div");
+                calendario.setAttribute("id", "calendarioFestivos");
+                calendario.innerHTML = Plantilla.crearDivCalendarioInfo();
+                calendario.innerHTML += Plantilla.crearDivCalendarioGeneral();
+                doc.getElementById("principal").innerHTML = "<h2 id='tituloCal'>Calendario de Días Festivos</h2>";
+                doc.getElementById("principal").appendChild(calendario);
+                Calendario.evMeses();
+            },
+            false
+        );
+
+        opPerfil.addEventListener(
+            "mouseover",
+            (e) => {
+                doc.getElementById("iconoPerfil").getElementsByClassName("infoPerfil")[0].classList.remove("ocultar");
+            },
+            false
+        );
+
+        opPerfil.addEventListener(
+            "mouseout",
+            (e) => {
+                doc.getElementById("iconoPerfil").getElementsByClassName("infoPerfil")[0].classList.add("ocultar");
+            },
+            false
+        );*/
+    }
+
+    crearPaginaInicialWorkasEmpleado = async() => {
+        var iconoPerfil = doc.getElementsByClassName("imgIconoPerfil");
+        var empleado = await this.devolverEmpleado(this.getUsu().id);
+
+        var imgPerfil = (empleado.data().iconoPerfil === "") ? "./img/empleadoIcono.png" : await this.descargarImgBD(empleado.data().iconoPerfil);
+
+        doc.getElementById("contenidoFormulario").id = "contenido";
+        doc.getElementById("contenido").classList.add("colapsarContenido");
+        doc.getElementById("contenido").innerHTML = Plantilla.crearPaginaInicialEmpleado(empleado, imgPerfil);
+        opAside = doc.getElementById("asideOpciones");
+
+        this.asignarEvColapsarAside();
+        
+        /*doc.getElementById("").addEventListener(
+            "click",
+            (e) => {
+ 
+            },
+            false
+        );*/
+
+        for (let i = 0; i < iconoPerfil.length; i++) {
+            iconoPerfil[i].addEventListener(
+                "click",
+                async(e) => {
+                    await this.modificarPaginaOpNavIconoPerfil("empleado");
+                },
+                false
+            );
+        }
+    }
 
 
 
 
 
 
+    quitarTablonAnuncio = async(btn) => {
+        var empresa = await this.devolverEmpresa(this.getUsu().id);
+        var array = empresa.data().tablonAnuncios;
+        array.splice(btn.id, 1);
 
+        await this.eliminarTablonEmpresa(this.getUsu().id, array);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        this.opListarTablonAnuncio(false);
+    }
 
     //Añade al DOM el formulario de creación de un tablón de anuncio.
     crearFormTablonAnuncio() {
@@ -457,409 +699,6 @@ class Workas extends BD_Firebase {
                 false
             );
         }
-    }
-
-    //Añadirá al DOM un div con información del empleado que ha iniciado sesión.
-    mostrarDatosEmpleado = async() => {
-        var empleado = await this.devolverEmpleado(this.getUsu().id);
-        var divIconoEmpleado = doc.getElementById("iconoPerfil");
-        divIconoEmpleado.innerHTML += Plantilla.crearDivInfoDatosEmpleado(empleado);
-    }
-
-    //Añadirá al DOM un div con información de la empresa que ha iniciado sesión.
-    mostrarDatosEmpresa = async() => {
-        var empresa = await this.devolverEmpresa(this.getUsu().id);
-        var divIconoEmpresa = doc.getElementById("iconoPerfil");
-        divIconoEmpresa.innerHTML += Plantilla.crearDivInfoDatosEmpresa(empresa);
-    }
-
-    administrarEmpleados() {
-        doc.getElementById("principal").innerHTML = `<div id="divPrincipalTabla"></div>`;
-        doc.getElementById("principal").innerHTML += `<div id="divModales"></div>`;
-
-        doc.getElementById("divModales").innerHTML += Plantilla.devolverCrearEmpleadoForm();
-        doc.getElementById("divModales").innerHTML += Plantilla.devolverEditarEmpleadoForm();
-
-        this.opListarEmpleados();
-        this.asignarBtnEvTerminarEditarEmpleado();
-        this.asignarEvAnyadirEmpleado();
-    }
-
-    asignarEvAdministrarEmpleados() {
-        var btn = doc.getElementById("asideAdministrarEmpleado");
-        btn.addEventListener(
-            "click",
-            (e) => {
-                this.administrarEmpleados();
-            },
-            false
-        );
-    }
-
-
-
-
-
-
-
-
-
-
-
-    
-
-    modificarTurno = (btn) => {
-        this.desactivarActivarBotones("btnTurno", true);
-        var promesas = []; 
-
-        if (btn === "diurnoToMixto") {
-            for (let empleado of arrayTurnoDiurno) {
-                var promesa = this.modificarTurnoEmpleado(empleado, "Mixto")
-                promesas.push(promesa);
-            }
-            for (let empleado of arrayTurnoMixto) {
-                var promesa = this.modificarTurnoEmpleado(empleado, "Diurno")
-                promesas.push(promesa);
-            }
-
-        } else if (btn === "diurnoToNocturno") {
-             this.modificarTurnoEmpleado(arrayTurnoDiurno, "Nocturno");
-             this.modificarTurnoEmpleado(arrayTurnoNocturno, "Diurno");
-
-        } else if (btn === "mixtoToDiurno") {
-             this.modificarTurnoEmpleado(arrayTurnoMixto, "Diurno");
-             this.modificarTurnoEmpleado(arrayTurnoDiurno, "Mixto");
-
-        } else if (btn === "mixtoToNocturno") {
-             this.modificarTurnoEmpleado(arrayTurnoMixto, "Nocturno");
-             this.modificarTurnoEmpleado(arrayTurnoNocturno, "Mixto");
-
-        } else if (btn === "nocturnoToDiurno") {
-             this.modificarTurnoEmpleado(arrayTurnoNocturno, "Diurno");
-             this.modificarTurnoEmpleado(arrayTurnoDiurno, "Nocturno");
-
-        } else if (btn === "nocturnoToMixto") {
-             this.modificarTurnoEmpleado(arrayTurnoNocturno, "Mixto");
-             this.modificarTurnoEmpleado(arrayTurnoMixto, "Nocturno");
-
-        }
-        
-        return Promise.all(promesas);
-
-
-        /*console.log("fddf")
-        
-        console.log(arrayTurnoDiurno)
-        console.log(arrayTurnoMixto)
-        console.log(arrayTurnoNocturno)*/
-    }
-
-    asigarEvBtnModificarTurno(puesto) {
-        var btn = doc.getElementsByClassName("btnTurno");
-        for (let i = 0; i < btn.length; i++) {
-            btn[i].addEventListener(
-                "click",
-                async(e) => {
-                    var ye = await this.modificarTurno(e.target.id);
-                    console.log(ye)
-                    console.log(2)
-                    this.crearArrayTurno(puesto, true);
-                    console.log(arrayTurnoDiurno)
-                    console.log(arrayTurnoMixto)
-                    console.log(arrayTurnoNocturno)
-                    arrayTurnoDiurno = [];
-                    arrayTurnoMixto = [];
-                    arrayTurnoNocturno = [];
-
-                },
-                false
-            );
-        }
-    }
-
-    crearArrayTurno = async(puesto, sobreescribir) =>  {
-        var empleados = await this.devolverEmpleadosEmpresa(this.getUsu().id);
-        empleados = empleados.docs.filter(empleado => empleado.data().puestoTrabajo.toLowerCase() === puesto.toLowerCase());
-
-        empleados.map((empleado) => {
-            console.log(empleado.data().turno)
-            if (empleado.data().turno === "Diurno") {
-                arrayTurnoDiurno.push(empleado);
-            } else if (empleado.data().turno === "Mixto") {
-                arrayTurnoMixto.push(empleado);
-            } else if (empleado.data().turno === "Nocturno") {
-                arrayTurnoNocturno.push(empleado);
-            }
-        });
-
-        if(sobreescribir) {
-            doc.getElementById("cardTurnoDiurno").getElementsByClassName("divCardEmpleados")[0].innerHTML = Plantilla.crearFilasCardRotarTurno(arrayTurnoDiurno);
-            doc.getElementById("cardTurnoMixto").getElementsByClassName("divCardEmpleados")[0].innerHTML = Plantilla.crearFilasCardRotarTurno(arrayTurnoMixto);
-            doc.getElementById("cardTurnoNocturno").getElementsByClassName("divCardEmpleados")[0].innerHTML = Plantilla.crearFilasCardRotarTurno(arrayTurnoNocturno);
-        }
-        this.desactivarActivarBotones("btnTurno", false);
-
-    }
-
-    buscarEmpleadoPorPuesto = async(puesto) =>  {
-        var div = doc.getElementById("divCardRotarTurno");
-        div.innerHTML = "";
-        var inputBuscar = doc.getElementById("inputBuscarPorPuesto");
-
-        if(puesto != undefined) {
-            inputBuscar.value = puesto;
-        }
-
-        await this.crearArrayTurno(inputBuscar.value, false)
-
-        div.innerHTML += Plantilla.crearCardRotarTurno("diurno", inputBuscar.value, arrayTurnoDiurno);
-        div.innerHTML += Plantilla.crearCardRotarTurno("mixto", inputBuscar.value, arrayTurnoMixto);
-        div.innerHTML += Plantilla.crearCardRotarTurno("nocturno", inputBuscar.value, arrayTurnoNocturno);
-
-        this.asigarEvBtnModificarTurno(inputBuscar.value);
-        inputBuscar.value = "";
-    }
-
-    asignarEvBuscarEmpleadoPorPuesto() {
-        var btn = doc.getElementById("btnBuscarEmpleadoPuesto");
-        btn.addEventListener(
-            "click",
-            (e) => {
-                this.buscarEmpleadoPorPuesto();
-                arrayTurnoDiurno = [];
-                arrayTurnoMixto = [];
-                arrayTurnoNocturno = [];
-            },
-            false
-        );
-    }
-
-    rotarEmpleados() {
-        doc.getElementById("principal").innerHTML = Plantilla.crearDivRotarTurno();
-        this.asignarEvBuscarEmpleadoPorPuesto();
-    }
-
-    asignarEvRotarEmpleados() {
-        var btn = doc.getElementById("asideRotarTurno");
-        btn.addEventListener(
-            "click",
-            (e) => {
-                this.rotarEmpleados();
-            },
-            false
-        );
-    }
-
-    modificarPaginaOpNavEmpleados() {
-
-        opAside.innerHTML = Plantilla.crearOpAsideNavEmpleados();
-        this.asignarEvAdministrarEmpleados();
-        this.administrarEmpleados();
-        this.asignarEvRotarEmpleados();
-    }
-
-    modificarPaginaOpNavIconoPerfil = async() => {
-        var empresa = await this.devolverEmpresa(this.getUsu().id);
-        var imgPerfil = (empresa.data().iconoPerfil === "") ? "./img/empresaIcono.png" : await this.descargarImgBD(empresa.data().iconoPerfil);
-        var nEmpleados = await this.devolverEmpleadosEmpresa(this.getUsu().id);
-
-        opAside.innerHTML = Plantilla.crearOpAsideNavPerfil();
-        doc.getElementById("principal").innerHTML = Plantilla.crearDivInfoDatosEmpresa(await this.devolverEmpresa(this.getUsu().id), imgPerfil, nEmpleados.docs.length);
-
-        doc.getElementById("btnActualizarImgPerfil").addEventListener(
-            "click",
-            async(e) => {
-                var file = ($('#inputAnyadirImg'))[0].files[0];
-                var nombreImg = `${this.getUsu().id}.${file.name.substr( (file.name.lastIndexOf(".")+1 - file.name.length) )}`;
-
-                await this.subirImgBD(`iconosPerfil/${nombreImg}`, file);
-                await this.actualizarImgPerfilEmpresa(this.getUsu().id, `iconosPerfil/${nombreImg}`);
-
-                var ruta = await this.descargarImgBD(`iconosPerfil/${nombreImg}`);
-
-                for (let i = 0; i < document.getElementsByClassName("imgIconoPerfil").length; i++) {
-                    document.getElementsByClassName("imgIconoPerfil")[i].src = ruta;
-                }
-            },
-            false
-        );
-    }
-
-    //Muestra la página principal con todas las funciones correspondientes si se ha iniciado sesión como empresa.
-    crearPaginaInicialWorkasEmpresa = async() => {
-        var iconoPerfil = doc.getElementsByClassName("imgIconoPerfil");
-        var empresa = await this.devolverEmpresa(this.getUsu().id);
-
-        var imgPerfil = (empresa.data().iconoPerfil === "") ? "./img/empresaIcono.png" : await this.descargarImgBD(empresa.data().iconoPerfil);
-
-        doc.getElementById("contenidoFormulario").id = "contenido";
-        doc.getElementById("contenido").classList.add("colapsarContenido");
-        doc.getElementById("contenido").innerHTML = Plantilla.crearPaginaInicialEmpresa(empresa, imgPerfil);
-        opAside = doc.getElementById("asideOpciones");
-
-        //this.mostrarDatosEmpresa();
-        this.modificarPaginaOpNavEmpleados();
-        this.asignarEvColapsarAside();
-        
-        doc.getElementById("opNavEmpleados").addEventListener(
-            "click",
-            (e) => {
-                this.modificarPaginaOpNavEmpleados();
-            },
-            false
-        );
-
-        for (let i = 0; i < iconoPerfil.length; i++) {
-            iconoPerfil[i].addEventListener(
-                "click",
-                async(e) => {
-                    await this.modificarPaginaOpNavIconoPerfil();
-                },
-                false
-            );
-        }
-
-
-        /*//Añade las funciones a los elementos de menú de empleado.
-        var opcionTablonAnuncio = doc.getElementsByClassName("listOpcionesTablonAnuncio");
-        var opPerfil = doc.getElementById("iconoPerfil");
-        var opCalendario = doc.getElementById("enlCalendario");
-        for (let i = 0; i < opcionEmpleados.length; i++) {
-            if (opcionEmpleados[i].id === "listAnyadirEmp") {
-                this.asignarEvOpAnyadirEmpleado(opcionEmpleados[i]);
-            } else if (opcionEmpleados[i].id === "listListarEmp") {
-                this.asignarEvOpListarEmpleados(opcionEmpleados[i]);
-            }
-        }
-
-        //Añade las funciones a los elementos de menú de tablón de anuncio.
-        for (let i = 0; i < opcionTablonAnuncio.length; i++) {
-            if (opcionTablonAnuncio[i].id === "listCrearTablonAnuncio") {
-                this.asignarEvOpCrearTablonAnuncio(opcionTablonAnuncio[i]);
-            } else if (opcionTablonAnuncio[i].id === "listListarTablonAnuncio") {
-                this.asignarEvOpListarTablonAnuncio(opcionTablonAnuncio[i]);
-            }
-        }
-
-        opCalendario.addEventListener(
-            "click",
-            () => {
-                var calendario = doc.createElement("div");
-                calendario.setAttribute("id", "calendarioFestivos");
-                calendario.innerHTML = Plantilla.crearDivCalendarioInfo();
-                calendario.innerHTML += Plantilla.crearDivCalendarioGeneral();
-                doc.getElementById("principal").innerHTML = "<h2 id='tituloCal'>Calendario de Días Festivos</h2>";
-                doc.getElementById("principal").appendChild(calendario);
-                Calendario.evMeses();
-            },
-            false
-        );
-
-        opPerfil.addEventListener(
-            "mouseover",
-            (e) => {
-                doc.getElementById("iconoPerfil").getElementsByClassName("infoPerfil")[0].classList.remove("ocultar");
-            },
-            false
-        );
-
-        opPerfil.addEventListener(
-            "mouseout",
-            (e) => {
-                doc.getElementById("iconoPerfil").getElementsByClassName("infoPerfil")[0].classList.add("ocultar");
-            },
-            false
-        );*/
-    }
-
-    crearPaginaInicialWorkasEmpleado = async() => {
-        doc.getElementById("contenido").outerHTML = Plantilla.crearPaginaInicialEmpleado(await this.devolverEmpleado(this.getUsu().id));
-        var opTablonAnuncio = doc.getElementById("enlTablonAnuncio");
-        var opPerfil = doc.getElementById("iconoPerfil");
-        var opCalendario = doc.getElementById("enlCalendario");
-
-        this.mostrarDatosEmpleado();
-        this.asignarEvColapsarAside();
-
-        this.asignarEvOpListarTablonAnuncioEmpleado(opTablonAnuncio);
-
-        opCalendario.addEventListener(
-            "click",
-            () => {
-                var calendario = doc.createElement("div");
-                calendario.setAttribute("id", "calendarioFestivos");
-                calendario.innerHTML = Plantilla.crearDivCalendarioInfo();
-                calendario.innerHTML += Plantilla.crearDivCalendarioGeneral();
-                doc.getElementById("principal").innerHTML = "<h2 id='tituloCal'>Calendario de Días Festivos</h2>";
-                doc.getElementById("principal").appendChild(calendario);
-                Calendario.evMeses();
-            },
-            false
-        );
-
-        opPerfil.addEventListener(
-            "mouseover",
-            (e) => {
-                doc.getElementById("iconoPerfil").getElementsByClassName("infoPerfil")[0].classList.remove("ocultar");
-            },
-            false
-        );
-
-        opPerfil.addEventListener(
-            "mouseout",
-            (e) => {
-                doc.getElementById("iconoPerfil").getElementsByClassName("infoPerfil")[0].classList.add("ocultar");
-            },
-            false
-        );
-    }
-
-
-
-
-
-
-    quitarTablonAnuncio = async(btn) => {
-        var empresa = await this.devolverEmpresa(this.getUsu().id);
-        var array = empresa.data().tablonAnuncios;
-        array.splice(btn.id, 1);
-
-        await this.eliminarTablonEmpresa(this.getUsu().id, array);
-
-        this.opListarTablonAnuncio(false);
-    }
-
-    colapsarAside(btn) {
-        if (btn.classList.contains("asideNoCollapse")) {
-            btn.classList.add("asideCollapse");
-            btn.classList.remove("asideNoCollapse");
-            doc.getElementById("contenido").classList.add("noColapsarContenido");
-            doc.getElementById("contenido").classList.remove("colapsarContenido");
-            for (let i = 0; i < doc.getElementById("asidePrincipal").getElementsByClassName("ocultarElAside").length; i++) {
-                doc.getElementById("asidePrincipal").getElementsByClassName("ocultarElAside")[i].classList.add("ocultarAsideClic");
-                doc.getElementById("asidePrincipal").getElementsByClassName("ocultarElAside")[i].classList.remove("ocultarAsideHover");
-            }
-        } else {
-            btn.classList.add("asideNoCollapse");
-            btn.classList.remove("asideCollapse");
-            doc.getElementById("contenido").classList.add("colapsarContenido");
-            doc.getElementById("contenido").classList.remove("noColapsarContenido");
-            for (let i = 0; i < doc.getElementById("asidePrincipal").getElementsByClassName("ocultarElAside").length; i++) {
-                doc.getElementById("asidePrincipal").getElementsByClassName("ocultarElAside")[i].classList.remove("ocultarAsideClic");
-                doc.getElementById("asidePrincipal").getElementsByClassName("ocultarElAside")[i].classList.add("ocultarAsideHover");
-            }
-        }
-    }
-
-    asignarEvColapsarAside() {
-        var btnColapsar = doc.getElementById("btnColapsarAside");
-            btnColapsar.addEventListener(
-                "click",
-                (e) => {
-                    this.colapsarAside(e.target);
-                },
-                false
-            );
     }
 
 }

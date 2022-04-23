@@ -1,19 +1,43 @@
 /* INPUT BUSCAR */
+#divBuscadorPuesto {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 0px;
+    margin: 20px 0px 40px 0px;
+}
+
+#divBuscadorPuesto > * {
+    width: 35%;
+    font-size: 18px;
+}
+
+#divBuscadorPuesto .input-group {
+    display: flex;
+    justify-content: end;
+}
+
 #inputBuscarPorPuesto {
     border: 1px solid black;
+    width: 200px;
+    height: 35px;
+    align-items: flex-end;
 }
 
 #inputBuscarPorPuesto:focus {
     box-shadow: 0px 0px 0px black;
     background-color: aliceblue;
+    outline: 0px !important;
 }
 
 #divBtnBuscarEmpleadoPuesto {
     background-color: #055759;
     border: 1px solid black;
     border-radius: 0px 20px 20px 0px;
-    height: 40px;
-    width: 60px;
+    height: 35px;
+    width: 50px;
 }
 
 #divBtnBuscarEmpleadoPuesto:hover {
@@ -24,6 +48,10 @@
     height: 100%;
     padding: .5em 1em;
     filter: invert(1);
+}
+
+#spanPuestoTrabajo {
+    font-weight: bold;
 }
 
 /* CARD TURNO */
@@ -37,7 +65,8 @@
 
 .cardTurno {
     width: min(400px, 30%);
-    border-radius: 50px 50px 0px 0px !important;
+    border-radius: 50px 50px 15px 15px !important;
+    box-shadow: 4px 4px 8px black;
 }
 
 .cardTurnoImg {
@@ -46,7 +75,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 50px 50px 0px 0px;
+    border-radius: 50px 50px 20px 20px;
+
 }
 
 .cardTurnoImg img {
@@ -55,9 +85,16 @@
     padding: 1.5em;
     background-color: rgba(255, 255, 255, .4);
     border-radius: 100%;
+    box-shadow: 1px 1px 2px black;
+    transition: .5s;
 }
 
-#cardTurnoDiurno .cardTurnoImg {
+.cardTurno:hover .cardTurnoImg img {
+    transition: .5s;
+    transform: scale(1.1);
+}
+
+#cardTurnoDiurno .cardTurnoImg, .btnDiurno {
     background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
 }
 
@@ -65,7 +102,7 @@
 
 }
 
-#cardTurnoMixto .cardTurnoImg {
+#cardTurnoMixto .cardTurnoImg, .btnMixto {
     background-image: linear-gradient(to right, #ed6ea0 0%, #ec8c69 100%);
 }
 
@@ -73,25 +110,107 @@
     padding: 0px;
 }
 
-#cardTurnoNocturno .cardTurnoImg {
+#cardTurnoNocturno .cardTurnoImg, .btnNocturno {
     background-image: linear-gradient(-225deg, #3D4E81 0%, #5753C9 48%, #6E7FF3 100%);
 }
 
-#cardTurnoNocturno .cardTurnoImg img {
-
+.cardTurno .card-title {
+    font-size: 30px;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 .divCardEmpleados {
-    height: 300px;
+    height: 250px;
     border-radius: 10px;
-    background-color: red;
+    background-color: rgb(252, 252, 252);
+    border: 2px dotted gray;
+    overflow-y: scroll;
+    text-align: center;
+    padding: .5em;
+    font-size: 17px;
 }
 
-.divCardEmpleados p {
-text-align: center;
+.divCardEmpleados table {
+    width: 100%;
 }
 
-.divBtnCambiarTurno input {
-    width: 40px;
+.divCardEmpleados table td {
+    padding: 5px 0px;
+}
+
+.divBtnCambiarTurno {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.divBtnCambiarTurno button {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 50px;
+    border: 1px solid black;
+    border-radius: 40% 0%;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.divBtnCambiarTurno button:hover {
+    box-shadow: 2px 2px 4px black;
+    transition: .3s;
+}
+
+
+.divBtnCambiarTurno button img {
+    width: 50px;
+    padding: 10px;
+}
+
+.divBtnCambiarTurno button.btnMixto img {
+    padding: 0px;
+}
+
+@media only screen and (max-width: 991px) {
+    #divCardRotarTurno {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .cardTurno {
+        width: min(500px, 100%);
+        margin-bottom: 30px;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    #divBuscadorPuesto {
+        width: 100%;
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+        justify-content: center;
+        margin: 0px;
+        margin-bottom: 30px;
+    }
+    
+    #divBuscadorPuesto > * {
+        width: 100%;
+        font-size: 16px;
+        text-align: center;
+        padding-bottom: 15px;
+    }
+    
+    #divBuscadorPuesto .input-group {
+        display: flex;
+        justify-content: center;
+    }
+    
+    #inputBuscarPorPuesto {
+        width: 150px;
+    }
 }
 
