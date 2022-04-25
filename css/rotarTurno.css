@@ -10,7 +10,7 @@
 }
 
 #divBuscadorPuesto > * {
-    width: 35%;
+    width: 40%;
     font-size: 18px;
 }
 
@@ -64,7 +64,7 @@
 }
 
 .cardTurno {
-    width: min(400px, 30%);
+    width: min(400px, 32%);
     border-radius: 50px 50px 15px 15px !important;
     box-shadow: 4px 4px 8px black;
 }
@@ -142,6 +142,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;    
+    margin: 10px 0px;
 }
 
 .divBtnCambiarTurno button {
@@ -157,6 +159,7 @@
     border-radius: 40% 0%;
     cursor: pointer;
     transition: .3s;
+    margin: 10px 0px;
 }
 
 .divBtnCambiarTurno button:hover {

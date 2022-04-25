@@ -197,6 +197,63 @@ class BD_Firebase {
         });
     }
 
+
+    /*TABLON*/
+
+    //Devuelve un documento de un anuncio. 
+    devolverAnuncio(id) {
+        var idRef = doc(this.devolverEnlace("tablonAnuncio"), id);
+        var coleccion = getDoc(idRef);
+        return coleccion;
+    }
+
+    //Añade un anuncio a la bd.
+    anyadirAnuncio(anuncio) {
+        return addDoc(this.devolverEnlace("tablonAnuncio"), anuncio);
+    }
+
+    //Modifica la imagen del anuncio.
+    actualizarImgAnuncio(id, ruta) {
+        var idRef = doc(this.devolverEnlace("tablonAnuncio"), id);
+        updateDoc(idRef, {
+            imgAnuncio: ruta
+        });
+    }
+
+    //Modifica la imagen del anuncio.
+    actualizarImgAnuncio(id, ruta) {
+        var idRef = doc(this.devolverEnlace("tablonAnuncio"), id);
+        updateDoc(idRef, {
+            imgAnuncio: ruta
+        });
+    }
+
+    //Modifica las visitas del anuncio.
+    actualizarVisitas(id, visitas) {
+        var idRef = doc(this.devolverEnlace("tablonAnuncio"), id);
+        updateDoc(idRef, {
+            visualizaciones: visitas
+        });
+    }
+
+    //Modifica los likes del anuncio.
+    actualizarLikes(id, likes, arrayUsuarioLikes) {
+        var idRef = doc(this.devolverEnlace("tablonAnuncio"), id);
+        updateDoc(idRef, {
+            arrayUsuarioLikes: arrayUsuarioLikes,
+            likes: likes
+        });
+    }
+
+    //Añade un comentario al anuncio.
+    actualizarArrayAnuncio(idAnuncio, comentario) {
+        var anuncio = doc(this.devolverEnlace("tablonAnuncio"), idAnuncio);
+
+        return updateDoc(anuncio, {
+            comentarios: arrayUnion(comentario)
+        });
+    }
+
 }
 
 //Exportamos.

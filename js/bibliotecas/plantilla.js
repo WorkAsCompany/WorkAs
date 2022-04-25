@@ -428,10 +428,30 @@ export const crearOpAsideNavPerfil = () => {
             </div>`;
 }
 
+//Devuelve la estructura de las opciones del tablón de anuncio.
+export const crearOpAsideNavTablonAnuncio = () => {
+    return `<div id="asideCrearAnuncio" class="divServicioAside">
+                <img src="./img/agregarAnuncio.png" alt="">
+                <div class="asideElInfo ocultarAsideHover ocultarElAside">
+                    <p>Crear</p>
+                    <p>Crear anuncio</p>
+                </div>
+            </div>
+            <div id="asideListarTablon" class="divServicioAside">
+                <img src="./img/tablonNoticiaServicio.png" alt="">
+                <div class="asideElInfo ocultarAsideHover ocultarElAside">
+                    <p>Listar</p>
+                    <p>Listar tablón anuncio</p>
+                </div>
+            </div>`;
+}
+
 //Crea la estructura de como se va a mostrar los datos del empleado en una fila de una tabla, con los botones de borrar y editar.
 export const crearFilaDatosEmpleado = (empleado) => {
+    var imgPerfil = (empleado.data().iconoPerfil === "") ? "./img/empleadoIcono.png" : empleado.data().iconoPerfil;
+
     return `<tr id="${empleado.id}" class="fila">
-                <td class="celda codEmpleado">${empleado.data().codEmpleado}</td>
+                <td class="celda imgEmpleadoTabla"><img src="${imgPerfil}" alt=""></td>
                 <td class="celda dni editable">${empleado.data().dni}</td>
                 <td class="celda apellidos editable">${empleado.data().apellidos}</td>
                 <td class="celda nombre editable">${empleado.data().nombre}</td>
@@ -445,87 +465,6 @@ export const crearFilaDatosEmpleado = (empleado) => {
             </tr>`;
 }
 
-//Crea una plantilla de como se va a mostrar el tablón de anuncio.
-export const crearTablonPlantillaEmpresa1 = (tablon, pos) => {
-    var date = new Date(tablon.fPubli.seconds * 1000);
-    console.log(tablon);
-    return `<div class="tablonAnuncio"><img id="${pos}" class="btnEliminarTablon" src="././././img/eliminar.png" />
-                <div class="divTituloTablon"><h1>${tablon.titulo}</h1></div>
-                <div class="divImagenTablonIzq"><img src="${tablon.rutaImagen}" alt=""></div>
-                <div class="divContenido">${tablon.contenido}</div>
-                <div class="divFooterTablon">
-                <div class="divAutor">Autor: ${tablon.autor}</div>
-                    <div class="divFPubli">Fecha Publicación: <span>${date.getDate()+
-                        "/"+(date.getMonth()+1)+
-                        "/"+date.getFullYear()+
-                        " "+date.getHours()+
-                        ":"+date.getMinutes()+
-                        ":"+date.getSeconds()}</span>
-                    </div>
-                </div>
-            </div>`;
-}
-
-//Crea otra plantilla de como se va a mostrar el tablón de anuncio.
-export const crearTablonPlantillaEmpresa2 = (tablon, pos) => {
-    var date = new Date(tablon.fPubli.seconds * 1000);
-    return `<div class="tablonAnuncio"><img id="${pos}" class="btnEliminarTablon" src="././././img/eliminar.png" />
-                <div class="divTituloTablon"><h1>${tablon.titulo}</h1></div>
-                <div class="divImagenTablonDrch"><img src="${tablon.rutaImagen}" alt=""></div>
-                <div class="divContenido">${tablon.contenido}</div>
-                <div class="divFooterTablon">
-                <div class="divAutor">Autor: ${tablon.autor}</div>
-                    <div class="divFPubli">Fecha Publicación: <span>${date.getDate()+
-                        "/"+(date.getMonth()+1)+
-                        "/"+date.getFullYear()+
-                        " "+date.getHours()+
-                        ":"+date.getMinutes()+
-                        ":"+date.getSeconds()}</span>
-                    </div>
-                </div>
-            </div>`;
-}
-
-//Crea una plantilla de como se va a mostrar el tablón de anuncio para empleado.
-export const crearTablonPlantillaEmpleado1 = (tablon) => {
-    var date = new Date(tablon.fPubli.seconds * 1000);
-    console.log(tablon);
-    return `<div class="tablonAnuncio">
-                <div class="divTituloTablon"><h1>${tablon.titulo}</h1></div>
-                <div class="divImagenTablonIzq"><img src="${tablon.rutaImagen}" alt=""></div>
-                <div class="divContenido">${tablon.contenido}</div>
-                <div class="divFooterTablon">
-                <div class="divAutor">Autor: ${tablon.autor}</div>
-                    <div class="divFPubli">Fecha Publicación: <span>${date.getDate()+
-                        "/"+(date.getMonth()+1)+
-                        "/"+date.getFullYear()+
-                        " "+date.getHours()+
-                        ":"+date.getMinutes()+
-                        ":"+date.getSeconds()}</span>
-                    </div>
-                </div>
-            </div>`;
-}
-
-//Crea otra plantilla de como se va a mostrar el tablón de anuncio para empleado.
-export const crearTablonPlantillaEmpleado2 = (tablon) => {
-    var date = new Date(tablon.fPubli.seconds * 1000);
-    return `<div class="tablonAnuncio">
-                <div class="divTituloTablon"><h1>${tablon.titulo}</h1></div>
-                <div class="divImagenTablonDrch"><img src="${tablon.rutaImagen}" alt=""></div>
-                <div class="divContenido">${tablon.contenido}</div>
-                <div class="divFooterTablon">
-                <div class="divAutor">Autor: ${tablon.autor}</div>
-                    <div class="divFPubli">Fecha Publicación: <span>${date.getDate()+
-                        "/"+(date.getMonth()+1)+
-                        "/"+date.getFullYear()+
-                        " "+date.getHours()+
-                        ":"+date.getMinutes()+
-                        ":"+date.getSeconds()}</span>
-                    </div>
-                </div>
-            </div>`;
-}
 
 //Crea un div que mostrará datos de la empresa que ha iniciado sesión.
 export const crearDivInfoDatosEmpresa = (empresa, iconoPerfil, nEmpleados) => {
@@ -722,6 +661,262 @@ export const crearCardRotarTurno = (turno) => {
 
 
 
+//Crea plantilla formulario anuncio.
+export const crearFormularioAnuncio = () => {
+    return `<form id="formAnuncio" class="row g-3">
+
+                <div class="col-12">
+                    <label for="inputTitulo" class="form-label">Título*</label>
+                    <input type="text" class="form-control" id="inputTitulo" placeholder="Introduce el título">
+                </div>
+
+                <div class="col-12">
+                    <label for="inputSubtitulo" class="form-label">Subtítulo</label>
+                    <input type="text" class="form-control" id="inputSubtitulo" placeholder="Introduce el subtítulo">
+                </div>
+
+                <div class="col-sm-6">
+                    <label for="inputAutor" class="form-label">Autor*</label>
+                    <input type="text" class="form-control" id="inputAutor" placeholder="Introduce el autor">
+                </div>
+                <div class="col-sm-6">
+                    <label for="inputImg" class="form-label">Imagen*</label>
+                    <input type="file" accept="image/*" class="form-control" id="inputAnyadirImg">
+                </div>
+
+                <div class="col-sm-6">
+                    <label for="inputNombreEnl" class="form-label">Nombre enlace</label>
+                    <input type="text" class="form-control" id="inputNombreEnl" placeholder="Introduce el nombre del enlace">
+                </div>
+                <div class="col-sm-6">
+                    <label for="inputEnl" class="form-label">Enlace</label>
+                    <input type="url" class="form-control" id="inputEnl" placeholder="Introduce el enlace">
+                </div>
+
+                <div class="col-12">
+                    <button id="btnCrearAnuncio" type="button" class="btn btn-primary">Crear Anuncio</button>
+                </div>
+            </form>`;
+}
+
+//Crea un div para agregar un párrafo al anuncio.
+export const crearDivAgregarParrafo = () => {
+    var parrafo = doc.createElement("div");
+    parrafo.classList.add("form-floating", "divInputParrafo");
+    parrafo.innerHTML = `<textarea class="form-control inputParrafo" placeholder="Escribe un párrafo"></textarea>
+                         <label>Escribe un párrafo</label>`;
+                         
+    return parrafo;
+}
+
+
+//Crea plantilla formulario anuncio.
+export const crearDivCrearAnuncio = () => {
+    return `<div id="principalCrearAnuncio" class="container-fluid animate__animated animate__fadeIn">
+                <h2 id='tituloDivCrearAnuncio' class="row g-3">Crear Anuncio</h2><hr>
+                <div id="divCrearAnuncio" class="row g-3">
+                    <div id="divFormCrearAnuncio" class="col-md-6 container-fluid">
+                        <h3>Formulario Anuncio</h3>
+                    </div>
+                    <div id="divParrafosAnuncio" class="col-md-6">
+                        <h3>Párrafos</h3>
+                        <div id="parrafosAnuncio">
+                            <div id="divParrafos">
+                                <div class="form-floating divInputParrafo">
+                                    <textarea class="form-control inputParrafo" placeholder="Escribe un párrafo"></textarea>
+                                    <label>Escribe un párrafo</label>
+                                </div>
+                            </div>
+                            <div id="divAnyadirParrafo">
+                                <img src="./img/añadir.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+}
+
+//Crea una plantilla de como se va a mostrar los comentarios.
+export const crearComentario = (texto, usuario, tipoUsuario) => {
+    if(tipoUsuario === "empleado") {
+        var nombre =`${usuario.nombre} ${usuario.apellidos}`;
+    } else {
+        var nombre = usuario.rznSocial;
+    }
+    return `<div class="comentario">
+                <div class="comentarioImgPerfil">
+                    <img src="${usuario.iconoPerfil}" alt="">
+                </div>
+                <div class="comentarioContenido">
+                    <h4>${nombre}</h4>
+                    <p>${texto}</p>
+                </div>
+            </div>`;
+}
+
+//Crea una plantilla de como se va a mostrar el tablón de anuncio.
+export const crearAnuncioPlantillaEmpresa = (anuncio, idUsuario) => {
+    var date = new Date(anuncio.fPubli.seconds * 1000);
+    var likeDado = false;
+
+    for (let i = 0; i < anuncio.arrayUsuarioLikes.length; i++) {
+        if(anuncio.arrayUsuarioLikes.includes(idUsuario)) {
+            likeDado = true;
+        }
+    }
+
+    var iconoLike = likeDado ? "./img/iconoLikePulsado.png" : "./img/iconoLike.png";
+    var classLike = likeDado ? "pulsado" : "";
+
+    return `<div class="plantillaAnuncio animate__animated animate__fadeIn">
+                <div class="divPortada">
+                    <div>
+                        <div class="divFechaAutorAnuncio">
+                            <span class="divAutorAnuncio">${anuncio.autor}</span>
+                            <span class="divFPubliAnuncio">
+                                ${date.getDate()+
+                                "/"+(date.getMonth()+1)+
+                                "/"+date.getFullYear()}
+                            </span>
+                        </div>
+                        <h3 class="divTituloAnuncio">${anuncio.titulo}</h3>
+                        <h4 class="divSubtituloAnuncio">${anuncio.subtitulo}</h4>
+                    </div>
+                    <div class="divImgAnuncio">
+                        <img src="${anuncio.imgAnuncio}" alt="">
+                    </div>
+                </div>
+                <div id="parrafosAnuncioSlc">
+                    ${anuncio.contenido}
+                </div>
+                <div class="divFeedback">
+                    <span class="divVisualizacionesAnuncio">
+                        <img id="imgVisitas" src="./img/iconoVisitas.png" alt="">
+                        <span id="spanVisitas">${anuncio.visualizaciones}</span>
+                    </span>
+                    <span class="divLikesAnuncio">
+                        <img id="imgLike" class="${classLike}" src="${iconoLike}" alt="">
+                        <span id="spanLike">${anuncio.likes}</span>
+                    </span>
+                </div>
+                <div class="divEnlaceAnuncio">
+                    <a href="${anuncio.enlace}" target="_blank">${anuncio.nEnlace}</a>
+                </div>
+                <div class="divComentariosAnuncio">
+                    <h3>Comentarios</h3>
+                    <div id="txtAreaComentario" class="form-floating">
+                        <textarea id="txtArea" class="form-control inputParrafo" placeholder="Escribe un comentario"></textarea>
+                        <label>Escribe un comentario</label>
+                    </div>
+                    <div id="divEnlEnviarComentario">
+                        <a id="enlEnviarComentario">Enviar comentario</a>
+                    </div>
+                    <div id="divComentarios"></div>
+                </div>
+            </div>`;
+}
+
+//Crea una plantilla de como se va a mostrar el tablón de anuncio.
+export const crearTablonPlantillaEmpresa1 = (tablon, pos) => {
+    var date = new Date(tablon.fPubli.seconds * 1000);
+    console.log(tablon);
+    return `<div class="tablonAnuncio"><img id="${pos}" class="btnEliminarTablon" src="././././img/eliminar.png" />
+                <div class="divTituloTablon"><h1>${tablon.titulo}</h1></div>
+                <div class="divImagenTablonIzq"><img src="${tablon.rutaImagen}" alt=""></div>
+                <div class="divContenido">${tablon.contenido}</div>
+                <div class="divFooterTablon">
+                <div class="divAutor">Autor: ${tablon.autor}</div>
+                    <div class="divFPubli">Fecha Publicación: <span>${date.getDate()+
+                        "/"+(date.getMonth()+1)+
+                        "/"+date.getFullYear()+
+                        " "+date.getHours()+
+                        ":"+date.getMinutes()+
+                        ":"+date.getSeconds()}</span>
+                    </div>
+                </div>
+            </div>`;
+}
+
+//Crea otra plantilla de como se va a mostrar el tablón de anuncio.
+export const crearTablonPlantillaEmpresa2 = (tablon, pos) => {
+    var date = new Date(tablon.fPubli.seconds * 1000);
+    return `<div class="tablonAnuncio"><img id="${pos}" class="btnEliminarTablon" src="././././img/eliminar.png" />
+                <div class="divTituloTablon"><h1>${tablon.titulo}</h1></div>
+                <div class="divImagenTablonDrch"><img src="${tablon.rutaImagen}" alt=""></div>
+                <div class="divContenido">${tablon.contenido}</div>
+                <div class="divFooterTablon">
+                <div class="divAutor">Autor: ${tablon.autor}</div>
+                    <div class="divFPubli">Fecha Publicación: <span>${date.getDate()+
+                        "/"+(date.getMonth()+1)+
+                        "/"+date.getFullYear()+
+                        " "+date.getHours()+
+                        ":"+date.getMinutes()+
+                        ":"+date.getSeconds()}</span>
+                    </div>
+                </div>
+            </div>`;
+}
+
+//Crea una plantilla de como se va a mostrar el tablón de anuncio para empleado.
+export const crearTablonPlantillaEmpleado1 = (tablon) => {
+    var date = new Date(tablon.fPubli.seconds * 1000);
+    console.log(tablon);
+    return `<div class="tablonAnuncio">
+                <div class="divTituloTablon"><h1>${tablon.titulo}</h1></div>
+                <div class="divImagenTablonIzq"><img src="${tablon.rutaImagen}" alt=""></div>
+                <div class="divContenido">${tablon.contenido}</div>
+                <div class="divFooterTablon">
+                <div class="divAutor">Autor: ${tablon.autor}</div>
+                    <div class="divFPubli">Fecha Publicación: <span>${date.getDate()+
+                        "/"+(date.getMonth()+1)+
+                        "/"+date.getFullYear()+
+                        " "+date.getHours()+
+                        ":"+date.getMinutes()+
+                        ":"+date.getSeconds()}</span>
+                    </div>
+                </div>
+            </div>`;
+}
+
+//Crea otra plantilla de como se va a mostrar el tablón de anuncio para empleado.
+export const crearTablonPlantillaEmpleado2 = (tablon) => {
+    var date = new Date(tablon.fPubli.seconds * 1000);
+    return `<div class="tablonAnuncio">
+                <div class="divTituloTablon"><h1>${tablon.titulo}</h1></div>
+                <div class="divImagenTablonDrch"><img src="${tablon.rutaImagen}" alt=""></div>
+                <div class="divContenido">${tablon.contenido}</div>
+                <div class="divFooterTablon">
+                <div class="divAutor">Autor: ${tablon.autor}</div>
+                    <div class="divFPubli">Fecha Publicación: <span>${date.getDate()+
+                        "/"+(date.getMonth()+1)+
+                        "/"+date.getFullYear()+
+                        " "+date.getHours()+
+                        ":"+date.getMinutes()+
+                        ":"+date.getSeconds()}</span>
+                    </div>
+                </div>
+            </div>`;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -785,6 +980,21 @@ export const crearDivCalendarioInfo = () => {
                 </div>
             </div>`;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //Exportamos.
 export * from './plantilla.js'

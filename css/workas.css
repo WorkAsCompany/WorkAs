@@ -101,22 +101,22 @@ hr {
     text-align: center;
 }
 
-#tablaEmpleados thead th:last-child {
+#tablaEmpleados thead th:last-child, #tablaEmpleados thead th:first-child {
     cursor: unset;
     width: 10px;   
 }
 
-#tablaEmpleados tbody td:last-child {
+#tablaEmpleados tbody td:last-child, #tablaEmpleados tbody td:first-child {
     display: flex;
     justify-content: center;
     width: 100%;
 }
 
-#tablaEmpleados thead th:last-child::before {
+#tablaEmpleados thead th:last-child::before, #tablaEmpleados thead th:first-child::before {
     content: '';
 }
 
-#tablaEmpleados thead th:last-child::after {
+#tablaEmpleados thead th:last-child::after, #tablaEmpleados thead th:first-child::after {
     content: '';
 }
 
@@ -158,6 +158,27 @@ hr {
 
 ul.dtr-details {
     margin: 0 auto;
+}
+
+.imgEmpleadoTabla {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.imgEmpleadoTabla img {
+    width: 60px;
+    height: 60px;
+    padding: 5px;
+    border-radius: 100%;
+}
+
+@media only screen and (max-width: 850px) {
+    .imgEmpleadoTabla {
+        display: flex !important;
+        justify-content: start !important;
+        align-items: center !important;
+    }
 }
 
 

@@ -1,4 +1,261 @@
-.tablonAnuncio {
+/* DIV CREAR ANUNCIO */
+#principalCrearAnuncio {
+
+}
+
+#divFormCrearAnuncio  {
+    border-right: 1px solid black;
+    padding-right: 20px;
+    padding-bottom: 2em;
+}
+
+#divParrafosAnuncio  {
+    border-left: 1px solid black;
+    padding-left: 20px;
+    padding-bottom: 2em;
+}
+
+#divAnyadirParrafo {
+    background-color: rgba(0, 0, 0, .70);
+    border-radius: 20px;
+    height: 100px;
+    width: 90%;
+    margin: 20px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+#divAnyadirParrafo:hover {
+    background-color: rgba(0, 0, 0, 0.85);
+    box-shadow: 3px 3px 6px black;
+    cursor: pointer;
+}
+
+#divAnyadirParrafo img {
+    width: 80px;
+    filter: invert(1);
+}
+
+.divInputParrafo {
+    width: 90%;
+    height: 100px;
+    margin: 20px auto;
+}
+
+.inputParrafo {
+    height: 100% !important;
+    border-radius: 20px !important;
+    background-color: rgb(255, 243, 228) !important;
+    box-shadow: 3px 3px 6px black;
+}
+
+@media only screen and (max-width: 991px) {
+    #divFormCrearAnuncio  {
+        border-bottom: 2px solid black;
+        border-right: 0px solid black;
+    }
+    
+    #divParrafosAnuncio  {
+        border-left: 0px solid black;
+    }
+
+    #divAnyadirParrafo {
+        height: 80px;
+    }
+
+    #divAnyadirParrafo img {
+        width: 60px;
+    }
+
+    .divInputParrafo {
+        height: 80px;
+    }
+}
+
+/* DIV MOSTRAR ANUNCIO */
+.plantillaAnuncio {
+    width: 80%;
+    margin: 0 auto;
+
+}
+
+.divFechaAutorAnuncio {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0px 20px 0px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.divTituloAnuncio {
+    font-size: 30px;
+    font-weight: bold;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.divSubtituloAnuncio {
+    color: rgb(61, 61, 61);
+    font-size: 20px;
+}
+
+.divImgAnuncio {
+    text-align: center;
+    padding: 20px;
+}
+
+#parrafosAnuncioSlc {
+    padding: 20px 0px;
+}
+
+.divImgAnuncio img {
+    width: min(800px, 80%);
+}
+
+.divVisualizacionesAnuncio img {
+    width: 25px;
+}
+
+.divLikesAnuncio img {
+    width: 30px;
+
+}
+
+#imgLike {
+    cursor: pointer;
+}
+
+.divFeedback {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+
+}
+
+.divFeedback > * {
+    width: 100px;
+}
+
+.divEnlaceAnuncio {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    font-size: 20px;
+}
+
+.divComentariosAnuncio {
+    background-color: floralwhite;
+    padding: 1em;
+    border-radius: 20px;
+}
+
+#divEnlEnviarComentario {
+    text-align: end;
+    padding: 1em 2em;
+    border-bottom: 1px solid lightgray;
+}
+
+#txtAreaComentario {
+    padding-top: 1em;
+}
+
+#txtAreaComentario textarea {
+    background-color: wheat !important;
+}
+
+#enlEnviarComentario {
+    padding: .5em;
+    color: blue;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#enlEnviarComentario:hover {
+    color: purple;
+}
+
+#divComentarios {
+    height: 650px;
+    overflow-y: scroll;
+    border-radius: 20px;
+}
+
+.comentario {
+    padding: 1em;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+}
+
+.comentarioImgPerfil {
+    align-self: flex-start;
+}
+
+.comentarioImgPerfil img {
+    width: 70px;
+    height: 70px;
+    padding: 5px;
+    border-radius: 100%;
+}
+
+.comentarioContenido {
+    padding: 5px;
+}
+
+@media only screen and (max-width: 991px) {
+    .plantillaAnuncio {
+        width: 100%;
+        margin: 0 auto;
+    
+    }
+
+    .divPortada {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+
+    .divImgAnuncio {
+        padding: 0px;
+    }
+
+    .divImgAnuncio img {
+        width: 100%;
+    }
+
+    .divFeedback {
+        justify-content: end;
+        align-items: center;
+    
+    }
+    
+    .divFeedback > * {
+        width: 50px;
+        margin: 0 auto;
+    }
+
+    .comentario {
+        padding: 1em;
+    }
+
+    .comentario h4 {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .comentario p {
+        font-size: 13px;
+    }
+}
+
+
+
+
+
+
+/*.tablonAnuncio {
     width: 850px;
     min-height: 400px;
     margin: 0 auto;
@@ -78,4 +335,4 @@
     cursor: pointer;
     background-color: brown;
     transition: .5s;
-}
+}*/

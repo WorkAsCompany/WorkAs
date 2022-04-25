@@ -13,6 +13,8 @@ var opAside;
 var arrayEmpleados = [];
 var empleadoEnEdicion;
 
+var anuncioSlc;
+
 class Workas extends RotarTurno {
     constructor() {
         super();
@@ -133,7 +135,7 @@ class Workas extends RotarTurno {
             div.innerHTML += `<table id="tablaEmpleados" class="display animate__animated animate__fadeIn animate__slow" style="width:100%">
                                 <thead class="cabeceraTabla">
                                     <tr>
-                                        <th class="celda">Código empleado</th>
+                                        <th class="celda">Perfil</th>
                                         <th class="celda">DNI</th>
                                         <th class="celda">Apellidos</th>
                                         <th class="celda">Nombre</th>
@@ -259,7 +261,7 @@ class Workas extends RotarTurno {
             div.insertBefore(alert, doc.getElementById("tituloListEmpleado"));
 
         } else {
-            alert = General.crearAlert(`El empleado ${empleadoEnEdicion.data().nombre} ${empleadoEnEdicion.data().apellidos} se ha modificado correctamente.`, "errorAlert");
+            alert = General.crearAlert(`El empleado ${empleadoEnEdicion.data().nombre} ${empleadoEnEdicion.data().apellidos} no se ha modificado correctamente.`, "errorAlert");
             div.insertBefore(alert, doc.getElementById("tituloListEmpleado"));
 
         }
@@ -346,7 +348,7 @@ class Workas extends RotarTurno {
 
         if(tipoUsuario === "empresa") {
             var empresa = await this.devolverEmpresa(this.getUsu().id);
-            var imgPerfil = (empresa.data().iconoPerfil === "") ? "./img/empresaIcono.png" : await this.descargarImgBD(empresa.data().iconoPerfil);
+            var imgPerfil = (empresa.data().iconoPerfil === "") ? "./img/empresaIcono.png" : empresa.data().iconoPerfil;
             var nEmpleados = await this.devolverEmpleadosEmpresa(this.getUsu().id);
             doc.getElementById("principal").innerHTML = Plantilla.crearDivInfoDatosEmpresa(await this.devolverEmpresa(this.getUsu().id), imgPerfil, nEmpleados.docs.length);
 
@@ -354,7 +356,7 @@ class Workas extends RotarTurno {
         } else if(tipoUsuario === "empleado") {
             var empleado = await this.devolverEmpleado(this.getUsu().id);
             var empleadoEmpresa = await this.devolverEmpresa(empleado.data().idEmpresa);
-            var imgPerfil = (empleado.data().iconoPerfil === "") ? "./img/empleadoIcono.png" : await this.descargarImgBD(empleado.data().iconoPerfil);
+            var imgPerfil = (empleado.data().iconoPerfil === "") ? "./img/empleadoIcono.png" : empleado.data().iconoPerfil;
             doc.getElementById("principal").innerHTML = Plantilla.crearDivInfoDatosEmpleado(await this.devolverEmpleado(this.getUsu().id), imgPerfil, empleadoEmpresa);
 
         }
@@ -366,9 +368,10 @@ class Workas extends RotarTurno {
                 var nombreImg = `${this.getUsu().id}.${file.name.substr( (file.name.lastIndexOf(".")+1 - file.name.length) )}`;
 
                 await this.subirImgBD(`iconosPerfil/${nombreImg}`, file);
-                await this.actualizarImgPerfil(this.getUsu().id, `iconosPerfil/${nombreImg}`, tipoUsuario);
 
                 var ruta = await this.descargarImgBD(`iconosPerfil/${nombreImg}`);
+
+                await this.actualizarImgPerfil(this.getUsu().id, ruta, tipoUsuario);
 
                 for (let i = 0; i < document.getElementsByClassName("imgIconoPerfil").length; i++) {
                     document.getElementsByClassName("imgIconoPerfil")[i].src = ruta;
@@ -383,7 +386,7 @@ class Workas extends RotarTurno {
         var iconoPerfil = doc.getElementsByClassName("imgIconoPerfil");
         var empresa = await this.devolverEmpresa(this.getUsu().id);
 
-        var imgPerfil = (empresa.data().iconoPerfil === "") ? "./img/empresaIcono.png" : await this.descargarImgBD(empresa.data().iconoPerfil);
+        var imgPerfil = (empresa.data().iconoPerfil === "") ? "./img/empresaIcono.png" : empresa.data().iconoPerfil;
 
         doc.getElementById("contenidoFormulario").id = "contenido";
         doc.getElementById("contenido").classList.add("colapsarContenido");
@@ -398,6 +401,14 @@ class Workas extends RotarTurno {
             "click",
             (e) => {
                 this.modificarPaginaOpNavEmpleados();
+            },
+            false
+        );
+
+        doc.getElementById("opNavTablon").addEventListener(
+            "click",
+            (e) => {
+                this.modificarPaginaOpNavTablonAnuncio();
             },
             false
         );
@@ -469,7 +480,7 @@ class Workas extends RotarTurno {
         var iconoPerfil = doc.getElementsByClassName("imgIconoPerfil");
         var empleado = await this.devolverEmpleado(this.getUsu().id);
 
-        var imgPerfil = (empleado.data().iconoPerfil === "") ? "./img/empleadoIcono.png" : await this.descargarImgBD(empleado.data().iconoPerfil);
+        var imgPerfil = (empleado.data().iconoPerfil === "") ? "./img/empleadoIcono.png" : empleado.data().iconoPerfil;
 
         doc.getElementById("contenidoFormulario").id = "contenido";
         doc.getElementById("contenido").classList.add("colapsarContenido");
@@ -495,8 +506,288 @@ class Workas extends RotarTurno {
                 false
             );
         }
+
+        doc.getElementById("opNavTablon").addEventListener(
+            "click",
+            (e) => {
+                this.modificarPaginaOpNavTablonAnuncio();
+            },
+            false
+        );
     }
 
+
+
+
+
+
+
+
+
+
+    aumentarVisita = async() => {
+        var visitas = anuncioSlc.data().visualizaciones;
+        visitas++;
+
+        await this.actualizarVisitas(anuncioSlc.id, visitas)
+
+        doc.getElementById("spanVisitas").innerHTML = visitas;
+
+        anuncioSlc = await this.devolverAnuncio(anuncioSlc.id);
+    }
+
+    mostrarComentarios = async() => {
+        var divComentario = doc.getElementById("divComentarios");
+        var comentarios = "";
+        for (let i = 0; i < anuncioSlc.data().comentarios.length; i++) {
+            var tipoUsuario = anuncioSlc.data().comentarios[i].tipoUsuario;
+
+            if(tipoUsuario === "empresa") {
+                var usuario = await this.devolverEmpresa(anuncioSlc.data().comentarios[i].idUsuario);
+            } else {
+                var usuario = await this.devolverEmpleado(anuncioSlc.data().comentarios[i].idUsuario);
+            }
+            
+            var texto = anuncioSlc.data().comentarios[i].texto;
+
+            comentarios += Plantilla.crearComentario(texto, usuario.data(), tipoUsuario);
+        }
+
+        divComentario.innerHTML = comentarios;
+    }
+
+    enviarComentario = async() => {
+        var texto = doc.getElementById("txtArea").value.trim();
+        var usuario = await this.devolverEmpresa(this.getUsu().id);
+
+        var tipoUsuario = usuario.data() == undefined ? "empleado" : "empresa";
+        if(texto === "") {
+            return;
+        }
+
+        var comentario = {
+            idUsuario: this.getUsu().id,
+            texto: texto,
+            tipoUsuario: tipoUsuario
+        }
+        var texto = doc.getElementById("txtArea").value = "";
+
+        await this.actualizarArrayAnuncio(anuncioSlc.id, comentario);
+        anuncioSlc = await this.devolverAnuncio(anuncioSlc.id);
+
+        this.mostrarComentarios();
+    }
+
+    asignarEvEnviarComentario() {
+        doc.getElementById("enlEnviarComentario").addEventListener(
+            "click",
+            (e) => {
+                this.enviarComentario();
+            },
+            false
+        );
+    }
+
+    quitarLike = async(imgLike) => {
+        var likes = anuncioSlc.data().likes;
+        likes--;
+        var arrayUsuarioLikes = anuncioSlc.data().arrayUsuarioLikes;
+        arrayUsuarioLikes.splice(arrayUsuarioLikes.indexOf(this.getUsu().id), 1);
+        
+        await this.actualizarLikes(anuncioSlc.id, likes, arrayUsuarioLikes);
+
+        imgLike.classList.remove("pulsado");
+        imgLike.src = "./img/iconoLike.png";
+
+        doc.getElementById("spanLike").innerHTML = likes;
+
+        anuncioSlc = await this.devolverAnuncio(anuncioSlc.id);
+    }
+
+    darLike = async(imgLike) => {
+        var likes = anuncioSlc.data().likes;
+        likes++;
+        var arrayUsuarioLikes = anuncioSlc.data().arrayUsuarioLikes;
+        arrayUsuarioLikes.push(this.getUsu().id)
+
+        await this.actualizarLikes(anuncioSlc.id, likes, arrayUsuarioLikes);
+
+        imgLike.classList.add("pulsado");
+        imgLike.src = "./img/iconoLikePulsado.png";[].slice
+
+        doc.getElementById("spanLike").innerHTML = likes;
+
+        anuncioSlc = await this.devolverAnuncio(anuncioSlc.id);
+    }
+
+    asignarEvDarLike() {
+        doc.getElementById("imgLike").addEventListener(
+            "click",
+            (e) => {
+                if (e.target.classList.contains("pulsado")) {
+                    this.quitarLike(e.target)
+                } else {
+                    this.darLike(e.target)
+                }
+            },
+            false
+        );
+    }
+
+    mostrarTablonAnuncio = async() => {
+        anuncioSlc = await this.devolverAnuncio("KgTx0OORxKZykYURF534");
+
+        doc.getElementById("principal").innerHTML = Plantilla.crearAnuncioPlantillaEmpresa(anuncioSlc.data(), this.getUsu().id);
+
+        this.asignarEvDarLike();
+        this.asignarEvEnviarComentario();
+        this.mostrarComentarios();
+        this.aumentarVisita();
+    }
+
+    asignarEvMostrarTablonAnuncio() {
+        doc.getElementById("asideListarTablon").addEventListener(
+            "click",
+            (e) => {
+                this.mostrarTablonAnuncio();
+            },
+            false
+        );
+    }
+
+    crearContenidoParrafos() {
+        var txtArea = doc.getElementsByClassName("inputParrafo")
+        var parrafos = "";
+        for (let i = 0; i < txtArea.length; i++) {
+            if(txtArea[i].value !== "") {
+                parrafos += `<p>${txtArea[i].value}</p>`;
+            }
+        }
+        return parrafos;
+    }
+
+    crearParrafo() {
+        var parrafos = doc.getElementsByClassName("inputParrafo");
+        var poderAnyadir = true;
+
+        for (let i = 0; i < parrafos.length; i++) {
+            if(parrafos[i].value === "") {
+                poderAnyadir = false;
+            }
+        }
+
+        if(poderAnyadir) {
+            doc.getElementById("divParrafos").appendChild(Plantilla.crearDivAgregarParrafo());
+
+        }
+    }
+
+    asignarEvCrearParrafo() {
+        doc.getElementById("divAnyadirParrafo").addEventListener(
+            "click",
+            (e) => {
+                this.crearParrafo()
+            },
+            false
+        );
+    }
+
+    crearAnuncio = async() => {
+        var div = doc.getElementById("principalCrearAnuncio");
+        var alert;
+
+        var fPubli = new Date();
+        var idEmpresa = this.getUsu().id;
+        var titulo = doc.getElementById("inputTitulo").value.trim();
+        var subtitulo = doc.getElementById("inputSubtitulo").value.trim();
+        var autor = doc.getElementById("inputAutor").value.trim();
+        var nEnlace = doc.getElementById("inputNombreEnl").value.trim();
+        var enlace = doc.getElementById("inputEnl").value.trim();
+        var contenido = this.crearContenidoParrafos();
+
+        var file = ($('#inputAnyadirImg'))[0].files[0];
+
+
+
+        if (true) {
+            var anuncio = {
+                titulo: titulo,
+                subtitulo: subtitulo,
+                autor: autor,
+                fPubli: fPubli,
+                imgAnuncio: "",
+                contenido: contenido,
+                nEnlace: nEnlace,
+                enlace: enlace,
+                visualizaciones: 0,
+                likes: 0,
+                arrayUsuarioLikes: [],
+                comentarios: [],
+                idEmpresa: idEmpresa
+            }
+
+            doc.getElementById("parrafosAnuncio").innerHTML =   `<div id="divParrafos">
+                                                                    <div class="form-floating divInputParrafo">
+                                                                        <textarea class="form-control inputParrafo" placeholder="Escribe un párrafo"></textarea>
+                                                                        <label>Escribe un párrafo</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div id="divAnyadirParrafo">
+                                                                    <img src="./img/añadir.png" alt="">
+                                                                </div>`
+
+            var anuncio = await this.anyadirAnuncio(anuncio);
+            console.log(anuncio);
+            console.log(anuncio.id);
+            var nombreImg = `${anuncio.id}.${file.name.substr( (file.name.lastIndexOf(".")+1 - file.name.length) )}`;
+            await this.subirImgBD(`imgAnuncio/${nombreImg}`, file);
+
+            var ruta = await this.descargarImgBD(`imgAnuncio/${nombreImg}`);
+
+            await this.actualizarImgAnuncio(anuncio.id, ruta);
+            doc.getElementById("formAnuncio").reset();
+
+        } else {
+            alert = General.crearAlert("Error en la introducción de datos.", "errorAlert");
+            div.insertBefore(alert, doc.getElementById("tituloListEmpleado"));
+        }   
+    }
+
+    asignarEvBtnCrearAnuncio() {
+        doc.getElementById("btnCrearAnuncio").addEventListener(
+            "click",
+            (e) => {
+                this.crearAnuncio();
+            },
+            false
+        );
+    }
+
+    divCrearAnuncio() {
+        doc.getElementById("principal").innerHTML = Plantilla.crearDivCrearAnuncio();
+        doc.getElementById("divFormCrearAnuncio").innerHTML += Plantilla.crearFormularioAnuncio();
+
+        this.asignarEvBtnCrearAnuncio();
+        this.asignarEvCrearParrafo();
+    }
+
+    asignarEvDivCrearAnuncio() {
+        doc.getElementById("asideCrearAnuncio").addEventListener(
+            "click",
+            (e) => {
+                this.divCrearAnuncio();
+            },
+            false
+        );
+    }
+
+    modificarPaginaOpNavTablonAnuncio() {
+        opAside.innerHTML = Plantilla.crearOpAsideNavTablonAnuncio();
+
+        this.asignarEvDivCrearAnuncio();
+        this.asignarEvMostrarTablonAnuncio();
+
+    }
 
 
 
@@ -575,6 +866,7 @@ class Workas extends RotarTurno {
                 autor: autor,
                 plantilla: plantilla
             }
+
 
             await this.actualizarArrayTablonAnuncioEmpresa(this.getUsu().id, tablonAnuncio);
             div.innerHTML = `<p class="infoMensajeCorrecto">Anuncio creado correctamente.</p>`;
