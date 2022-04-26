@@ -126,8 +126,8 @@ class Workas extends RotarTurno {
         var filas = "";
         var empleados = await this.devolverEmpleadosEmpresa(this.getUsu().id);
         arrayEmpleados = empleados.docs;
-        if (arrayEmpleados.docs.length > 0) {
-            arrayEmpleados.docs.map((empleado) => {
+        if (arrayEmpleados.length > 0) {
+            arrayEmpleados.map((empleado) => {
 
                 filas += `${Plantilla.crearFilaDatosEmpleado(empleado)}`;
             });
