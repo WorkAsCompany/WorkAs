@@ -126,8 +126,8 @@ class Workas extends RotarTurno {
         var filas = "";
         var empleados = await this.devolverEmpleadosEmpresa(this.getUsu().id);
         arrayEmpleados = empleados.docs;
-        if (empleados.docs.length > 0) {
-            empleados.docs.map((empleado) => {
+        if (arrayEmpleados.docs.length > 0) {
+            arrayEmpleados.docs.map((empleado) => {
 
                 filas += `${Plantilla.crearFilaDatosEmpleado(empleado)}`;
             });
@@ -255,7 +255,7 @@ class Workas extends RotarTurno {
             }
     
             await this.actualizarEmpleado( empleadoEnEdicion.id, empleadoMod);
-            await this.opListarEmpleados();
+            this.opListarEmpleados();
 
             alert = General.crearAlert(`El empleado ${nombre} ${apellidos} se ha modificado correctamente.`, "exitoAlert");
             div.insertBefore(alert, doc.getElementById("tituloListEmpleado"));
