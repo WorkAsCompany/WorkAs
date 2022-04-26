@@ -143,7 +143,7 @@ class BD_Firebase {
     //Modifica un empleado del array de empleados de una empresa.
     actualizarEmpleado(idEmpleado, empleado) {
         var idRef = doc(this.devolverEnlace("empleado"), idEmpleado);
-        updateDoc(idRef, {
+        return updateDoc(idRef, {
             dni: empleado.dni,
             nombre: empleado.nombre,
             apellidos: empleado.apellidos,
