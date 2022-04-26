@@ -255,7 +255,7 @@ class Workas extends RotarTurno {
             }
     
             await this.actualizarEmpleado( empleadoEnEdicion.id, empleadoMod);
-            this.opListarEmpleados();
+            await this.opListarEmpleados();
 
             alert = General.crearAlert(`El empleado ${nombre} ${apellidos} se ha modificado correctamente.`, "exitoAlert");
             div.insertBefore(alert, doc.getElementById("tituloListEmpleado"));
@@ -273,8 +273,8 @@ class Workas extends RotarTurno {
 
         btnEditar.addEventListener(
             "click",
-            async(e) => {
-                await this.terminarEditarEmpleado();
+            (e) => {
+                this.terminarEditarEmpleado();
             },
             false
         );
