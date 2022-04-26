@@ -443,6 +443,13 @@ export const crearOpAsideNavTablonAnuncio = () => {
                     <p>Listar</p>
                     <p>Listar tablón anuncio</p>
                 </div>
+            </div>
+            <div id="asideEstadisticasTablon" class="divServicioAside">
+                <img src="./img/iconoEstadisticas.png" alt="">
+                <div class="asideElInfo ocultarAsideHover ocultarElAside">
+                    <p>Datos</p>
+                    <p>Estadísticas del tablón de anuncios</p>
+                </div>
             </div>`;
 }
 
