@@ -448,7 +448,7 @@ export const crearOpAsideNavTablonAnuncio = () => {
                 <img src="./img/iconoEstadisticas.png" alt="">
                 <div class="asideElInfo ocultarAsideHover ocultarElAside">
                     <p>Datos</p>
-                    <p>Estadísticas del tablón de anuncios</p>
+                    <p>Estadísticas del tablón</p>
                 </div>
             </div>`;
 }
