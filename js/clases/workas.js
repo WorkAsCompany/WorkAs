@@ -273,8 +273,8 @@ class Workas extends RotarTurno {
 
         btnEditar.addEventListener(
             "click",
-            (e) => {
-                this.terminarEditarEmpleado();
+            async(e) => {
+                await this.terminarEditarEmpleado();
             },
             false
         );

@@ -36,7 +36,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    padding-top: 5em;
+    padding-bottom: 2em;
     max-width: 1900px;
 }
 
