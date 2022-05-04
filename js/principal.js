@@ -49,4 +49,5 @@ window.onload = function() {
     formulario.cambiarFormRegistrarLogin();
     formulario.loguearTeclaEnter("btnLoginRegistrar");
 
+    formulario.comprobarSesion();
 };

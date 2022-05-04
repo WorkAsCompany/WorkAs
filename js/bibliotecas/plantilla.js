@@ -307,7 +307,7 @@ export const crearPaginaInicialEmpresa = (usu, imgPerfil) => {
                                 <a class="nav-link active" aria-current="page">Tablón</a>
                             </li>
                             <li id="opNavLogout" class="nav-item">
-                                <a href="" class="nav-link active" aria-current="page">Cerrar sesión</a>
+                                <a class="nav-link active" aria-current="page">Cerrar sesión</a>
                             </li>                            
                             <li id="iconoPerfil" class="divIconoPerfil collapse navbar-collapse">
                                 <img class="imgIconoPerfil" src="${imgPerfil}" alt="">
@@ -362,7 +362,7 @@ export const crearPaginaInicialEmpleado = (usu, imgPerfil) => {
                                 <a class="nav-link active" aria-current="page">Tablón</a>
                             </li>
                             <li id="opNavLogout" class="nav-item">
-                                <a href="" class="nav-link active" aria-current="page">Cerrar sesión</a>
+                                <a class="nav-link active" aria-current="page">Cerrar sesión</a>
                             </li>
                             <li id="iconoPerfil" class="divIconoPerfil collapse navbar-collapse">
                                 <img class="imgIconoPerfil" src="${imgPerfil}" alt="">
@@ -429,28 +429,73 @@ export const crearOpAsideNavPerfil = () => {
 }
 
 //Devuelve la estructura de las opciones del tablón de anuncio.
-export const crearOpAsideNavTablonAnuncio = () => {
-    return `<div id="asideCrearAnuncio" class="divServicioAside">
-                <img src="./img/agregarAnuncio.png" alt="">
-                <div class="asideElInfo ocultarAsideHover ocultarElAside">
-                    <p>Crear</p>
-                    <p>Crear anuncio</p>
+export const crearOpAsideNavTablonAnuncio = (tipoUsuario) => {
+    if(tipoUsuario === "empleado") {
+        return `<div id="asideListarTablon" class="divServicioAside">
+                    <img src="./img/tablonNoticiaServicio.png" alt="">
+                    <div class="asideElInfo ocultarAsideHover ocultarElAside">
+                        <p>Listar</p>
+                        <p>Listar tablón anuncio</p>
+                    </div>
+                </div>`;
+    } else {
+        return `<div id="asideCrearAnuncio" class="divServicioAside">
+                    <img src="./img/agregarAnuncio.png" alt="">
+                    <div class="asideElInfo ocultarAsideHover ocultarElAside">
+                        <p>Crear</p>
+                        <p>Crear anuncio</p>
+                    </div>
                 </div>
-            </div>
-            <div id="asideListarTablon" class="divServicioAside">
-                <img src="./img/tablonNoticiaServicio.png" alt="">
-                <div class="asideElInfo ocultarAsideHover ocultarElAside">
-                    <p>Listar</p>
-                    <p>Listar tablón anuncio</p>
+                <div id="asideListarTablon" class="divServicioAside">
+                    <img src="./img/tablonNoticiaServicio.png" alt="">
+                    <div class="asideElInfo ocultarAsideHover ocultarElAside">
+                        <p>Listar</p>
+                        <p>Listar tablón anuncio</p>
+                    </div>
                 </div>
-            </div>
-            <div id="asideEstadisticasTablon" class="divServicioAside">
-                <img src="./img/iconoEstadisticas.png" alt="">
-                <div class="asideElInfo ocultarAsideHover ocultarElAside">
-                    <p>Datos</p>
-                    <p>Estadísticas del tablón</p>
+                <div id="asideEstadisticasTablon" class="divServicioAside" data-bs-toggle="offcanvas" data-bs-target="#canvasEstadisticas" aria-controls="offcanvasTop">
+                    <img src="./img/iconoEstadisticas.png" alt="">
+                    <div class="asideElInfo ocultarAsideHover ocultarElAside">
+                        <p>Datos</p>
+                        <p>Estadísticas del tablón</p>
+                    </div>
+                </div>`;
+    }
+}
+
+//Devuelve la estructura de las opciones del chat.
+export const crearOpAsideChat = (tipoUsuario) => {
+    if(tipoUsuario === "empleado") {
+        return `<div id="asideListarTablon" class="divServicioAside">
+                    <img src="./img/tablonNoticiaServicio.png" alt="">
+                    <div class="asideElInfo ocultarAsideHover ocultarElAside">
+                        <p>Listar</p>
+                        <p>Listar tablón anuncio</p>
+                    </div>
+                </div>`;
+    } else {
+        return `<div id="asideCrearAnuncio" class="divServicioAside">
+                    <img src="./img/agregarAnuncio.png" alt="">
+                    <div class="asideElInfo ocultarAsideHover ocultarElAside">
+                        <p>Crear</p>
+                        <p>Crear anuncio</p>
+                    </div>
                 </div>
-            </div>`;
+                <div id="asideListarTablon" class="divServicioAside">
+                    <img src="./img/tablonNoticiaServicio.png" alt="">
+                    <div class="asideElInfo ocultarAsideHover ocultarElAside">
+                        <p>Listar</p>
+                        <p>Listar tablón anuncio</p>
+                    </div>
+                </div>
+                <div id="asideEstadisticasTablon" class="divServicioAside" data-bs-toggle="offcanvas" data-bs-target="#canvasEstadisticas" aria-controls="offcanvasTop">
+                    <img src="./img/iconoEstadisticas.png" alt="">
+                    <div class="asideElInfo ocultarAsideHover ocultarElAside">
+                        <p>Datos</p>
+                        <p>Estadísticas del tablón</p>
+                    </div>
+                </div>`;
+    }
 }
 
 //Crea la estructura de como se va a mostrar los datos del empleado en una fila de una tabla, con los botones de borrar y editar.
@@ -761,10 +806,50 @@ export const crearComentario = (texto, usuario, tipoUsuario) => {
             </div>`;
 }
 
+//Crea una plantilla para mostrar las estadísticas totales de los anuncios.
+export const crearCanvasEstadisticas = () => {
+    return `<div class="offcanvas offcanvas-end" tabindex="-1" id="canvasEstadisticas" aria-labelledby="offcanvasRightLabel">
+                <div class="offcanvas-header">
+                    <h5 id="offcanvasRightLabel">Estadísticas Anuncios</h5>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" style="filter: invert(0)"></button>
+                </div>
+                <div id="bodyEstadisticasAnuncio" class="offcanvas-body"></div>
+            </div>`;
+}
+
+//Crea el contenido de las estadísticas totales de los anuncios.
+export const crearDivEstadisticas = (estadisticas) => {
+    return `<div>
+                <div class="divEstadistica">
+                    <span><img src="./img/iconoVisitas.png" alt="">Nº Visitas </span>
+                    <span id="estVisitas">${estadisticas.nVisitas}</span>
+                </div>
+                <div class="divEstadistica">
+                    <span><img src="./img/iconoLikePulsado.png" alt="">Nº Likes </span>
+                    <span id="estLikes">${estadisticas.nLikes}</span>
+                </div>
+                <div class="divEstadistica">
+                    <span><img src="./img/iconoComentario.png" alt="">Nº comentarios </span>
+                    <span id="estComentarios">${estadisticas.nComentarios}</span>
+                </div>
+                <div class="divEstadistica">
+                    <span><img src="./img/iconoEstadisticas.png" alt="">Engagement</span>
+                    <span id="estEngagement ">${estadisticas.engagement}%</span>
+                </div>
+            </div>
+            <div>
+                <h5>Los más vistos</h5>
+                <div>
+                    ${estadisticas.anunciosMasVistos}
+                </div>
+            </div>`;
+}
+
 //Crea una plantilla de como se va a mostrar el tablón de anuncio.
-export const crearAnuncioPlantillaEmpresa = (anuncio, idUsuario) => {
+export const crearAnuncioPlantillaEmpresa = (anuncio, idUsuario, tipoUsu, idTablon) => {
     var date = new Date(anuncio.fPubli.seconds * 1000);
     var likeDado = false;
+    var imgEliminar = "";
 
     for (let i = 0; i < anuncio.arrayUsuarioLikes.length; i++) {
         if(anuncio.arrayUsuarioLikes.includes(idUsuario)) {
@@ -772,10 +857,15 @@ export const crearAnuncioPlantillaEmpresa = (anuncio, idUsuario) => {
         }
     }
 
+    if(tipoUsu === "empresa") {
+        imgEliminar = `<div id="${idTablon}" class="divImgEliminarAnuncio2"><img id="imgEliminarAnuncioTablon" src="./img/iconoEliminar.png" alt=""></div>`;
+    }
+
     var iconoLike = likeDado ? "./img/iconoLikePulsado.png" : "./img/iconoLike.png";
     var classLike = likeDado ? "pulsado" : "";
 
     return `<div class="plantillaAnuncio animate__animated animate__fadeIn">
+                ${imgEliminar}
                 <div class="divPortada">
                     <div>
                         <div class="divFechaAutorAnuncio">
@@ -810,7 +900,7 @@ export const crearAnuncioPlantillaEmpresa = (anuncio, idUsuario) => {
                     <a href="${anuncio.enlace}" target="_blank">${anuncio.nEnlace}</a>
                 </div>
                 <div class="divComentariosAnuncio">
-                    <h3>Comentarios</h3>
+                    <h3>Comentarios(<span id="nComentarios">${anuncio.comentarios.length}</span>)</h3>
                     <div id="txtAreaComentario" class="form-floating">
                         <textarea id="txtArea" class="form-control inputParrafo" placeholder="Escribe un comentario"></textarea>
                         <label>Escribe un comentario</label>
@@ -823,86 +913,148 @@ export const crearAnuncioPlantillaEmpresa = (anuncio, idUsuario) => {
             </div>`;
 }
 
-//Crea una plantilla de como se va a mostrar el tablón de anuncio.
-export const crearTablonPlantillaEmpresa1 = (tablon, pos) => {
-    var date = new Date(tablon.fPubli.seconds * 1000);
-    console.log(tablon);
-    return `<div class="tablonAnuncio"><img id="${pos}" class="btnEliminarTablon" src="././././img/eliminar.png" />
-                <div class="divTituloTablon"><h1>${tablon.titulo}</h1></div>
-                <div class="divImagenTablonIzq"><img src="${tablon.rutaImagen}" alt=""></div>
-                <div class="divContenido">${tablon.contenido}</div>
-                <div class="divFooterTablon">
-                <div class="divAutor">Autor: ${tablon.autor}</div>
-                    <div class="divFPubli">Fecha Publicación: <span>${date.getDate()+
-                        "/"+(date.getMonth()+1)+
-                        "/"+date.getFullYear()+
-                        " "+date.getHours()+
-                        ":"+date.getMinutes()+
-                        ":"+date.getSeconds()}</span>
-                    </div>
+export const creardivAnuncioEnTablon = (anuncio, tipoUsu) => {
+    var date = new Date(anuncio.data().fPubli.seconds * 1000);
+    var imgEliminar = "";
+    if(tipoUsu === "empresa") {
+        imgEliminar = `<img src="./img/iconoEliminar.png" class="imgEliminarAnuncio" alt="">`;
+    }
+    
+    return `    <div id="${anuncio.id}" class="card cardAnuncio">
+                    <img src="${anuncio.data().imgAnuncio}" class="card-img-top" alt="">
+                    ${imgEliminar}
+                    <img src="./img/chinchetaAnuncio.png" class="imgChincheta" alt="">
+                        <div class="card-body">
+                            <h5 class="card-title">${anuncio.data().titulo}</h5>
+                            <p class="card-text">${anuncio.data().subtitulo}</p>
+                        </div>
+                        <div class="card-body divEstadisticasAnuncio">
+                            <div>
+                                <img src="./img/iconoVisitas.png" alt="">
+                                <span>${anuncio.data().visualizaciones}</span>
+                            </div>
+                            <div>
+                                <img src="./img/iconoLikePulsado.png" alt="">
+                                <span>${anuncio.data().likes}</span>
+                            </div>
+                            <div>
+                                <img src="./img/iconoComentario.png" alt="">
+                                <span>${anuncio.data().comentarios.length}</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">
+                                Publicado el
+                                ${" ",date.getDate()+
+                                "/"+(date.getMonth()+1)+
+                                "/"+date.getFullYear()}  
+                            </small>
+                        </div>
+                    </div>`;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Crea una fila de usuario del chat.
+export const crearFilaListUsuChat = (empleado) => {
+    var iconoPerfil = empleado.iconoPerfil ? empleado.iconoPerfil : "./img/empleadoIcono.png";
+    var conectadoClass = empleado.conectado ? "conectado" : "desconectado";
+    return `<div class="divUsuarioChat">
+                <div class="chatListImgPerfil">
+                    <img src="${iconoPerfil}" alt="">
+                    <div class="iconoConectado ${conectadoClass}">
+                </div>
+                </div>
+                <div class="chatListContenido">
+                    <h5 class="nombreUsuGrupoChat">${empleado.nombre} ${empleado.apellidos}</h5>
+                    <p>Vale, luego te paso el documento por email.dfgfdgfd</p>
+                </div>
+                <div class="chatListFechaOnline">
+                    <h5><span class="badge bg-danger">+99</span></h5>
+                    <p>1 min</p>
                 </div>
             </div>`;
 }
 
-//Crea otra plantilla de como se va a mostrar el tablón de anuncio.
-export const crearTablonPlantillaEmpresa2 = (tablon, pos) => {
-    var date = new Date(tablon.fPubli.seconds * 1000);
-    return `<div class="tablonAnuncio"><img id="${pos}" class="btnEliminarTablon" src="././././img/eliminar.png" />
-                <div class="divTituloTablon"><h1>${tablon.titulo}</h1></div>
-                <div class="divImagenTablonDrch"><img src="${tablon.rutaImagen}" alt=""></div>
-                <div class="divContenido">${tablon.contenido}</div>
-                <div class="divFooterTablon">
-                <div class="divAutor">Autor: ${tablon.autor}</div>
-                    <div class="divFPubli">Fecha Publicación: <span>${date.getDate()+
-                        "/"+(date.getMonth()+1)+
-                        "/"+date.getFullYear()+
-                        " "+date.getHours()+
-                        ":"+date.getMinutes()+
-                        ":"+date.getSeconds()}</span>
+//Crea una plantilla del chat.
+export const crearPlantillaChat = (empleado) => {
+    return `<div id="divChat">
+                <div id="divChatConversacion">
+                    <div id="headerChatUsuario">
+                        <div id="imgChatSlc">
+                            <img src="./img/miFotoPerfil.jpg" alt="">
+                        </div>
+                        <h4>Izan Torres Barceló</h4>
+                        <div class="iconoConectado2 desconectado"></div>
+                    </div>
+                    <div id="conversacion">
+                        <div class="msgConversacion msgUsu1">
+                            <p>dfgsdgfdddddddsdfgggggggggggsdfg</p>
+                        </div>
+                        <div class="msgConversacion msgUsu2">
+                            <p>dfgsdgfdddddddsdfgggggggggggsdfg</p>
+                        </div>
+                        <div class="msgConversacion msgUsu1">
+                            <p>dfgsdgfdddddddsdfgggggggggggsdfg</p>
+                        </div>
+                    </div>
+                    <div id="divInputChatUsuario">
+                        <input type="text" id="inputMsgChat" placeholder="Escribe tu mensaje">
+                        <div id="divIconosInputMsg">
+                            <input id="inputSlcEmoji" type="image" src="./img/iconoSlcEmoji.png" alt="">
+                            <input id="inputEnviarMsg" type="image" src="./img/iconoEnviarMsg.svg" alt="">
+                        </div>
                     </div>
                 </div>
-            </div>`;
-}
-
-//Crea una plantilla de como se va a mostrar el tablón de anuncio para empleado.
-export const crearTablonPlantillaEmpleado1 = (tablon) => {
-    var date = new Date(tablon.fPubli.seconds * 1000);
-    console.log(tablon);
-    return `<div class="tablonAnuncio">
-                <div class="divTituloTablon"><h1>${tablon.titulo}</h1></div>
-                <div class="divImagenTablonIzq"><img src="${tablon.rutaImagen}" alt=""></div>
-                <div class="divContenido">${tablon.contenido}</div>
-                <div class="divFooterTablon">
-                <div class="divAutor">Autor: ${tablon.autor}</div>
-                    <div class="divFPubli">Fecha Publicación: <span>${date.getDate()+
-                        "/"+(date.getMonth()+1)+
-                        "/"+date.getFullYear()+
-                        " "+date.getHours()+
-                        ":"+date.getMinutes()+
-                        ":"+date.getSeconds()}</span>
+                <div id="divChatListadoUsuarios">
+                    <div id="headerListadoUsuarios">
+                        <h2>Chat</h2>
+                        <input id="inputBuscarUsuarioChat" type="text" placeholder="Buscar">
                     </div>
+                    <div id="listadoUsuariosChat"></div>
                 </div>
-            </div>`;
-}
-
-//Crea otra plantilla de como se va a mostrar el tablón de anuncio para empleado.
-export const crearTablonPlantillaEmpleado2 = (tablon) => {
-    var date = new Date(tablon.fPubli.seconds * 1000);
-    return `<div class="tablonAnuncio">
-                <div class="divTituloTablon"><h1>${tablon.titulo}</h1></div>
-                <div class="divImagenTablonDrch"><img src="${tablon.rutaImagen}" alt=""></div>
-                <div class="divContenido">${tablon.contenido}</div>
-                <div class="divFooterTablon">
-                <div class="divAutor">Autor: ${tablon.autor}</div>
-                    <div class="divFPubli">Fecha Publicación: <span>${date.getDate()+
-                        "/"+(date.getMonth()+1)+
-                        "/"+date.getFullYear()+
-                        " "+date.getHours()+
-                        ":"+date.getMinutes()+
-                        ":"+date.getSeconds()}</span>
-                    </div>
-                </div>
-            </div>`;
+            </div>
+            </div><div id="divModales"></div>`;
 }
 
 

@@ -135,7 +135,7 @@ class BD_Firebase {
     eliminarTablonEmpresa(idEmpresa, tablonAnuncio) {
         var idRef = doc(this.devolverEnlace("empresa"), idEmpresa);;
 
-        updateDoc(idRef, {
+        return updateDoc(idRef, {
             tablonAnuncios: tablonAnuncio
         });
     }
@@ -153,12 +153,11 @@ class BD_Firebase {
     }
 
     //Modifica el id de un empleado.
-    actualizarIdEmpleado(idEmpleado, empleado) {
+    actualizarIdEmpleado(idEmpleado, id) {
         var idRef = doc(this.devolverEnlace("empleado"), idEmpleado);
-        updateDoc(idRef, {
-            id: empleado.id
+        return updateDoc(idRef, {
+            id: id
         });
-        return idEmpleado;
     }
 
     //Devuelve la lista de empleados que pertenecen a la empresa.
@@ -173,7 +172,7 @@ class BD_Firebase {
     //Modifica la imagen de perfil según el usuario.
     actualizarImgPerfil(id, ruta, usuario) {
         var idRef = doc(this.devolverEnlace(usuario), id);
-        updateDoc(idRef, {
+        return updateDoc(idRef, {
             iconoPerfil: ruta
         });
     }
@@ -215,7 +214,7 @@ class BD_Firebase {
     //Modifica la imagen del anuncio.
     actualizarImgAnuncio(id, ruta) {
         var idRef = doc(this.devolverEnlace("tablonAnuncio"), id);
-        updateDoc(idRef, {
+        return updateDoc(idRef, {
             imgAnuncio: ruta
         });
     }
@@ -223,7 +222,7 @@ class BD_Firebase {
     //Modifica la imagen del anuncio.
     actualizarImgAnuncio(id, ruta) {
         var idRef = doc(this.devolverEnlace("tablonAnuncio"), id);
-        updateDoc(idRef, {
+        return updateDoc(idRef, {
             imgAnuncio: ruta
         });
     }
@@ -231,7 +230,7 @@ class BD_Firebase {
     //Modifica las visitas del anuncio.
     actualizarVisitas(id, visitas) {
         var idRef = doc(this.devolverEnlace("tablonAnuncio"), id);
-        updateDoc(idRef, {
+        return updateDoc(idRef, {
             visualizaciones: visitas
         });
     }
@@ -239,7 +238,7 @@ class BD_Firebase {
     //Modifica los likes del anuncio.
     actualizarLikes(id, likes, arrayUsuarioLikes) {
         var idRef = doc(this.devolverEnlace("tablonAnuncio"), id);
-        updateDoc(idRef, {
+        return updateDoc(idRef, {
             arrayUsuarioLikes: arrayUsuarioLikes,
             likes: likes
         });
@@ -254,6 +253,43 @@ class BD_Firebase {
         });
     }
 
+    //Devuelve los anuncios que pertenecen a la empresa.
+    devolverAnunciosEmpresa(idEmpresa) {
+        var consulta = query(
+            this.devolverEnlace("tablonAnuncio"),
+            where("idEmpresa", "==", `${idEmpresa}`),
+            orderBy("fPubli", "desc")
+        );
+        return getDocs(consulta);
+    }
+
+    //Devuelve los 3 anuncios con más visitas.
+    devolverAnunciosEmpresaMasVistos(idEmpresa) {
+        var consulta = query(
+            this.devolverEnlace("tablonAnuncio"),
+            where("idEmpresa", "==", `${idEmpresa}`),
+            orderBy("visualizaciones", "desc"),
+            limit(3)
+        );
+        return getDocs(consulta);
+    }
+
+    //Elimina un anuncio de la empresa.
+    eliminarAnuncioEmpresa(idAnuncio) {
+        return deleteDoc(doc(this.devolverEnlace("tablonAnuncio"), idAnuncio));
+    }
+
+
+
+    /*CHAT*/
+
+    //Actualiza el estado del usuario.
+    actualizarEstadoConectado(id, conectado, tipoUsu) {
+        var idRef = doc(this.devolverEnlace(tipoUsu), id);
+        return updateDoc(idRef, {
+            conectado: conectado
+        });
+    }
 }
 
 //Exportamos.

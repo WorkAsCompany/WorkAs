@@ -1,9 +1,11 @@
 "use strict";
 import { BD_Firebase } from "./bd_firebase.js";
-import { RotarTurno } from "./rotarTurno.js";
+import { TablonAnuncio } from "./tablonAnuncio.js";
 
 import * as Plantilla from "../bibliotecas/plantilla.js";
 import * as General from "../bibliotecas/general.js";
+
+import { onSnapshot } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
 /*  --- BIBLIOTECA WORKAS ---  */
 //Tenemos todas las fuciones o procedimientos que nos pueden ser utiles para trabajar con nuestra aplicación principal.
@@ -13,9 +15,7 @@ var opAside;
 var arrayEmpleados = [];
 var empleadoEnEdicion;
 
-var anuncioSlc;
-
-class Workas extends RotarTurno {
+class Workas extends TablonAnuncio {
     constructor() {
         super();
     }
@@ -68,6 +68,7 @@ class Workas extends RotarTurno {
 
         if (this.comprobarCorreo(correo) && this.comprobarDni(dni) && this.comprobarRazSocial(nombre) && this.comprobarRazSocial(apellidos) && this.comprobarRazSocial(puestoTrabajo) && turno !== "noSelec") {
             var empleado = {
+                id: "",
                 idEmpresa: this.getUsu().id,
                 dni: dni,
                 nombre: nombre,
@@ -76,7 +77,10 @@ class Workas extends RotarTurno {
                 puestoTrabajo: puestoTrabajo,
                 turno: turno,
                 codEmpleado: codEmpleado,
-                iconoPerfil: ""
+                iconoPerfil: "",
+                conectado: false,
+                chatSlc: "",
+                statusChat: null
             }
 
             var existeEmpleado = await this.devolverConsultaFiltrarEmpleadoCorreo(empleado.correo);
@@ -129,7 +133,6 @@ class Workas extends RotarTurno {
 
         if (arrayEmpleados.length > 0) {
             arrayEmpleados.map((empleado) => {
-                console.log(empleado.data().nombre)
                 filas += `${Plantilla.crearFilaDatosEmpleado(empleado)}`;
             });
 
@@ -383,14 +386,30 @@ class Workas extends RotarTurno {
         );
     }
 
+    modificarPaginaOpNavTablonAnuncio(tipoUsu) {
+        opAside.innerHTML = Plantilla.crearOpAsideNavTablonAnuncio(tipoUsu);
+
+        if(tipoUsu === "empresa") {
+            this.asignarEvDivCrearAnuncio();
+            this.asignarEvMostrarEstadisticasTablones();
+        }
+
+        this.asignarEvMostrarTablonAnuncio(tipoUsu);
+        this.mostrarTablonAnuncio(tipoUsu);
+    }
+
     //Muestra la página principal con todas las funciones correspondientes si se ha iniciado sesión como empresa.
     crearPaginaInicialWorkasEmpresa = async() => {
+        console.log("fdfdf")
         var iconoPerfil = doc.getElementsByClassName("imgIconoPerfil");
         var empresa = await this.devolverEmpresa(this.getUsu().id);
+        await this.actualizarEstadoConectado(empresa.id, true, "empresa")
 
         var imgPerfil = (empresa.data().iconoPerfil === "") ? "./img/empresaIcono.png" : empresa.data().iconoPerfil;
 
-        doc.getElementById("contenidoFormulario").id = "contenido";
+        if(doc.getElementById("contenidoFormulario") != null) {
+            doc.getElementById("contenidoFormulario").id = "contenido";
+        }
         doc.getElementById("contenido").classList.add("colapsarContenido");
         doc.getElementById("contenido").innerHTML = Plantilla.crearPaginaInicialEmpresa(empresa, imgPerfil);
         opAside = doc.getElementById("asideOpciones");
@@ -410,7 +429,32 @@ class Workas extends RotarTurno {
         doc.getElementById("opNavTablon").addEventListener(
             "click",
             (e) => {
-                this.modificarPaginaOpNavTablonAnuncio();
+                this.modificarPaginaOpNavTablonAnuncio("empresa");
+            },
+            false
+        );
+
+        doc.getElementById("btnChat").addEventListener(
+            "click",
+            async(e) => {
+                this.modificarPaginaOpNavChat("empleado");
+            },
+            false
+        );
+
+        doc.getElementById("opNavLogout").addEventListener(
+            "click",
+            async(e) => {
+                this.cerrarSesion();
+                await this.actualizarEstadoConectado(empresa.id, false, "empresa");
+            },
+            false
+        );
+
+        window.addEventListener(
+            "beforeunload", 
+            async(e) => {
+                await this.actualizarEstadoConectado(empresa.id, false, "empresa");
             },
             false
         );
@@ -481,6 +525,7 @@ class Workas extends RotarTurno {
     crearPaginaInicialWorkasEmpleado = async() => {
         var iconoPerfil = doc.getElementsByClassName("imgIconoPerfil");
         var empleado = await this.devolverEmpleado(this.getUsu().id);
+        await this.actualizarEstadoConectado(empleado.id, true, "empleado");
 
         var imgPerfil = (empleado.data().iconoPerfil === "") ? "./img/empleadoIcono.png" : empleado.data().iconoPerfil;
 
@@ -490,7 +535,8 @@ class Workas extends RotarTurno {
         opAside = doc.getElementById("asideOpciones");
 
         this.asignarEvColapsarAside();
-        
+        this.modificarPaginaOpNavTablonAnuncio("empleado");
+
         /*doc.getElementById("").addEventListener(
             "click",
             (e) => {
@@ -511,489 +557,115 @@ class Workas extends RotarTurno {
 
         doc.getElementById("opNavTablon").addEventListener(
             "click",
-            (e) => {
-                this.modificarPaginaOpNavTablonAnuncio();
+            (e) => {this
+                this.modificarPaginaOpNavTablonAnuncio("empleado");
             },
             false
         );
-    }
 
-
-
-
-
-
-
-
-
-
-    aumentarVisita = async() => {
-        var visitas = anuncioSlc.data().visualizaciones;
-        visitas++;
-
-        await this.actualizarVisitas(anuncioSlc.id, visitas)
-
-        doc.getElementById("spanVisitas").innerHTML = visitas;
-
-        anuncioSlc = await this.devolverAnuncio(anuncioSlc.id);
-    }
-
-    mostrarComentarios = async() => {
-        var divComentario = doc.getElementById("divComentarios");
-        var comentarios = "";
-        for (let i = 0; i < anuncioSlc.data().comentarios.length; i++) {
-            var tipoUsuario = anuncioSlc.data().comentarios[i].tipoUsuario;
-
-            if(tipoUsuario === "empresa") {
-                var usuario = await this.devolverEmpresa(anuncioSlc.data().comentarios[i].idUsuario);
-            } else {
-                var usuario = await this.devolverEmpleado(anuncioSlc.data().comentarios[i].idUsuario);
-            }
-            
-            var texto = anuncioSlc.data().comentarios[i].texto;
-
-            comentarios += Plantilla.crearComentario(texto, usuario.data(), tipoUsuario);
-        }
-
-        divComentario.innerHTML = comentarios;
-    }
-
-    enviarComentario = async() => {
-        var texto = doc.getElementById("txtArea").value.trim();
-        var usuario = await this.devolverEmpresa(this.getUsu().id);
-
-        var tipoUsuario = usuario.data() == undefined ? "empleado" : "empresa";
-        if(texto === "") {
-            return;
-        }
-
-        var comentario = {
-            idUsuario: this.getUsu().id,
-            texto: texto,
-            tipoUsuario: tipoUsuario
-        }
-        var texto = doc.getElementById("txtArea").value = "";
-
-        await this.actualizarArrayAnuncio(anuncioSlc.id, comentario);
-        anuncioSlc = await this.devolverAnuncio(anuncioSlc.id);
-
-        this.mostrarComentarios();
-    }
-
-    asignarEvEnviarComentario() {
-        doc.getElementById("enlEnviarComentario").addEventListener(
+        doc.getElementById("btnChat").addEventListener(
             "click",
-            (e) => {
-                this.enviarComentario();
+            async(e) => {
+                this.modificarPaginaOpNavChat("empleado");
+            },
+            false
+        );
+
+        doc.getElementById("opNavLogout").addEventListener(
+            "click",
+            async(e) => {
+                this.cerrarSesion();
+                await this.actualizarEstadoConectado(empleado.id, false, "empleado");
+            },
+            false
+        );
+
+        window.addEventListener(
+            "beforeunload", 
+            async(e) => {
+                await this.actualizarEstadoConectado(empleado.id, false, "empleado");
             },
             false
         );
     }
 
-    quitarLike = async(imgLike) => {
-        var likes = anuncioSlc.data().likes;
-        likes--;
-        var arrayUsuarioLikes = anuncioSlc.data().arrayUsuarioLikes;
-        arrayUsuarioLikes.splice(arrayUsuarioLikes.indexOf(this.getUsu().id), 1);
+    mostrarListadoUsuChat = async(tipoUsu) => {
+        var conversacion = [
+            {
+                idUsu: "",
+                fecha: new Date(),
+                mensaje: ""
+            }
+        ]
+
+        var pinGrupo = [
+            {
+                texto: "",
+                fPubli: new Date(),
+                imgPin: "",
+                enlaces: []
+            }
+        ]
+
+        var status = {
+            info: "",
+            emoji: ""
+        }
+
+        var chat = {
+            arrayUsuariosChat: [],
+            tipoConver: "privado",
+            conversacion: conversacion,
+            nMsgSinLeer: 5,
+            capacidadGrupo: 2,
+            nombreGrupo: "Obreros sin fronteras",
+            imgGrupo: "",
+            infoGrupo: "",
+            pinGrupo: pinGrupo
+        }
+
+    }
+
+    modificarPaginaOpNavChat = async(tipoUsu) => {
+        opAside.innerHTML = Plantilla.crearOpAsideChat(tipoUsu);
+
+
+        if(tipoUsu === "empresa") {
+
+        }
+
+        doc.getElementById("principal").innerHTML = Plantilla.crearPlantillaChat();
+        this.obtenerListadoUsuariosChat()
+
+    }
+
+    obtenerListadoUsuariosChat = async () => {
+        var divListado = doc.getElementById("listadoUsuariosChat");
+        var empleadoSesion = await this.devolverEmpleado(this.getUsu().id);
+
+        const empleados = await onSnapshot(this.devolverEnlace("empleado"), (empleados) => {
+            divListado.innerHTML = "";
+
+            empleados.docs.map((empleado) => {
+                if(empleadoSesion.idEmpresa === empleado.idEmpresa) {
+                    divListado.innerHTML += Plantilla.crearFilaListUsuChat(empleado.data());
+                }
+            });
+        });
         
-        await this.actualizarLikes(anuncioSlc.id, likes, arrayUsuarioLikes);
-
-        imgLike.classList.remove("pulsado");
-        imgLike.src = "./img/iconoLike.png";
-
-        doc.getElementById("spanLike").innerHTML = likes;
-
-        anuncioSlc = await this.devolverAnuncio(anuncioSlc.id);
-    }
-
-    darLike = async(imgLike) => {
-        var likes = anuncioSlc.data().likes;
-        likes++;
-        var arrayUsuarioLikes = anuncioSlc.data().arrayUsuarioLikes;
-        arrayUsuarioLikes.push(this.getUsu().id)
-
-        await this.actualizarLikes(anuncioSlc.id, likes, arrayUsuarioLikes);
-
-        imgLike.classList.add("pulsado");
-        imgLike.src = "./img/iconoLikePulsado.png";[].slice
-
-        doc.getElementById("spanLike").innerHTML = likes;
-
-        anuncioSlc = await this.devolverAnuncio(anuncioSlc.id);
-    }
-
-    asignarEvDarLike() {
-        doc.getElementById("imgLike").addEventListener(
-            "click",
-            (e) => {
-                if (e.target.classList.contains("pulsado")) {
-                    this.quitarLike(e.target)
-                } else {
-                    this.darLike(e.target)
-                }
-            },
-            false
-        );
-    }
-
-    mostrarTablonAnuncio = async() => {
-        anuncioSlc = await this.devolverAnuncio("KgTx0OORxKZykYURF534");
-
-        doc.getElementById("principal").innerHTML = Plantilla.crearAnuncioPlantillaEmpresa(anuncioSlc.data(), this.getUsu().id);
-
-        this.asignarEvDarLike();
-        this.asignarEvEnviarComentario();
-        this.mostrarComentarios();
-        this.aumentarVisita();
-    }
-
-    asignarEvMostrarTablonAnuncio() {
-        doc.getElementById("asideListarTablon").addEventListener(
-            "click",
-            (e) => {
-                this.mostrarTablonAnuncio();
-            },
-            false
-        );
-    }
-
-    crearContenidoParrafos() {
-        var txtArea = doc.getElementsByClassName("inputParrafo")
-        var parrafos = "";
-        for (let i = 0; i < txtArea.length; i++) {
-            if(txtArea[i].value !== "") {
-                parrafos += `<p>${txtArea[i].value}</p>`;
-            }
-        }
-        return parrafos;
-    }
-
-    crearParrafo() {
-        var parrafos = doc.getElementsByClassName("inputParrafo");
-        var poderAnyadir = true;
-
-        for (let i = 0; i < parrafos.length; i++) {
-            if(parrafos[i].value === "") {
-                poderAnyadir = false;
-            }
-        }
-
-        if(poderAnyadir) {
-            doc.getElementById("divParrafos").appendChild(Plantilla.crearDivAgregarParrafo());
-
-        }
-    }
-
-    asignarEvCrearParrafo() {
-        doc.getElementById("divAnyadirParrafo").addEventListener(
-            "click",
-            (e) => {
-                this.crearParrafo()
-            },
-            false
-        );
-    }
-
-    crearAnuncio = async() => {
-        var div = doc.getElementById("principalCrearAnuncio");
-        var alert;
-
-        var fPubli = new Date();
-        var idEmpresa = this.getUsu().id;
-        var titulo = doc.getElementById("inputTitulo").value.trim();
-        var subtitulo = doc.getElementById("inputSubtitulo").value.trim();
-        var autor = doc.getElementById("inputAutor").value.trim();
-        var nEnlace = doc.getElementById("inputNombreEnl").value.trim();
-        var enlace = doc.getElementById("inputEnl").value.trim();
-        var contenido = this.crearContenidoParrafos();
-
-        var file = ($('#inputAnyadirImg'))[0].files[0];
-
-
-
-        if (true) {
-            var anuncio = {
-                titulo: titulo,
-                subtitulo: subtitulo,
-                autor: autor,
-                fPubli: fPubli,
-                imgAnuncio: "",
-                contenido: contenido,
-                nEnlace: nEnlace,
-                enlace: enlace,
-                visualizaciones: 0,
-                likes: 0,
-                arrayUsuarioLikes: [],
-                comentarios: [],
-                idEmpresa: idEmpresa
-            }
-
-            doc.getElementById("parrafosAnuncio").innerHTML =   `<div id="divParrafos">
-                                                                    <div class="form-floating divInputParrafo">
-                                                                        <textarea class="form-control inputParrafo" placeholder="Escribe un párrafo"></textarea>
-                                                                        <label>Escribe un párrafo</label>
-                                                                    </div>
-                                                                </div>
-                                                                <div id="divAnyadirParrafo">
-                                                                    <img src="./img/añadir.png" alt="">
-                                                                </div>`
-
-            var anuncio = await this.anyadirAnuncio(anuncio);
-            console.log(anuncio);
-            console.log(anuncio.id);
-            var nombreImg = `${anuncio.id}.${file.name.substr( (file.name.lastIndexOf(".")+1 - file.name.length) )}`;
-            await this.subirImgBD(`imgAnuncio/${nombreImg}`, file);
-
-            var ruta = await this.descargarImgBD(`imgAnuncio/${nombreImg}`);
-
-            await this.actualizarImgAnuncio(anuncio.id, ruta);
-            doc.getElementById("formAnuncio").reset();
-
-        } else {
-            alert = General.crearAlert("Error en la introducción de datos.", "errorAlert");
-            div.insertBefore(alert, doc.getElementById("tituloListEmpleado"));
-        }   
-    }
-
-    asignarEvBtnCrearAnuncio() {
-        doc.getElementById("btnCrearAnuncio").addEventListener(
-            "click",
-            (e) => {
-                this.crearAnuncio();
-            },
-            false
-        );
-    }
-
-    divCrearAnuncio() {
-        doc.getElementById("principal").innerHTML = Plantilla.crearDivCrearAnuncio();
-        doc.getElementById("divFormCrearAnuncio").innerHTML += Plantilla.crearFormularioAnuncio();
-
-        this.asignarEvBtnCrearAnuncio();
-        this.asignarEvCrearParrafo();
-    }
-
-    asignarEvDivCrearAnuncio() {
-        doc.getElementById("asideCrearAnuncio").addEventListener(
-            "click",
-            (e) => {
-                this.divCrearAnuncio();
-            },
-            false
-        );
-    }
-
-    modificarPaginaOpNavTablonAnuncio() {
-        opAside.innerHTML = Plantilla.crearOpAsideNavTablonAnuncio();
-
-        this.asignarEvDivCrearAnuncio();
-        this.asignarEvMostrarTablonAnuncio();
-
-    }
-
-
-
-
-
-    quitarTablonAnuncio = async(btn) => {
-        var empresa = await this.devolverEmpresa(this.getUsu().id);
-        var array = empresa.data().tablonAnuncios;
-        array.splice(btn.id, 1);
-
-        await this.eliminarTablonEmpresa(this.getUsu().id, array);
-
-        this.opListarTablonAnuncio(false);
-    }
-
-    //Añade al DOM el formulario de creación de un tablón de anuncio.
-    crearFormTablonAnuncio() {
-        var div = doc.getElementById("principal");
-        div.innerHTML = `<form id="formCrearTablonAnuncio" action=''>
-                            <fieldset>
-                            <legend>Introduce el título</legend>
-                            <input id="txtTitulo" type="text" placeholder="Introduce el título">
-                            </fieldset>	
-                            <fieldset>
-                            <legend>Tipo Plantilla</legend>
-                            <input type="radio" class="plantillaTablon" name="plantillaTablon" value="plantilla1" checked>Plantilla 1<br>
-                            <input type="radio" class="plantillaTablon" name="plantillaTablon" value="plantilla2">Plantilla 2<br>
-                            </fieldset>	
-                            <fieldset>
-                            <legend>Introduce el autor</legend>
-                            <input id="txtAutor" type="text" placeholder="Introduce el autor">
-                            </fieldset>	
-                            <fieldset>
-                            <label for="selecImagen">Elije una imagen</label>
-                               <select name="selecImagen" id="selecImagen">
-                                   <option value="noSelec">No seleccionado</option>
-                                   <option value="././././img/slcImgEmpresa.jpg">Empresa</option>
-                                   <option value="././././img/slcImgReunion.jpg">Reunión</option>
-                                   <option value="././././img/slcImgRevisionMedica.jpg">Médico</option>
-                                   <option value="././././img/slcImgObras.jpg">Obras</option>
-                                   <option value="././././img/slcImgVacaciones.jpg">Vacaciones</option>
-                                   <option value="././././img/slcImgNavidad.jpg">Navidad</option>
-                                </select> 
-                            </fieldset>
-                            <fieldset>
-                            <legend>Contenido del tablón</legend>
-                            <textarea id="contenidoTablon" name="contenidoTablon" rows="35" cols="150"></textarea>
-                            </fieldset>		
-                            <p class="error ocultar">(*) Error en la introducción de datos.</p>
-                            <div id="divBtnCrearTablon"><input id="btnCrearTablon" type="button" value="Crear"></div>
-                        </form>`;
-    }
-
-    //Recoge los datos del formulario y si son correctos creará un objeto "tablón de anuncio" y lo añadirá al array de tablonAnuncios de una empresa.
-    opCrearTablonAnuncio = async() => {
-        var div = doc.getElementById("principal");
-
-        var titulo = doc.getElementById("txtTitulo").value.trim();
-        var rutaImagen = doc.getElementById("selecImagen").value.trim();
-        var contenido = doc.getElementById("contenidoTablon").value.trim();
-        var autor = doc.getElementById("txtAutor").value.trim();
-        var fPubli = new Date();
-        var plantilla;
-        for (let i = 0; i < doc.getElementsByClassName("plantillaTablon").length; i++) {
-            if (doc.getElementsByClassName("plantillaTablon")[i].checked) {
-                plantilla = doc.getElementsByClassName("plantillaTablon")[i].value;
-            }
-        }
-
-        if (this.comprobarRazSocial(titulo) && rutaImagen !== "noSelec" && contenido !== "" && this.comprobarRazSocial(autor)) {
-            var tablonAnuncio = {
-                titulo: titulo,
-                rutaImagen: rutaImagen,
-                contenido: contenido,
-                fPubli: fPubli,
-                autor: autor,
-                plantilla: plantilla
-            }
-
-
-            await this.actualizarArrayTablonAnuncioEmpresa(this.getUsu().id, tablonAnuncio);
-            div.innerHTML = `<p class="infoMensajeCorrecto">Anuncio creado correctamente.</p>`;
-            this.opListarTablonAnuncio(true);
-        } else {
-            div.getElementsByClassName("error")[0].innerHTML = "(*) Error en la introducción de datos.";
-            div.getElementsByClassName("error")[0].classList.remove("ocultar");
-        }
-    }
-
-    //Asigna el evento al botón del form de recoger los datos del formulario y añadir el objeto tablón de anuncio a la bd de una empresa.
-    asignarEvCrearTablonAnuncio() {
-        var btn = doc.getElementById("btnCrearTablon");
-        btn.addEventListener(
-            "click",
-            (e) => {
-                this.opCrearTablonAnuncio();
-            },
-            false
-        );
-    }
-
-    //Asigna el evento de añadir el formulario al DOM y asignar al botón de este el evento de añadir un tablón de anuncios a la empresa correspondiente.
-    asignarEvOpCrearTablonAnuncio(btn) {
-        btn.addEventListener(
-            "click",
-            (e) => {
-                this.crearFormTablonAnuncio();
-                this.asignarEvCrearTablonAnuncio();
-            },
-            false
-        );
-    }
-
-    //Lista el array de tablonAnuncios y lo mostrará al DOM de distinta forma según la plantilla que tenga el tablón.
-    opListarTablonAnuncio = async(anyadido) => {
-        var div = doc.getElementById("principal");
-        if (!anyadido) {
-            div.innerHTML = "";
-        }
-        var empresa = await this.devolverEmpresa(this.getUsu().id);
-        if (empresa.data().tablonAnuncios.length > 0) {
-            for (let i = 0; i < empresa.data().tablonAnuncios.length; i++) {
-                if (empresa.data().tablonAnuncios[i].plantilla === "plantilla1") {
-                    div.innerHTML += Plantilla.crearTablonPlantillaEmpresa1(empresa.data().tablonAnuncios[i], i);
-                } else if (empresa.data().tablonAnuncios[i].plantilla === "plantilla2") {
-                    div.innerHTML += Plantilla.crearTablonPlantillaEmpresa2(empresa.data().tablonAnuncios[i], i);
-                }
-            }
-
-        } else {
-            div.innerHTML = `<p class="mensajeInfo">No hay ningún tablón de anuncio añadido todavía.</p>`;
-        }
-
-        this.asignarEvOpBorrarTablonAnuncio();
-    }
-
-    //Lista el array de tablonAnuncios que tenga la empresa en la que el empleado está registrado y lo mostrará al DOM de distinta forma según la plantilla que tenga el tablón.
-    opListarTablonAnuncioEmpleado = async() => {
-        var div = doc.getElementById("principal");
-        div.innerHTML = "";
-
-        var empleado = await this.devolverEmpleado(this.getUsu().id);
-        var empresa = await this.devolverEmpresa(empleado.data().idEmpresa);
-
-        if (empresa.data().tablonAnuncios.length > 0) {
-            for (let i = 0; i < empresa.data().tablonAnuncios.length; i++) {
-                if (empresa.data().tablonAnuncios[i].plantilla === "plantilla1") {
-                    div.innerHTML += Plantilla.crearTablonPlantillaEmpleado1(empresa.data().tablonAnuncios[i]);
-                } else if (empresa.data().tablonAnuncios[i].plantilla === "plantilla2") {
-                    div.innerHTML += Plantilla.crearTablonPlantillaEmpleado2(empresa.data().tablonAnuncios[i]);
-                }
-            }
-
-        } else {
-            div.innerHTML = `<p class="mensajeInfo">La empresa no ha publicado ningún tablón de anuncio todavía.</p>`;
-        }
-    }
-
-    //Asigna el evento de listar el array de tablonAnuncios al botón.
-    asignarEvOpListarTablonAnuncio(btn) {
-        btn.addEventListener(
-            "click",
-            (e) => {
-                this.opListarTablonAnuncio(false);
-            },
-            false
-        );
-    }
-
-    //Asigna el evento de listar el array de tablonAnuncios que tiene la empresa a la que el empleado está registrado.
-    asignarEvOpListarTablonAnuncioEmpleado(btn) {
-        btn.addEventListener(
-            "click",
-            (e) => {
-                this.opListarTablonAnuncioEmpleado();
-            },
-            false
-        );
-    }
-
-    //Borra el tablón de anuncio seleccionado de la bd y vuelve a listar el array tablonAnuncios.
-    quitarTablonAnuncio = async(btn) => {
-        var empresa = await this.devolverEmpresa(this.getUsu().id);
-        var array = empresa.data().tablonAnuncios;
-        array.splice(btn.id, 1);
-
-        await this.eliminarTablonEmpresa(this.getUsu().id, array);
-
-        this.opListarTablonAnuncio(false);
-    }
-
-    //Asigna el evento de borrar tabón de anuncio al botón eliminar.
-    asignarEvOpBorrarTablonAnuncio() {
-        var btnBorrar = doc.getElementsByClassName("btnEliminarTablon");
-        for (let i = 0; i < btnBorrar.length; i++) {
-            btnBorrar[i].addEventListener(
-                "click",
-                (e) => {
-                    this.quitarTablonAnuncio(e.target);
-                },
-                false
-            );
-        }
-    }
+        //Filtrar nombre usuario por input.
+        $(doc).ready(function() {
+            $("#inputBuscarUsuarioChat").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $(".nombreUsuGrupoChat").filter(function() {
+                    $(this.parentNode.parentNode).toggle($(this).text()
+                    .toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    };
+
+    
 
 }
 //Exportamos.

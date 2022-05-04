@@ -6,6 +6,7 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     onAuthStateChanged,
+    signOut
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
    
    /*  --- BIBLIOTECA FORMULARIO ---  */
@@ -16,7 +17,41 @@ class Formulario extends Workas {
     constructor() {
         super();
     }
- 
+
+    cerrarSesion() {
+        autentificacion.signOut()
+            .then(function() {
+                location.reload();
+        })
+    }
+
+    entrarConSesion = async(usuario) => {
+        var empresa = await this.devolverConsultaFiltrarUsuarioId(usuario.uid);
+        doc.body.classList.add("bodyFondo");
+        this.setUsu(empresa.docs[0]);
+
+        if(this.getUsu() == undefined) {
+            console.log(usuario.uid)
+
+            var empleado = await this.devolverConsultaFiltrarEmpleadoId(usuario.uid);
+            
+            this.setUsu(empleado.docs[0]);
+            console.log(this.getUsu())
+            if(this.getUsu() != undefined) {
+                this.crearPaginaInicialWorkasEmpleado();
+            }
+        } else {
+            this.crearPaginaInicialWorkasEmpresa();
+        }
+    }
+
+    comprobarSesion() {
+        onAuthStateChanged(autentificacion, (usuario) => {
+            if (usuario) {
+                this.entrarConSesion(usuario);
+            }
+          });
+    }
     
     //Permite iniciar sesión o registrarse con la tecla enter.
     loguearTeclaEnter(id) {
@@ -343,7 +378,10 @@ class Formulario extends Workas {
                     psswd: psswd,
                     repetirPsswd: "",
                     tablonAnuncios: [],
-                    iconoPerfil: ""
+                    iconoPerfil: "",
+                    conectado: false,
+                    chatSlc: "",
+                    statusChat: null
                 }
             }
         } else if (tipoForm === "singup") {
@@ -358,12 +396,16 @@ class Formulario extends Workas {
                     psswd: psswd,
                     repetirPsswd: repPsswd,
                     tablonAnuncios: [],
-                    iconoPerfil: ""
+                    iconoPerfil: "",
+                    conectado: false,
+                    chatSlc: "",
+                    statusChat: null
                 }
             }
         } else if (tipoForm === "loginEmpleado") {
             if (this.comprobarCorreo(correo) && this.comprobarContrasenya(codEmpleado)) {
                 var usuario = {
+                    id:"",
                     idEmpresa: "",
                     dni: "",
                     nombre: "",
@@ -372,12 +414,16 @@ class Formulario extends Workas {
                     puestoTrabajo: "",
                     turno: "",
                     codEmpleado: codEmpleado,
-                    iconoPerfil: ""
+                    iconoPerfil: "",
+                    conectado: false,
+                    chatSlc: "",
+                    statusChat: null
                 }
             }
         } else if (tipoForm === "registroEmpleado") {
             if (this.comprobarCorreo(correo) && this.comprobarContrasenya(codEmpleado)) {
                 var usuario = {
+                    id:"",
                     idEmpresa: "",
                     dni: "",
                     nombre: "",
@@ -386,7 +432,10 @@ class Formulario extends Workas {
                     puestoTrabajo: "",
                     turno: "",
                     codEmpleado: codEmpleado,
-                    iconoPerfil: ""
+                    iconoPerfil: "",
+                    conectado: false,
+                    chatSlc: "",
+                    statusChat: null
                 }
             }
         }
@@ -454,15 +503,32 @@ class Formulario extends Workas {
 
     //Crea un empleado y lo añade a la bd.
     crearUsuarioEmpleado(empleado) {
+        var idUsu;
+        var usuFiltrado;
         createUserWithEmailAndPassword(autentificacion, empleado.correo, empleado.codEmpleado)
             .then((credenciales) => {
+                idUsu = credenciales.user.uid;
+                console.log(idUsu)
                 return this.devolverConsultaFiltrarEmpleadoCorreo(empleado.correo);
             }).then((datos) => {
-                this.setUsu(datos.docs[0]);
+                console.log(datos.docs[0])
+                usuFiltrado = datos.docs[0];
+                console.log(usuFiltrado.id)
+                console.log(usuFiltrado.data())
+                usuFiltrado.data().id = usuFiltrado.id;
+                this.setUsu(usuFiltrado);
+                console.log(this.getUsu().id)
+                console.log(usuFiltrado.data())
+                /*ARREGLAR CONECTADO*/
+                return this.actualizarIdEmpleado(this.getUsu().id, usuFiltrado.id);
+            }).then((datos) => {
+                console.log("gfdkljnnlbhsujdfhguyiosdfhibiudflosj")
+                console.log(datos)
+                console.log(datos.id)
                 this.crearPaginaInicialWorkasEmpleado();
             })
             .catch((error) => {
-
+                console.log(error);
                 doc.getElementById("errorLoginSingup").innerHTML = "(*) Error, cuenta ya creada.";
                 doc.getElementById("errorLoginSingup").classList.remove("ocultar");
             });

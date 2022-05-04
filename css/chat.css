@@ -1,0 +1,197 @@
+#divChat {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    height: 800px;
+}
+
+#divChatListadoUsuarios {
+    background-color: white;
+    width: 35%;
+    height: 100%;
+    border-radius: 15px;
+}
+
+#divChatConversacion {
+    width: 65%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#headerListadoUsuarios {
+    height: 80px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 10px;
+    border-bottom: 1px solid lightgray;
+}
+
+/* LISTADO USUARIOS */
+#divChatListadoUsuarios {
+    height: 800px;
+    background-color: white;
+    overflow-y: auto;
+}
+
+.divUsuarioChat {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100px;
+    padding: 20px 0px;
+}
+
+.divUsuarioChat:hover {
+    background-color: lightgray;
+    cursor: pointer;
+}
+
+.divUsuarioChat p {
+    margin: 5px 0px;
+}
+
+.divUsuarioChat > div {
+    margin: 0em 10px;
+}
+
+
+.chatListImgPerfil {
+    width: 70px;
+    height: 70px;
+}
+
+
+.chatListImgPerfil img {
+    width: 70px;
+    height: 70px;
+    border-radius: 100%;
+    background-color: powderblue;
+}
+
+.iconoConectado {
+    position: relative;
+    bottom: 20%;
+    left: 75%;
+    width: 15px;
+    height: 15px;
+    outline: 3px solid white;
+    text-align: center;
+    border-radius: 100%;
+}
+
+.conectado {
+    background-color: darkgreen;
+
+}
+
+.desconectado {
+    background-color: darkred;
+}
+
+.chatListContenido {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.chatListContenido  h5 {
+    font-weight: bold;
+}
+
+.chatListContenido p {
+    color: gray;
+}
+
+.chatListContenido {
+    text-overflow:ellipsis;
+    white-space:nowrap; 
+    overflow:hidden; 
+}
+
+.chatListFechaOnline {
+    width: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+/*CHAT CONVERSACIÓN*/
+
+
+#headerChatUsuario {
+    height: 80px;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    margin: 0em 10px;
+    gap: 10px;
+    border-bottom: 1px solid lightgray;
+}
+
+.iconoConectado2 {
+    width: 15px;
+    height: 15px;
+    border-radius: 100%;
+} 
+
+#imgChatSlc img {
+    width: 70px;
+    height: 70px;
+    margin: 5px;
+    border-radius: 100%;
+    background-color: gray;
+}
+
+#conversacion {
+    height: 100%;
+}
+
+#divInputChatUsuario {
+    border-radius: 10px;
+    background-color: white;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+}
+
+#divInputChatUsuario input[type="text"] {
+    width: 100%;
+    height: 100%;
+    padding: 1em;
+    border: 0px solid;
+}
+
+#divInputChatUsuario input:focus {
+    width: 100%;
+    outline: 0px;
+}
+
+#divInputChatUsuario #divIconosInputMsg {
+    width: 120px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+
+#divInputChatUsuario #inputSlcEmoji {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+}
+
+#divInputChatUsuario #inputEnviarMsg {
+    width: 40px;
+    height: 40px;
+    padding: 5px;
+    padding-left: 7px;
+    border-radius: 100%;
+    filter: invert(1);
+    background-color: #faa7a5;
+}
