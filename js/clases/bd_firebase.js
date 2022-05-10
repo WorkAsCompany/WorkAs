@@ -283,11 +283,53 @@ class BD_Firebase {
 
     /*CHAT*/
 
+    //Devuelve un documento de un chat. 
+    devolverChat(id) {
+        var idRef = doc(this.devolverEnlace("chat"), id);
+        var coleccion = getDoc(idRef);
+        return coleccion;
+    }
+
     //Actualiza el estado del usuario.
     actualizarEstadoConectado(id, conectado, tipoUsu) {
         var idRef = doc(this.devolverEnlace(tipoUsu), id);
         return updateDoc(idRef, {
             conectado: conectado
+        });
+    }
+
+    //Añade un chat a la bd.
+    anyadirChat(chat) {
+        return addDoc(this.devolverEnlace("chat"), chat);
+    }
+
+    //Añade el chat seleccionado al usuario.
+    actualizarChatSlc(id, chatSlc, tipoUsu) {
+        var idRef = doc(this.devolverEnlace(tipoUsu), id);
+
+        return updateDoc(idRef, {
+            chatSlc: chatSlc
+        });
+    }
+    
+    //Añade un mensaje a la conversacion.
+    actualizarConversacion(idChat, nMsgSinLeer, msg) {
+        var chat = doc(this.devolverEnlace("chat"), idChat);
+        nMsgSinLeer++;
+        console.log(chat.nMsgSinLeer)
+        return updateDoc(chat, {
+            fLastMsg: msg.fecha,
+            nMsgSinLeer: nMsgSinLeer,
+            conversacion: arrayUnion(msg)
+        });
+    }
+
+    //Actualiza el nº de mensajes sin leer.
+    actualizarNMsgSinLeer(idChat, nMsgSinLeer) {
+        var chat = doc(this.devolverEnlace("chat"), idChat);
+
+        return updateDoc(chat, {
+            nMsgSinLeer: nMsgSinLeer
         });
     }
 }

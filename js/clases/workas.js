@@ -15,6 +15,8 @@ var opAside;
 var arrayEmpleados = [];
 var empleadoEnEdicion;
 
+var chatSlc = "";
+
 class Workas extends TablonAnuncio {
     constructor() {
         super();
@@ -56,7 +58,7 @@ class Workas extends TablonAnuncio {
     //Recoge los datos del formulario y si son correctos crea un nuevo empleado y lo añade a la empresa correspondiente.
     opAnyadirEmpleado = async() => {
         var div = doc.getElementById("divPrincipalTabla");
-        var alert;
+        var alert, chat, arrayAnyadirChat = [];
 
         var dni = doc.getElementById("txtDni").value.trim();
         var nombre = doc.getElementById("txtNombre").value.trim();
@@ -80,7 +82,8 @@ class Workas extends TablonAnuncio {
                 iconoPerfil: "",
                 conectado: false,
                 chatSlc: "",
-                statusChat: null
+                statusChat: null,
+                tipoUsu: "empleado"
             }
 
             var existeEmpleado = await this.devolverConsultaFiltrarEmpleadoCorreo(empleado.correo);
@@ -92,7 +95,47 @@ class Workas extends TablonAnuncio {
             } else {
                 alert = General.crearAlert("Empleado creado correctamente.", "exitoAlert");
                 doc.getElementById("formCrearEmpleado").reset();
-                await this.anyadirEmpleado(empleado);
+
+                var usuAnyadido = await this.anyadirEmpleado(empleado);
+                var arrayEmpleados = await this.devolverEmpleadosEmpresa(this.getUsu().id);
+
+                chat = {
+                    arrayUsuariosChat: [this.getUsu().id, usuAnyadido.id],
+                    tipoConver: "privado",
+                    conversacion: null,
+                    nMsgSinLeer: 0,
+                    capacidadGrupo: 2,
+                    nombreGrupo: "",
+                    imgGrupo: "",
+                    infoGrupo: "",
+                    pinGrupo: null,
+                    idEmpresa: this.getUsu().id,
+                    fLastMsg: null
+                }
+                arrayAnyadirChat += this.anyadirChat(chat);
+
+                arrayEmpleados.docs.map((empleado) => {
+
+                    if(empleado.id !== usuAnyadido.id) {
+                        chat = {
+                            arrayUsuariosChat: [empleado.id, usuAnyadido.id],
+                            tipoConver: "privado",
+                            conversacion: null,
+                            nMsgSinLeer: 0,
+                            capacidadGrupo: 2,
+                            nombreGrupo: "",
+                            imgGrupo: "",
+                            infoGrupo: "",
+                            pinGrupo: null,
+                            idEmpresa: this.getUsu().id,
+                            fLastMsg: null
+                        }
+    
+                        arrayAnyadirChat += this.anyadirChat(chat);
+                    }
+                });
+
+                await Promise.all(arrayAnyadirChat);
                 this.opListarEmpleados();
                 div.insertBefore(alert, doc.getElementById("tituloListEmpleado"));            }
         } else {
@@ -417,6 +460,7 @@ class Workas extends TablonAnuncio {
         //this.mostrarDatosEmpresa();
         this.modificarPaginaOpNavEmpleados();
         this.asignarEvColapsarAside();
+        this.chatMostrarMsgChat();
         
         doc.getElementById("opNavEmpleados").addEventListener(
             "click",
@@ -437,7 +481,7 @@ class Workas extends TablonAnuncio {
         doc.getElementById("btnChat").addEventListener(
             "click",
             async(e) => {
-                this.modificarPaginaOpNavChat("empleado");
+                this.modificarPaginaOpNavChat("empresa");
             },
             false
         );
@@ -536,6 +580,7 @@ class Workas extends TablonAnuncio {
 
         this.asignarEvColapsarAside();
         this.modificarPaginaOpNavTablonAnuncio("empleado");
+        this.chatMostrarMsgChat();
 
         /*doc.getElementById("").addEventListener(
             "click",
@@ -612,18 +657,164 @@ class Workas extends TablonAnuncio {
             emoji: ""
         }
 
-        var chat = {
-            arrayUsuariosChat: [],
-            tipoConver: "privado",
-            conversacion: conversacion,
-            nMsgSinLeer: 5,
-            capacidadGrupo: 2,
-            nombreGrupo: "Obreros sin fronteras",
-            imgGrupo: "",
-            infoGrupo: "",
-            pinGrupo: pinGrupo
-        }
+    }
 
+    chatMostrarMsgChat = async() => {
+        var usuSesion = await this.devolverEmpresa(this.getUsu().id);
+        const chats = await onSnapshot(this.devolverEnlace("chat"), (chats) => {
+            var nMsg = 0;
+            chats.docs.map((chat) => {
+
+                if(chat.data().arrayUsuariosChat.includes(usuSesion.id) && chat.data().conversacion[chat.data().conversacion.length-1].idUsu != usuSesion.id) {
+                    nMsg += chat.data().nMsgSinLeer;
+                }
+            });
+            nMsg = nMsg === 0 ? "0": nMsg < 100 ? `${nMsg}+`: "99+";
+            doc.getElementById("btnChat").getElementsByClassName("badge")[0].innerHTML = "";
+            doc.getElementById("btnChat").getElementsByClassName("badge")[0].innerHTML = nMsg;
+
+        });
+    }
+
+    evCambiarChatPrivado() {
+        var btn = doc.getElementById("divSlcPrivadoChat");
+        btn.addEventListener(
+            "click",
+            (e) => {
+                doc.getElementById("divSlcGrupoChat").classList.remove("tipoChatSlc");
+                doc.getElementById("divSlcPrivadoChat").classList.add("tipoChatSlc");
+                doc.getElementById("listadoUsuariosChat").scrollIntoView({ behavior: "smooth" });
+
+            },
+            false
+        );
+    }
+
+    evCambiarChatGrupo() {
+        var btn = doc.getElementById("divSlcGrupoChat");
+        btn.addEventListener(
+            "click",
+            (e) => {
+                doc.getElementById("divSlcPrivadoChat").classList.remove("tipoChatSlc");
+                doc.getElementById("divSlcGrupoChat").classList.add("tipoChatSlc");
+                doc.getElementById("listadoGruposChat").scrollIntoView({ behavior: "smooth" });
+
+            },
+            false
+        );
+    }
+
+    mostrarMsgConversacion = async(chat, nMsgSinLeer) =>  {
+        doc.getElementById("conversacion").innerHTML = "";
+        var usuSesion = await this.devolverEmpresa(this.getUsu().id);
+
+            if(chatSlc === chat.id && chat.data().conversacion != null) {
+                var conversacion = chat.data().conversacion;
+                var cambioDia = new Date(0);
+                for (let i = 0; i < conversacion.length; i++) {
+                    var fechaMsg = new Date(conversacion[i].fecha.seconds * 1000)
+
+                    if(fechaMsg.getDay() !== cambioDia.getDay()) {
+                        doc.getElementById("conversacion").innerHTML += Plantilla.crearDivMostrarDiaConversacion(fechaMsg);
+                        cambioDia = new Date(conversacion[i].fecha.seconds * 1000)
+                    }
+
+                    if(nMsgSinLeer !== 0 && nMsgSinLeer === (conversacion.length-i) && chat.data().conversacion[chat.data().conversacion.length-1].idUsu != usuSesion.id) {
+                        doc.getElementById("conversacion").innerHTML += "<div class='divMsgSinLeer'>Mensajes no leídos</div>";
+                    }
+
+                    var esUsuSesion = conversacion[i].idUsu === usuSesion.id;
+
+                    doc.getElementById("conversacion").innerHTML += Plantilla.crearPlantillaMensaje(conversacion[i], esUsuSesion);
+                }
+            }
+
+        doc.getElementById("conversacion").scrollTop = doc.getElementById("conversacion").scrollHeight;
+    }
+
+    enviarMensajeChat = async() =>  {
+        var inputTxt = doc.getElementsByClassName("emojionearea-editor")[0];
+
+        if(inputTxt.innerHTML === "") return;
+
+        var msg =   {
+                        idUsu: this.getUsu().id,
+                        fecha: new Date(),
+                        mensaje: inputTxt.innerHTML
+                    };
+
+        var chat = await this.devolverChat(chatSlc);
+        await this.actualizarConversacion(chatSlc, chat.data().nMsgSinLeer, msg);
+
+        inputTxt.innerHTML = "";
+    }
+
+    asignarEvEnviarMensajeChat() {
+        var btn = doc.getElementById("inputEnviarMsg");
+        btn.addEventListener(
+            "click",
+            (e) => {
+                this.enviarMensajeChat();
+            },
+            false
+        );
+    }
+
+    slcUsuListChat = async(tipoUsu) => {
+        var empleadosArray = await this.devolverEmpleadosEmpresa(this.getUsu().id);
+        var usuSesion = await this.devolverEmpresa(this.getUsu().id);
+        var nMsgSinLeer =  await this.devolverChat(chatSlc);
+        doc.getElementById("divChatConversacion").classList.remove("ocultar")
+        doc.getElementById("divChatConversacion").classList.add("animate__animated", "animate__fadeIn")
+
+        await this.actualizarNMsgSinLeer(chatSlc, 0);
+        doc.getElementsByClassName("emojionearea-editor")[0].innerHTML = "";
+
+        const chats = await onSnapshot(this.devolverEnlace("chat"), (chats) => {
+
+            chats.docs.map((chat) => {
+
+                if(chatSlc === chat.id) {
+                    var idUsu = chat.data().arrayUsuariosChat;
+                    idUsu.splice(chat.data().arrayUsuariosChat.indexOf(usuSesion.id), 1);
+                    idUsu = idUsu[0];
+        
+                    var usu = empleadosArray.docs.filter(usu => usu.id === idUsu)[0];
+                   /* var conectadoClass = usu.data().conectado ? "conectado" : "desconectado";*/
+
+                    doc.getElementById("imgChatSlc").innerHTML = usu.data().iconoPerfil ? `<img src="${usu.data().iconoPerfil}" alt="">` : "<img src='./img/empleadoIcono.png' alt=''>";
+                    doc.getElementById("nombreUsuChatSlc").innerHTML = `${usu.data().nombre} ${usu.data().apellidos}`;
+                   /* doc.getElementById("iconoConectado2").classList.add(conectadoClass);*/
+
+                    this.mostrarMsgConversacion(chat, nMsgSinLeer.data().nMsgSinLeer);
+
+                    /*var conversacion = chat.data().conversacion;
+
+                    if (conversacion == null) return;
+
+                    for (let i = 0; i < conversacion.length; i++) {
+                        doc.getElementById("conversacion"). innerHTML = this.getUsu().id === conversacion[i].idUsu 
+                        ? Plantilla.crearPlantillaMensaje(conversacion[i].mensaje, true) 
+                        : Plantilla.crearPlantillaMensaje(conversacion[i].mensaje, false);
+                    }*/
+                }
+            });  
+
+        });
+    }
+
+    asignarEvSlcUsuListChat(tipoUsu) {
+        var divChats = doc.getElementsByClassName("divUsuarioChat");
+        for (let i = 0; i < divChats.length; i++) {
+            divChats[i].addEventListener(
+                "click",
+                async(e) => {
+                    chatSlc = divChats[i].id;
+                    this.slcUsuListChat(tipoUsu);
+                },
+                false
+            );
+        }
     }
 
     modificarPaginaOpNavChat = async(tipoUsu) => {
@@ -634,24 +825,86 @@ class Workas extends TablonAnuncio {
 
         }
 
-        doc.getElementById("principal").innerHTML = Plantilla.crearPlantillaChat();
-        this.obtenerListadoUsuariosChat()
+        doc.getElementById("principal").innerHTML = Plantilla.crearPlantillaChat(tipoUsu);
+        this.obtenerListadoUsuariosChat(tipoUsu)
+        this.evCambiarChatPrivado();
+        this.evCambiarChatGrupo();
 
+        //Emojis
+        $(doc).ready(function() {
+            $("#inputMsgChat").emojioneArea({
+                pickerPosition: "top"
+            });
+        })
     }
 
-    obtenerListadoUsuariosChat = async () => {
-        var divListado = doc.getElementById("listadoUsuariosChat");
-        var empleadoSesion = await this.devolverEmpleado(this.getUsu().id);
+    obtenerListadoUsuariosChat = async (tipoUsu) => {
+        var divListadoUsu = doc.getElementById("listadoUsuariosChat");
+        var divChatEmpresa = doc.getElementById("empresaChat");
+        var divListadoGrupo = doc.getElementById("listadoGruposChat");
+        this.asignarEvEnviarMensajeChat();
 
-        const empleados = await onSnapshot(this.devolverEnlace("empleado"), (empleados) => {
-            divListado.innerHTML = "";
+        if(tipoUsu === "empresa") {
+            var usuSesion = await this.devolverEmpresa(this.getUsu().id);
+            var empleadosArray = await this.devolverEmpleadosEmpresa(this.getUsu().id);
+            /*var arrayChat = await this.devolverColeccion("chat");*/
 
-            empleados.docs.map((empleado) => {
-                if(empleadoSesion.idEmpresa === empleado.idEmpresa) {
-                    divListado.innerHTML += Plantilla.crearFilaListUsuChat(empleado.data());
-                }
+            const usuarios = await onSnapshot(this.devolverEnlace("empleado"), (usuarios) => {
+                usuarios.docs.map((usuario) => {
+                    if(doc.getElementById(usuario.id) != undefined) {
+                        var conectadoClass = usuario.data().conectado ? "conectado" : "desconectado";
+                        doc.getElementById(usuario.id).classList.remove("conectado");
+                        doc.getElementById(usuario.id).classList.remove("desconectado");
+                        doc.getElementById(usuario.id).classList.add(conectadoClass);
+                    }
+                })
             });
-        });
+
+            const chats = await onSnapshot(this.devolverEnlace("chat"), (chats) => {
+                divListadoUsu.innerHTML = "";
+                chats = chats.docs.sort((a, b) => a.data().fLastMsg < b.data().fLastMsg) 
+                chats.map((chat) => {
+                    var idUsu = chat.data().arrayUsuariosChat;
+                    idUsu.splice(chat.data().arrayUsuariosChat.indexOf(usuSesion.id), 1);
+                    idUsu = idUsu[0];
+    
+                    var usu = empleadosArray.docs.filter(usu => usu.id ===  idUsu);
+                    if(usuSesion.id === chat.data().idEmpresa && chat.data().arrayUsuariosChat.includes(usuSesion.id)) {
+    
+                        divListadoUsu.innerHTML += Plantilla.crearFilaListUsuChat(usu[0], chat, chatSlc);
+                    }
+
+
+                });  
+
+                this.asignarEvSlcUsuListChat(tipoUsu);
+            }); 
+
+        } else if(tipoUsu === "empleado") {
+            var usuSesion = await this.devolverEmpleado(this.getUsu().id);
+
+            const usuarios = await onSnapshot(this.devolverEnlace("empleado"), (usuarios) => {
+                divListadoUsu.innerHTML = "";
+    
+                usuarios.docs.map((usuario) => {
+
+                    if(usuSesion.idEmpresa === usuario.idEmpresa && usuSesion.id !== usuario.id) {
+                        divListadoUsu.innerHTML += Plantilla.crearFilaListUsuChat(usuario, chat, chatSlc);
+                    }
+                });
+                this.asignarEvSlcUsuListChat(tipoUsu)
+            });
+
+            const empresa = await onSnapshot(this.devolverEnlace("empresa"), (empresas) => {
+                divChatEmpresa.innerHTML = "";
+                empresas.docs.map((usuario) => {
+                    if(usuSesion.data().idEmpresa === usuario.id) {
+                        divChatEmpresa.innerHTML += Plantilla.crearFilaListUsuChat(usuario, chat, chatSlc);
+                    }
+                });
+                this.asignarEvSlcUsuListChat(tipoUsu)
+            });
+        }
         
         //Filtrar nombre usuario por input.
         $(doc).ready(function() {
@@ -663,10 +916,8 @@ class Workas extends TablonAnuncio {
                 });
             });
         });
+        doc.getElementsByClassName("emojionearea-editor")[0].innerHTML = "";
     };
-
-    
-
 }
 //Exportamos.
 export { Workas };

@@ -318,7 +318,7 @@ export const crearPaginaInicialEmpresa = (usu, imgPerfil) => {
                 <button id="btnChat" type="button" class="btn">
                     <input type="image" src="./img/chatServicio.png">
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        99+
+                        0
                         <span class="visually-hidden">unread messages</span>
                     </span>
                 </button>
@@ -373,7 +373,7 @@ export const crearPaginaInicialEmpleado = (usu, imgPerfil) => {
                 <button id="btnChat" type="button" class="btn">
                     <input type="image" src="./img/chatServicio.png">
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        99+
+                        0
                         <span class="visually-hidden">unread messages</span>
                     </span>
                 </button>
@@ -991,57 +991,134 @@ export const creardivAnuncioEnTablon = (anuncio, tipoUsu) => {
 
 
 
+//Crea formato hora del chat.
+export const crearFormatoHoraChat = (fecha) => {
+    return `${fecha.getHours()}:${(fecha.getMinutes()>=10 ? fecha.getMinutes(): `0${fecha.getMinutes()}`)}`;
+}
 
+//Crea formato año del chat.
+export const crearFormatoAnyoChat = (fecha) => {
+    return `${fecha.getDate()}/${(fecha.getMonth()+1)}/${fecha.getFullYear().toString().substring(2)}`;
+}
 
+//Crea formato fecha del chat.
+export const crearFormatoFechaChat = (fecha) => {
+    var fechaActual = new Date();
 
+    if((fechaActual.getDate()-fecha.getDate()) === 0) {
+        return crearFormatoHoraChat(fecha);
+    } else if((fechaActual.getDate()-fecha.getDate()) === 1) {
+        return "ayer";
+    } else {
+        return crearFormatoAnyoChat(fecha);
+    }
+}
+
+//Crea formato del día de la conversación.
+export const crearDivMostrarDiaConversacion = (fecha) => {
+    const month = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+    var fechaActual = new Date();
+    if((fechaActual.getDate()-fecha.getDate()) === 0) {
+        return `<div class="divCambioDiaChat">Hoy</div>`;
+    } else if((fechaActual.getDate()-fecha.getDate()) === 1) {
+        return `<div class="divCambioDiaChat">Ayer</div>`;
+    } else {
+        return `<div class="divCambioDiaChat">${fecha.getDate()} de ${month[(fecha.getMonth()+1)].toLocaleLowerCase()} de ${fecha.getFullYear()}</div>`;
+    }
+}
 
 //Crea una fila de usuario del chat.
-export const crearFilaListUsuChat = (empleado) => {
-    var iconoPerfil = empleado.iconoPerfil ? empleado.iconoPerfil : "./img/empleadoIcono.png";
-    var conectadoClass = empleado.conectado ? "conectado" : "desconectado";
-    return `<div class="divUsuarioChat">
+export const crearFilaListUsuChat = (usuario, chat, chatSlc) => {
+    var nombreChat = "";
+    var iconoPerfil = "";
+    var nMsg = 0;
+
+    var lastMsg = (chat.data().conversacion != null && chat.data().conversacion.length !== 0)
+        ? chat.data().conversacion[chat.data().conversacion.length-1] 
+        : "No hay mensajes todavía.";
+
+    var date = (chat.data().conversacion != null && chat.data().conversacion.length !== 0)
+        ? chat.data().conversacion[chat.data().conversacion.length-1].fecha 
+        : "";
+
+    var condicion = usuario.id === lastMsg.idUsu && chat.data().nMsgSinLeer > 0 && chat.id !== chatSlc;
+    var mostrarNmsgSinLeer = condicion 
+        ? `<span class="badge bg-danger">${chat.data().nMsgSinLeer}</span>` 
+        : "";
+
+    if(date !== "") {
+        date = new Date(date.seconds * 1000);
+        date = crearFormatoFechaChat(date);
+    }
+    var conectadoClass = usuario.data().conectado ? "conectado" : "desconectado";
+
+    if(usuario.data().tipoUsu === "empresa") {
+        nombreChat = `${usuario.data().rznSocial}<small> (Fijado)</small>`;
+        iconoPerfil = usuario.data().iconoPerfil ? usuario.data().iconoPerfil : "./img/empresaIcono.png";
+    } else {
+        nombreChat = `${usuario.data().nombre} ${usuario.data().apellidos}`;
+        iconoPerfil = usuario.data().iconoPerfil ? usuario.data().iconoPerfil : "./img/empleadoIcono.png";
+    }
+    nMsg = nMsg === 0 
+        ? ""
+        : nMsg < 100 
+            ? `<h5><span class="badge bg-danger">${nMsg}+</span></h5>`
+            : `<h5><span class="badge bg-danger">99+</span></h5>`;
+
+    return `<div id="${chat.id}" class="divUsuarioChat">
                 <div class="chatListImgPerfil">
                     <img src="${iconoPerfil}" alt="">
-                    <div class="iconoConectado ${conectadoClass}">
+                    <div id="${usuario.id}" class="iconoConectado ${conectadoClass}">
                 </div>
                 </div>
                 <div class="chatListContenido">
-                    <h5 class="nombreUsuGrupoChat">${empleado.nombre} ${empleado.apellidos}</h5>
-                    <p>Vale, luego te paso el documento por email.dfgfdgfd</p>
+                    <h5 class="nombreUsuGrupoChat">${nombreChat}</h5>
+                    <p class="lastMsgChat">${lastMsg.mensaje}</p>
                 </div>
                 <div class="chatListFechaOnline">
-                    <h5><span class="badge bg-danger">+99</span></h5>
-                    <p>1 min</p>
+                    <h5>${mostrarNmsgSinLeer}</h5>
+                    <p class="fechaLastMsg">${date}</p>
                 </div>
             </div>`;
 }
 
+//Crea una plantilla del mensaje del chat.
+export const crearPlantillaMensaje = (msg, esUsuSesion) => {
+    var divMsg = "";
+    var date = msg.fecha;
+
+    date = new Date(date.seconds * 1000);
+    date =  crearFormatoHoraChat(date);
+
+    if(esUsuSesion) {
+        divMsg =`<div class="msgConversacion msgUsu1">
+                    <p class="msgTxt">${msg.mensaje}</p>
+                    <p class="msgFecha">${date}</p>
+                </div>`;
+    } else {
+        divMsg =`<div class="msgConversacion msgUsu2">
+                    <p class="msgTxt">${msg.mensaje}</p>
+                    <p class="msgFecha">${date}</p>
+                </div>`;
+    }
+
+    return divMsg;
+}
+
 //Crea una plantilla del chat.
-export const crearPlantillaChat = (empleado) => {
-    return `<div id="divChat">
-                <div id="divChatConversacion">
+export const crearPlantillaChat = (tipoUsu) => {
+    return `<div id="divChat" class="animate__animated animate__fadeIn">
+                <div id="divChatConversacion" class="ocultar">
                     <div id="headerChatUsuario">
-                        <div id="imgChatSlc">
-                            <img src="./img/miFotoPerfil.jpg" alt="">
-                        </div>
-                        <h4>Izan Torres Barceló</h4>
-                        <div class="iconoConectado2 desconectado"></div>
+                        <div id="imgChatSlc"></div>
+                        <h4 id="nombreUsuChatSlc"></h4>
+                        <div id="iconoConectado2" class="iconoConectado2"></div>
                     </div>
-                    <div id="conversacion">
-                        <div class="msgConversacion msgUsu1">
-                            <p>dfgsdgfdddddddsdfgggggggggggsdfg</p>
-                        </div>
-                        <div class="msgConversacion msgUsu2">
-                            <p>dfgsdgfdddddddsdfgggggggggggsdfg</p>
-                        </div>
-                        <div class="msgConversacion msgUsu1">
-                            <p>dfgsdgfdddddddsdfgggggggggggsdfg</p>
-                        </div>
-                    </div>
+                    <div id="conversacion"></div>
                     <div id="divInputChatUsuario">
-                        <input type="text" id="inputMsgChat" placeholder="Escribe tu mensaje">
+                        <textarea id="inputMsgChat" placeholder="Escribe tu mensaje">
+                        </textarea>
                         <div id="divIconosInputMsg">
-                            <input id="inputSlcEmoji" type="image" src="./img/iconoSlcEmoji.png" alt="">
                             <input id="inputEnviarMsg" type="image" src="./img/iconoEnviarMsg.svg" alt="">
                         </div>
                     </div>
@@ -1051,7 +1128,17 @@ export const crearPlantillaChat = (empleado) => {
                         <h2>Chat</h2>
                         <input id="inputBuscarUsuarioChat" type="text" placeholder="Buscar">
                     </div>
-                    <div id="listadoUsuariosChat"></div>
+                    <div id="divSlcTipoChat">
+                        <div id="divSlcPrivadoChat" class="tipoChatSlc">Privado</div>
+                        <div id="divSlcGrupoChat">Grupo</div>
+                    </div>
+                    <div id="divListadoUsuarioGrupoChat">
+                        <div id="listadoUsuarios">
+                            ${tipoUsu === "empleado" ? "<div id='empresaChat'></div>" : ""}
+                            <div id="listadoUsuariosChat"></div>
+                        </div>
+                        <div id="listadoGruposChat"></div>
+                    </div>
                 </div>
             </div>
             </div><div id="divModales"></div>`;

@@ -34,7 +34,7 @@ class Formulario extends Workas {
             console.log(usuario.uid)
 
             var empleado = await this.devolverConsultaFiltrarEmpleadoId(usuario.uid);
-            
+
             this.setUsu(empleado.docs[0]);
             console.log(this.getUsu())
             if(this.getUsu() != undefined) {
@@ -381,7 +381,8 @@ class Formulario extends Workas {
                     iconoPerfil: "",
                     conectado: false,
                     chatSlc: "",
-                    statusChat: null
+                    statusChat: null,
+                    tipoUsu: "empresa"
                 }
             }
         } else if (tipoForm === "singup") {
@@ -399,7 +400,8 @@ class Formulario extends Workas {
                     iconoPerfil: "",
                     conectado: false,
                     chatSlc: "",
-                    statusChat: null
+                    statusChat: null,
+                    tipoUsu: "empresa"
                 }
             }
         } else if (tipoForm === "loginEmpleado") {
@@ -417,7 +419,8 @@ class Formulario extends Workas {
                     iconoPerfil: "",
                     conectado: false,
                     chatSlc: "",
-                    statusChat: null
+                    statusChat: null,
+                    tipoUsu: "empleado"
                 }
             }
         } else if (tipoForm === "registroEmpleado") {
@@ -435,7 +438,8 @@ class Formulario extends Workas {
                     iconoPerfil: "",
                     conectado: false,
                     chatSlc: "",
-                    statusChat: null
+                    statusChat: null,
+                    tipoUsu: "empleado"
                 }
             }
         }
