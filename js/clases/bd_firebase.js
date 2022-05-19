@@ -362,23 +362,43 @@ class BD_Firebase {
 
     //Devuelve la lista de días solicitados según si están pendientes que pertenecen a la empresa.
     devolverDiasSolicitadosSegunEstadoEmpresa(idEmpresa, pendiente) {
+        var fecha;
+
+        if(pendiente) {
+            fecha = new Date();
+            fecha.setDate(fecha.getDate() - 1);
+        } else {
+            fecha = new Date(0);
+        }
+
         var consulta = query(
             this.devolverEnlace("diaSolicitud"),
             where("idEmpresa", "==", `${idEmpresa}`),
             where("pendiente", "==", pendiente),
-            orderBy("fEnviada", "desc")
+            where("fComienzo", ">=", fecha),
+            orderBy("fComienzo", "desc")
         );
         return getDocs(consulta);
     }
 
     //Devuelve la lista de días solicitados según si están pendientes que pertenecen al empleado.
     devolverDiasSolicitadosSegunEstadoEmpleado(idEmpresa, idEmpleado, pendiente) {
+        var fecha;
+
+        if(pendiente) {
+            fecha = new Date();
+            fecha.setDate(fecha.getDate() - 1);
+        } else {
+            fecha = new Date(0);
+        }
+        
         var consulta = query(
             this.devolverEnlace("diaSolicitud"),
             where("idEmpresa", "==", `${idEmpresa}`),
             where("idEmpleado", "==", `${idEmpleado}`),
             where("pendiente", "==", pendiente),
-            orderBy("fEnviada", "desc")
+            where("fComienzo", ">=", fecha),
+            orderBy("fComienzo", "desc")
         );
         return getDocs(consulta);
     }

@@ -1045,7 +1045,8 @@ export const crearFilaDiaFestivo = (diaFest, tipoUsu) => {
 //Crea una fila del día solicitado.
 export const crearFilaDiaSolicitado = (diaSol, tipoUsu, empleado) => {
     var fEnviada = new Date(diaSol.data().fEnviada.seconds * 1000);
-    var fechaHoy = new Date()
+    var fechaHoy = new Date();
+    fechaHoy.setDate(fechaHoy.getDate() - 1);
     var fComienzo = new Date(diaSol.data().fComienzo.seconds * 1000);
     var fFin = new Date(diaSol.data().fFin.seconds * 1000);
     var claseEstado = `bordePendiente`;
@@ -1113,7 +1114,7 @@ export const crearFilaDiaSolicitado = (diaSol, tipoUsu, empleado) => {
         }
     }
 
-    var enl = tipoUsu === "empresa" && diaSol.data().pendiente && fComienzo >= fechaHoy
+    var enl = tipoUsu === "empresa" && diaSol.data().pendiente
         ? `<a id="${diaSol.id}" class="enlResponderSol" data-bs-toggle="modal" data-bs-target="#modalResolucionDiaSol">Responder</a>`
         : "<div></div>";
 

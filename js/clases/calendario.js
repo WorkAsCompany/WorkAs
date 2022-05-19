@@ -389,7 +389,7 @@ class Calendario extends TablonAnuncio {
             });
 
         } else {
-            div.innerHTML = `<p class="mensajeInfo">No hat ninguna solicitud resuelta tadavía.</p>`;
+            div.innerHTML = `<p class="mensajeInfo">No hay ninguna solicitud resuelta tadavía.</p>`;
         } 
 
     }
