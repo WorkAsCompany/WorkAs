@@ -1,7 +1,4 @@
 /* DIV CREAR ANUNCIO */
-#principalCrearAnuncio {
-
-}
 
 #divFormCrearAnuncio  {
     border-right: 1px solid black;
@@ -254,9 +251,7 @@
 /* TABLÓN DE ANUNCIOS */
 
 #divTablones {
-    
-
-
+    position: relative;
 }
 
 .tablonMes {
@@ -282,7 +277,9 @@
     font-weight: bold;
     letter-spacing: 0px;
     text-align: center;
-    background: linear-gradient(to bottom,#044647 0%, #ece4d9 100%);
+    background-color: white;
+    border-left: 5px solid #08274c;
+    border-right: 5px solid #08274c;
     position: absolute;
     padding: .5em;
     left: 50%;
@@ -381,7 +378,7 @@
     }
 
     .cardAnuncio {
-        width: min(180px, 100%);
+        width: min(250px, 100%);
     }
     
     .divEstadisticasAnuncio {
@@ -495,4 +492,26 @@
     .anunciosMasVisto {
         flex-direction: column;
     }
+}
+
+/* TOAST ANUNCIO */
+.toast {
+    display: block !important;
+    cursor: pointer;
+}
+
+.toast .btn-close {
+    filter: invert(0) !important;
+}
+
+.toast img {
+    width: 50px;
+}
+
+.toast-container {
+    position: absolute !important;
+    top: 100px !important;
+    right: 20px;
+    padding-left: 30px;
+    z-index: 9 !important;
 }

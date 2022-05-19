@@ -1,6 +1,5 @@
 "use strict";
-import { BD_Firebase } from "./bd_firebase.js";
-import { TablonAnuncio } from "./tablonAnuncio.js";
+import { Calendario } from "./calendario.js";
 
 import * as Plantilla from "../bibliotecas/plantilla.js";
 import * as General from "../bibliotecas/general.js";
@@ -17,7 +16,7 @@ var empleadoEnEdicion;
 
 var chatSlc = "";
 
-class Workas extends TablonAnuncio {
+class Workas extends Calendario {
     constructor() {
         super();
     }
@@ -439,6 +438,21 @@ class Workas extends TablonAnuncio {
 
         this.asignarEvMostrarTablonAnuncio(tipoUsu);
         this.mostrarTablonAnuncio(tipoUsu);
+
+    }
+
+    modificarPaginaOpNavCalendario(tipoUsu) {
+        opAside.innerHTML = Plantilla.crearOpAsideNavCalendario(tipoUsu);
+        this.mostrarDivCalendario(tipoUsu)
+
+        if(tipoUsu === "empresa") {
+            this.asignarEvAnyadirFestivo();
+
+        } else {
+            this.asignarEvBtnSolicitarDias();
+
+        }
+
     }
 
     //Muestra la página principal con todas las funciones correspondientes si se ha iniciado sesión como empresa.
@@ -474,6 +488,14 @@ class Workas extends TablonAnuncio {
             "click",
             (e) => {
                 this.modificarPaginaOpNavTablonAnuncio("empresa");
+            },
+            false
+        );
+
+        doc.getElementById("opNavCalendario").addEventListener(
+            "click",
+            (e) => {
+                this.modificarPaginaOpNavCalendario("empresa");
             },
             false
         );
@@ -579,6 +601,7 @@ class Workas extends TablonAnuncio {
         opAside = doc.getElementById("asideOpciones");
 
         this.asignarEvColapsarAside();
+        this.mostrarToastAnuncioNuevo();
         this.modificarPaginaOpNavTablonAnuncio("empleado");
         this.chatMostrarMsgChat();
 
@@ -608,6 +631,14 @@ class Workas extends TablonAnuncio {
             false
         );
 
+        doc.getElementById("opNavCalendario").addEventListener(
+            "click",
+            (e) => {
+                this.modificarPaginaOpNavCalendario("empleado");
+            },
+            false
+        );
+
         doc.getElementById("btnChat").addEventListener(
             "click",
             async(e) => {
@@ -633,6 +664,27 @@ class Workas extends TablonAnuncio {
             false
         );
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     mostrarListadoUsuChat = async(tipoUsu) => {
         var conversacion = [
@@ -665,7 +717,7 @@ class Workas extends TablonAnuncio {
             var nMsg = 0;
             chats.docs.map((chat) => {
 
-                if(chat.data().arrayUsuariosChat.includes(usuSesion.id) && chat.data().conversacion[chat.data().conversacion.length-1].idUsu != usuSesion.id) {
+                if(chat.data().conversacion > 0 && chat.data().arrayUsuariosChat.includes(usuSesion.id) && chat.data().conversacion[chat.data().conversacion.length-1].idUsu != usuSesion.id) {
                     nMsg += chat.data().nMsgSinLeer;
                 }
             });
@@ -707,6 +759,7 @@ class Workas extends TablonAnuncio {
     mostrarMsgConversacion = async(chat, nMsgSinLeer) =>  {
         doc.getElementById("conversacion").innerHTML = "";
         var usuSesion = await this.devolverEmpresa(this.getUsu().id);
+        var conver = "";
 
             if(chatSlc === chat.id && chat.data().conversacion != null) {
                 var conversacion = chat.data().conversacion;
@@ -715,20 +768,21 @@ class Workas extends TablonAnuncio {
                     var fechaMsg = new Date(conversacion[i].fecha.seconds * 1000)
 
                     if(fechaMsg.getDay() !== cambioDia.getDay()) {
-                        doc.getElementById("conversacion").innerHTML += Plantilla.crearDivMostrarDiaConversacion(fechaMsg);
+                        conver += Plantilla.crearDivMostrarDiaConversacion(fechaMsg);
                         cambioDia = new Date(conversacion[i].fecha.seconds * 1000)
                     }
 
                     if(nMsgSinLeer !== 0 && nMsgSinLeer === (conversacion.length-i) && chat.data().conversacion[chat.data().conversacion.length-1].idUsu != usuSesion.id) {
-                        doc.getElementById("conversacion").innerHTML += "<div class='divMsgSinLeer'>Mensajes no leídos</div>";
+                        conver += "<div class='divMsgSinLeer'>Mensajes no leídos</div>";
                     }
 
                     var esUsuSesion = conversacion[i].idUsu === usuSesion.id;
 
-                    doc.getElementById("conversacion").innerHTML += Plantilla.crearPlantillaMensaje(conversacion[i], esUsuSesion);
+                    conver += Plantilla.crearPlantillaMensaje(conversacion[i], esUsuSesion);
                 }
             }
 
+        doc.getElementById("conversacion").innerHTML = conver;
         doc.getElementById("conversacion").scrollTop = doc.getElementById("conversacion").scrollHeight;
     }
 

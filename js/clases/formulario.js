@@ -26,7 +26,7 @@ class Formulario extends Workas {
     }
 
     entrarConSesion = async(usuario) => {
-        var empresa = await this.devolverConsultaFiltrarUsuarioId(usuario.uid);
+       /* var empresa = await this.devolverConsultaFiltrarUsuarioId(usuario.uid);
         doc.body.classList.add("bodyFondo");
         this.setUsu(empresa.docs[0]);
 
@@ -42,7 +42,7 @@ class Formulario extends Workas {
             }
         } else {
             this.crearPaginaInicialWorkasEmpresa();
-        }
+        }*/
     }
 
     comprobarSesion() {

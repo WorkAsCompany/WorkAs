@@ -2,6 +2,8 @@
 /*  --- BIBLIOTECA PLANTILLA ---  */
 //Tenemos todas las fuciones o procedimientos que nos pueden ser utiles para interactuar con el DOM.
 var doc = document;
+const month = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+var contadorCollapse = 1;
 
 //Añade el elemento pasado por parámetro a otro elemento con la id pasada por parámetro.
 export const anyadirElemento = (id, elemento) => {
@@ -377,6 +379,9 @@ export const crearPaginaInicialEmpleado = (usu, imgPerfil) => {
                         <span class="visually-hidden">unread messages</span>
                     </span>
                 </button>
+                <div aria-live="polite" aria-atomic="true" class="">
+                    <div id="divToastTablonAnuncio" class="toast-container"></div>
+                </div>
             </nav>
             <aside id="asidePrincipal">
                 <div class="asideTitulo">
@@ -458,6 +463,27 @@ export const crearOpAsideNavTablonAnuncio = (tipoUsuario) => {
                     <div class="asideElInfo ocultarAsideHover ocultarElAside">
                         <p>Datos</p>
                         <p>Estadísticas del tablón</p>
+                    </div>
+                </div>`;
+    }
+}
+
+//Devuelve la estructura de las opciones del calendario.
+export const crearOpAsideNavCalendario = (tipoUsuario) => {
+    if(tipoUsuario === "empleado") {
+        return `<div id="asideSolicitarDia" class="divServicioAside" data-bs-toggle="offcanvas" data-bs-target="#formSolicitarDias" aria-controls="offcanvasTop">
+                    <img src="./img/solicitarDia.png" alt="">
+                    <div class="asideElInfo ocultarAsideHover ocultarElAside">
+                        <p>Solicitar</p>
+                        <p>Solicitar días</p>
+                    </div>
+                </div>`;
+    } else {
+        return `<div id="asideAnyadirFestivo" class="divServicioAside" data-bs-toggle="offcanvas" data-bs-target="#formDiaFest" aria-controls="offcanvasTop">
+                    <img src="./img/agregarDiaFest.png" alt="">
+                    <div class="asideElInfo ocultarAsideHover ocultarElAside">
+                        <p>Añadir</p>
+                        <p>Añadir día festivo</p>
                     </div>
                 </div>`;
     }
@@ -953,11 +979,292 @@ export const creardivAnuncioEnTablon = (anuncio, tipoUsu) => {
                     </div>`;
 }
 
+//Devuelve un toast con la información del anuncio.
+export const crearToastAnuncio = (anuncio) => {
+    var fecha = new Date(anuncio.data().fPubli.seconds * 1000);
+    fecha = crearFormatoFechaChat(fecha);
 
+    return `<div id="${anuncio.id}" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <img src="${anuncio.data().imgAnuncio}" class="rounded me-2" alt="">
+                    <strong class="me-auto">¡Nuevo Anuncio!</strong>
+                    <small class="text-muted">${fecha}</small>
+                </div>
+                <div class="toast-body">
+                    ${anuncio.data().titulo}
+                </div>
+            </div>`;
+}
 
+/* CALENDARIO */
+//Crea un div del calendario.
+export const crearDivCalendario = () => {
+    return `<div id="calendario">
+                <h2 id="tituloCalendario">Calendario</h2>
+                <div id="divCalendario">
+                <div class="divCalendarioOp">
+                    <h3>Días Festivos</h3>
+                    <div id="divCalDiasFest"></div>
+                </div>
+                <div class="divCalendarioOp">
+                    <h3>Solicitudes Empleados</h3>
+                    <div id="divMenuDiasSol">
+                        <input id="btnSolPendientes" class="btnMenuDiasSol btnMenuDiasSolSlc" type="image" src="././././img/iconoListCheck.png" alt="">
+                        <input id="btnSolResueltas" class="btnMenuDiasSol" type="image" src="././././img/iconoHistorial.png" alt="">
+                    </div>
+                    <div id="divCalSolicitud"></div>
+                </div>
+                </div>
+            </div>`;
+}
 
+//Crea una fila del día festivo.
+export const crearFilaDiaFestivo = (diaFest, tipoUsu) => {
+    var fecha = new Date(diaFest.data().fDiaFest.seconds * 1000);
+    var dia = fecha.getDate()>=10 ? fecha.getDate() : `0${fecha.getDate()}`;
+    var enlace = diaFest.data().enlace !== "" ? `href="${diaFest.data().enlace}" target="_blank"` : "";
 
+    var btnEl = tipoUsu === "empresa" ? `<input id="${diaFest.id}" class="btnEliminar" type="image" src="././././img/eliminar.png" alt="">` : "";
+    return `<div class="divFilaDiaFest">
+                <a ${enlace}>
+                    <div class="divNDiaFest ${diaFest.data().color}">${dia}</div>
+                    <div class="divContenidoDiaFest">
+                        <p class="divDiaFestNombre">${diaFest.data().nombre}</p>
+                        <p class="divDiaFestFecha"><small>${dia} - ${month[(fecha.getMonth())].toLocaleLowerCase()} - ${fecha.getFullYear()}</small></p>
+                    </div>
+                </a>
+                ${btnEl}
+            </div>`;
+}
 
+//Crea una fila del día solicitado.
+export const crearFilaDiaSolicitado = (diaSol, tipoUsu, empleado) => {
+    var fEnviada = new Date(diaSol.data().fEnviada.seconds * 1000);
+    var fechaHoy = new Date()
+    var fComienzo = new Date(diaSol.data().fComienzo.seconds * 1000);
+    var fFin = new Date(diaSol.data().fFin.seconds * 1000);
+    var claseEstado = `bordePendiente`;
+    var estado = `<div class="estadoSol amarillo">Pendiente</div>`;
+    var desc = "";
+
+    if(!diaSol.data().pendiente) {
+        if (diaSol.data().aceptada) {
+            claseEstado = `bordeAceptada`;
+            estado = `<div class="estadoSol oliva">Aceptada</div>`;
+        } else {
+            claseEstado = `bordeRechazada`;
+            estado = `<div class="estadoSol rojoOscuro">Rechazada</div>`;
+        }
+
+        desc = `<div class="accordion" id="accordion${contadorCollapse}">`;
+
+        if(diaSol.data().descSolicitud !== "") {
+            desc += `<div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${contadorCollapse}col1" aria-expanded="true" aria-controls="collapse${contadorCollapse}col1">
+                                <strong>Descripción empleado</strong>
+                            </button>
+                        </h2>
+                        <div id="collapse${contadorCollapse}col1" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordion${contadorCollapse}">
+                            <div class="accordion-body">
+                                ${diaSol.data().descSolicitud}
+                            </div>
+                        </div>
+                    </div>`;
+        }
+
+        if(diaSol.data().descResolucion !== "") {
+            desc += `<div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${contadorCollapse}col2" aria-expanded="false" aria-controls="collapse${contadorCollapse}col2">
+                            <strong>Respuesta empresa</strong>
+                        </button>
+                        </h2>
+                        <div id="collapse${contadorCollapse}col2" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            ${diaSol.data().descResolucion}
+                        </div>
+                        </div>
+                    </div>`;
+        }
+
+        desc += `</div>`;
+    } else {
+        if(diaSol.data().descSolicitud !== "") {
+            desc = `<div class="accordion" id="accordion${contadorCollapse}">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${contadorCollapse}col1" aria-expanded="true" aria-controls="collapse${contadorCollapse}col1">
+                                    <strong>Descripción empleado</strong>
+                                </button>
+                            </h2>
+                            <div id="collapse${contadorCollapse}col1" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordion${contadorCollapse}">
+                                <div class="accordion-body">
+                                    ${diaSol.data().descSolicitud}
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+        }
+    }
+
+    var enl = tipoUsu === "empresa" && diaSol.data().pendiente && fComienzo >= fechaHoy
+        ? `<a id="${diaSol.id}" class="enlResponderSol" data-bs-toggle="modal" data-bs-target="#modalResolucionDiaSol">Responder</a>`
+        : "<div></div>";
+
+    if(tipoUsu === "empresa" && enl === "<div></div>") {
+        var enl = tipoUsu === "empresa" && !diaSol.data().pendiente && fComienzo >= fechaHoy
+        ? `<a id="${diaSol.id}" class="enlDeshacerSol">Deshacer</a>`
+        : "<div></div>";
+    }
+
+    contadorCollapse++;
+    return `<div class="divFilaDiaSolicitado ${claseEstado}">
+                <div class="divEstadoSolicitud ${claseEstado}">
+                    ${estado}
+                </div>
+                <div class="divAsunto"><strong>Asunto:</strong> ${diaSol.data().asunto}</div>
+                <div class="divSolicitante"><strong>Solicitante:</strong> ${empleado.data().nombre } ${empleado.data().apellidos }</div>
+                <div class="divFechaComienzo">
+                    <img src="./img/calendarioDiaSolicitado.png" alt="">
+                    <span><strong>Desde:</strong> ${crearFormatoAnyoChat(fComienzo)}</span>                 
+                </div>
+                <div class="divFechaFin">
+                    <img src="./img/calendarioDiaSolicitado.png" alt="">
+                    <span><strong>Hasta:</strong> ${crearFormatoAnyoChat(fFin)}</span>                 
+                </div>
+                <div class="divDescSol">
+                    ${desc}
+                </div>
+                <div class="divFooterDiaSol">
+                    ${enl}
+                    <small class="fechaEnviado">${crearFormatoFechaChat(fEnviada)}</small>
+                </div>
+            </div><hr>`;
+}
+
+//Crea un modal con el formulario de resolucion del día solicitado.
+export const crearModalResolucionDiaSol = () => {
+    return `<div id="modalResolucionDiaSol" class="modal fade" tabindex="-1" aria-labelledby="modalResolucionDiaSolLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalResolucionDiaSolLabel">Resolución</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body"> 
+                            <form id="formResolucionDia">                     
+                                <div>
+                                    <label for="radioResol" class="form-label">Estado*</label>
+                                    <div>
+                                        <input type="radio" class="btn-check" name="radioEstadoSol" value="true" id="aceptarSol" autocomplete="off" checked>
+                                        <label class="btn btn-outline-success" for="aceptarSol">Aceptar</label>
+                                        
+                                        <input type="radio" class="btn-check" name="radioEstadoSol" value="false" id="rechazarSol" autocomplete="off">
+                                        <label class="btn btn-outline-danger" for="rechazarSol">Rechazar</label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="txtAreaDescResol" class="form-label">Descripción resolución</label>
+                                    <textarea class="form-control" id="txtAreaDescResol" rows="2"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button id="btnResolucionSol" type="button" class="btn btn-primary" data-bs-dismiss="modal">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+}
+
+//Crea un div del formulario para añadir un día festivo.
+export const crearDivFormDiaFest = () => {
+    var contenido = "";
+    var arrayColor = ["azul", "rojoOscuro", "purpura", "cianOscuro", 
+                      "verde", "naranja", "rosa", "amarillo", 
+                      "oliva", "rojoclaro"];
+    
+    for (let i = 0; i < arrayColor.length; i++) {
+        contenido += `  <div class="form-check">
+                            <input class="form-check-input ${arrayColor[i]}" type="radio" name="radioColor" value="${arrayColor[i]}" ${i === 0 ? "checked" : ""}>
+                        </div>`;
+    }
+    return `<div class="offcanvas offcanvas-end" tabindex="-1" id="formDiaFest" aria-labelledby="formDiaFestLabel">
+                <div class="offcanvas-header">
+                    <h5 id="formDiaFestLabel">Crear Día Festivo</h5>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body container-fluid">
+                    <form id="formCrearDiaFest" class="row g-3">
+                        <div class="col-md-6">
+                            <label for="inputNomFest" class="form-label">Nombre*</label>
+                            <input type="text" class="form-control" id="inputNomFest" placeholder="Nombre del día festivo">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="inputFDiaFest" class="form-label">Fecha*</label>
+                            <input type="date" class="form-control" id="inputFDiaFest">
+                        </div>
+                        <div class="col-12">
+                            <label for="inputEnlInteres" class="form-label">Enlace de interés</label>
+                            <input type="url" class="form-control" id="inputEnlInteres" placeholder="Enlace de interés">
+                        </div>
+                        <div class="col-12 radioColorCalendario">
+                            <label for="radioColor" class="form-label">Color festivo*</label>
+                            <div class="divRadioColores">
+                                ${contenido}
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <button id="btnAnyadirDiaFest" type="button" class="btn btn-primary" data-bs-dismiss="offcanvas" aria-label="Close">Añadir</button>
+                        </div>
+                    </form>
+                </div>
+            </div>`;
+}
+
+//Crea un div del formulario para solicitar días.
+export const crearDivFormSolicitarDias = () => {
+    var opciones = "<option value='0' selected>Seleccionar</option>";
+    var arrayAsuntos = ["Asuntos propios", "Días compensación horas extra", 
+                        "Días compensación jornada irregular", "Vacaciones"];
+    
+    for (let i = 0; i < arrayAsuntos.length; i++) {
+        opciones += `<option value="${arrayAsuntos[i]}">${arrayAsuntos[i]}</option>`;
+    }
+    return `<div class="offcanvas offcanvas-end" tabindex="-1" id="formSolicitarDias" aria-labelledby="formDiaFestLabel">
+                <div class="offcanvas-header">
+                    <h5 id="formDiaFestLabel">Solicitar Días</h5>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body container-fluid">
+                    <form id="formSolicitarDiasAsunto" class="row g-3">
+                        <div class="col-md-6">
+                            <label for="inputFDiaComienzo" class="form-label">Desde*</label>
+                            <input type="date" class="form-control" id="inputFDiaComienzo">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="inputFDiaFin" class="form-label">Hasta*</label>
+                            <input type="date" class="form-control" id="inputFDiaFin">
+                        </div>
+                        <div class="col-12">
+                            <label for="slcOpcionesAsuntos" class="form-label">Asunto*</label>
+                            <select id="slcOpcionesAsuntos" class="form-select" aria-label="Select">
+                                ${opciones}
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label for="txtAreaDesc" class="form-label">Descripción Asunto</label>
+                            <textarea class="form-control" id="txtAreaDesc" rows="2"></textarea>
+                        </div>
+                        <div class="col-12">
+                            <button id="btnSolicitarDias" type="button" class="btn btn-primary" data-bs-dismiss="offcanvas" aria-label="Close">Añadir</button>
+                        </div>
+                    </form>
+                </div>
+            </div>`;
+}
 
 
 
@@ -1016,14 +1323,13 @@ export const crearFormatoFechaChat = (fecha) => {
 
 //Crea formato del día de la conversación.
 export const crearDivMostrarDiaConversacion = (fecha) => {
-    const month = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
     var fechaActual = new Date();
     if((fechaActual.getDate()-fecha.getDate()) === 0) {
         return `<div class="divCambioDiaChat">Hoy</div>`;
     } else if((fechaActual.getDate()-fecha.getDate()) === 1) {
         return `<div class="divCambioDiaChat">Ayer</div>`;
     } else {
-        return `<div class="divCambioDiaChat">${fecha.getDate()} de ${month[(fecha.getMonth()+1)].toLocaleLowerCase()} de ${fecha.getFullYear()}</div>`;
+        return `<div class="divCambioDiaChat">${fecha.getDate()} de ${month[(fecha.getMonth())].toLocaleLowerCase()} de ${fecha.getFullYear()}</div>`;
     }
 }
 
@@ -1032,17 +1338,17 @@ export const crearFilaListUsuChat = (usuario, chat, chatSlc) => {
     var nombreChat = "";
     var iconoPerfil = "";
     var nMsg = 0;
-
-    var lastMsg = (chat.data().conversacion != null && chat.data().conversacion.length !== 0)
-        ? chat.data().conversacion[chat.data().conversacion.length-1] 
-        : "No hay mensajes todavía.";
+console.log(chat.data().conversacion)
+    var lastMsg = (chat.data().conversacion == null || chat.data().conversacion.length === 0)
+        ? "No hay mensajes todavía."
+        : chat.data().conversacion[chat.data().conversacion.length-1] ;
 
     var date = (chat.data().conversacion != null && chat.data().conversacion.length !== 0)
         ? chat.data().conversacion[chat.data().conversacion.length-1].fecha 
         : "";
 
     var condicion = usuario.id === lastMsg.idUsu && chat.data().nMsgSinLeer > 0 && chat.id !== chatSlc;
-    var mostrarNmsgSinLeer = condicion 
+    var mostrarNmsgSinLeer = condicion
         ? `<span class="badge bg-danger">${chat.data().nMsgSinLeer}</span>` 
         : "";
 
@@ -1073,7 +1379,7 @@ export const crearFilaListUsuChat = (usuario, chat, chatSlc) => {
                 </div>
                 <div class="chatListContenido">
                     <h5 class="nombreUsuGrupoChat">${nombreChat}</h5>
-                    <p class="lastMsgChat">${lastMsg.mensaje}</p>
+                    <p class="lastMsgChat">${lastMsg.mensaje == undefined ? "No hay mensajes todavía." : lastMsg.mensaje}</p>
                 </div>
                 <div class="chatListFechaOnline">
                     <h5>${mostrarNmsgSinLeer}</h5>
@@ -1143,104 +1449,6 @@ export const crearPlantillaChat = (tipoUsu) => {
             </div>
             </div><div id="divModales"></div>`;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//Crea un div con datos del día festivo pasado por parámetro.
-export const crearDiaCalendario = (dia, mes) => {
-    return `<div class="calendarioDia">
-                <div class="calendario">
-                    ${dia.date_day} <em>${dia.week_day}</em>
-                </div>
-                <div class="desaparecer infoCalOculta">
-                    <div>
-                        <div><span class="diaInfoLetra">${dia.date_day}</span>, <span class="diaInfoNum">${dia.week_day}</span></div>
-                        <div class="mesInfo">${mes}</div>
-                    </div>
-                    <div id="infoDiaSelec">
-                        <div><span class="atributo">Nombre:</span> ${dia.name}</div>
-                        <div><span class="atributo">Tipo:</span> ${dia.type}</div>
-                        <div><span class="atributo">Ubicación:</span> ${dia.location}</div>
-                    </div>
-                </div>
-            </div>`;
-}
-
-//Crea un div que tendrá un menú de los meses y el contenido de los días festivos.
-export const crearDivCalendarioGeneral = () => {
-    return `<div id="calendarioGeneral">
-                <h2><span id="mesTituloCal"></span>2022</h2>
-                <div class="enlMesesCalendario">
-                    <span id="enero">JAN</span>
-                    <span id="febrero">FEB</span>
-                    <span id="marzo">MAR</span>
-                    <span id="abril">APR</span>
-                    <span id="mayo">MAY</span>
-                    <span id="junio">JUN</span>
-                    <span id="julio">JUL</span>
-                    <span id="agosto">AUG</span>
-                    <span id="septiembre">SEP</span>
-                    <span id="octubre">OCT</span>
-                    <span id="noviembre">NOV</span>
-                    <span id="diciembre">DEC</span>
-                </div>
-                <div id="calendarioMes"></div>
-            </div>`;
-}
-
-//Crea un div que contendrá información del día festivo.
-export const crearDivCalendarioInfo = () => {
-    return `<div id="calendarioInfo">
-                <div>
-                    <div><span class="diaInfoLetra">Información</span></div>
-                    <div class="mesInfo">Día</div>
-                </div>
-                <div>
-                    <div><span class="atributo">Selecciona un mes y un día.</span></div>
-                    <div><span class="atributo">Nombre:</span> no Seleccionado</div>
-                    <div><span class="atributo">Tipo:</span> no Seleccionado</div>
-                    <div><span class="atributo">Ubicación</span>: no Seleccionado</div>
-                </div>
-            </div>`;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //Exportamos.
 export * from './plantilla.js'

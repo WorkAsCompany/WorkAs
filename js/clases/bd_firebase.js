@@ -279,6 +279,112 @@ class BD_Firebase {
         return deleteDoc(doc(this.devolverEnlace("tablonAnuncio"), idAnuncio));
     }
 
+    //Modifica el array de usuarios notificados del anuncio.
+    actualizarArrayNotificacionesAnuncio(idAnuncio, usuNotificado) {
+        var anuncio = doc(this.devolverEnlace("tablonAnuncio"), idAnuncio);
+
+        return updateDoc(anuncio, {
+            arrayUsuarioNotificados: arrayUnion(usuNotificado)
+        });
+    }
+
+    /*CALENDARIO*/
+
+    //Añade un día festivo a la bd.
+    anyadirDiaFest(diaFest) {
+        return addDoc(this.devolverEnlace("calendario"), diaFest);
+    }
+
+    //Devuelve un día festivo.
+    devolverDiaFest(id) {
+        var idRef = doc(this.devolverEnlace("calendario"), id);
+        var coleccion = getDoc(idRef);
+        return coleccion;
+    }
+
+    //Devuelve la lista de días festivos que pertenecen a la empresa.
+    devolverDiasFest(idEmpresa) {
+        var consulta = query(
+            this.devolverEnlace("calendario"),
+            where("idEmpresa", "==", `${idEmpresa}`),
+            orderBy("fDiaFest", "asc")
+        );
+        return getDocs(consulta);
+    }
+
+    //Elimina un día festivo.
+    eliminarDiaFest(idDiaFest) {
+        deleteDoc(doc(this.devolverEnlace("calendario"), idDiaFest));
+    }
+
+    //Añade una solicitud a la bd.
+    anyadirSolicitudDias(diaSolicitud) {
+        return addDoc(this.devolverEnlace("diaSolicitud"), diaSolicitud);
+    }
+
+    //Devuelve un día solicitado.
+    devolverDiaSolicitado(id) {
+        var idRef = doc(this.devolverEnlace("diaSolicitud"), id);
+        var coleccion = getDoc(idRef);
+        return coleccion;
+    }
+
+    //Devuelve la lista de días solicitados que pertenecen a la empresa.
+    devolverDiasSolicitadosEmpresa(idEmpresa) {
+        var consulta = query(
+            this.devolverEnlace("diaSolicitud"),
+            where("idEmpresa", "==", `${idEmpresa}`),
+            orderBy("fEnviada", "asc")
+        );
+        return getDocs(consulta);
+    }
+
+    //Devuelve la lista de días solicitados que pertenecen al empleado.
+    devolverDiasSolicitadosEmpleado(idEmpresa, idEmpleado) {
+        var consulta = query(
+            this.devolverEnlace("diaSolicitud"),
+            where("idEmpresa", "==", `${idEmpresa}`),
+            where("idEmpleado", "==", `${idEmpleado}`),
+            orderBy("fEnviada", "asc")
+        );
+        return getDocs(consulta);
+    }
+
+    //Actualiza atributos de la solicitud.
+    actualizarDiaSolicitud(id, resolucion) {
+        var idRef = doc(this.devolverEnlace("diaSolicitud"), id);
+        return updateDoc(idRef, {
+            aceptada: resolucion.aceptada,
+            descResolucion: resolucion.descResolucion,
+            pendiente: resolucion.pendiente,           
+        });
+    }
+
+    //Devuelve la lista de días solicitados según si están pendientes que pertenecen a la empresa.
+    devolverDiasSolicitadosSegunEstadoEmpresa(idEmpresa, pendiente) {
+        var consulta = query(
+            this.devolverEnlace("diaSolicitud"),
+            where("idEmpresa", "==", `${idEmpresa}`),
+            where("pendiente", "==", pendiente),
+            orderBy("fEnviada", "desc")
+        );
+        return getDocs(consulta);
+    }
+
+    //Devuelve la lista de días solicitados según si están pendientes que pertenecen al empleado.
+    devolverDiasSolicitadosSegunEstadoEmpleado(idEmpresa, idEmpleado, pendiente) {
+        var consulta = query(
+            this.devolverEnlace("diaSolicitud"),
+            where("idEmpresa", "==", `${idEmpresa}`),
+            where("idEmpleado", "==", `${idEmpleado}`),
+            where("pendiente", "==", pendiente),
+            orderBy("fEnviada", "desc")
+        );
+        return getDocs(consulta);
+    }
+    
+
+
 
 
     /*CHAT*/
@@ -288,6 +394,15 @@ class BD_Firebase {
         var idRef = doc(this.devolverEnlace("chat"), id);
         var coleccion = getDoc(idRef);
         return coleccion;
+    }
+
+    //Devuelve la lista de chats que pertenecen a la empresa.
+    devolverChatsEmpresa(idEmpresa) {
+        var consulta = query(
+            this.devolverEnlace("chat"),
+            where("idEmpresa", "==", `${idEmpresa}`)
+        );
+        return getDocs(consulta);
     }
 
     //Actualiza el estado del usuario.

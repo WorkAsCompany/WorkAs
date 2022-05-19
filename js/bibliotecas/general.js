@@ -3,6 +3,7 @@
 //Tenemos todas las fuciones o procedimientos que nos pueden ser utiles para el resto de clases o bibliotecas de nuestra aplicación.
 var doc = document;
 var contadorAlerts = 1;
+var contadorToasts = 1;
 
 export const crearAlert = (msg, tipoAlert) => {
     var alert = doc.createElement("div");
@@ -45,6 +46,33 @@ export const crearAlert = (msg, tipoAlert) => {
     }
     contadorAlerts++;
     return alert;
+}
+
+export const eventoToastAnuncio = (divAnuncio) => {
+    var toast = doc.createElement("div");
+    var idToast = `toast${contadorToasts}`;
+
+    toast.id = idToast;
+    toast.classList.add("animate__animated", "animate__flipInX")
+
+    setTimeout(function() {
+        if(doc.getElementById(idToast) != null) {
+            doc.getElementById(idToast).remove("animate__fadeOut");
+        }
+
+    },10000);
+
+   setTimeout(function() {
+        if(doc.getElementById(idToast) != null) {
+            doc.getElementById(idToast).classList.remove("animate__flipInX");
+            doc.getElementById(idToast).classList.add("animate__fadeOut");
+        }
+
+    },9000);
+
+    toast.innerHTML = divAnuncio;
+    contadorToasts++;
+    return toast;
 }
 
 //Crea un div que contendrá información del día festivo.

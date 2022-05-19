@@ -1,211 +1,329 @@
-#calendarioFestivos {
+#divCalendario {
     display: flex;
     flex-direction: row;
-    justify-items: center;
+    gap: 30px;
+    padding-top: 2em;
+    padding-bottom: 6em;
+}
+
+/*Calendario Dia Festivo*/
+
+#divCalendario .divCalendarioOp {
+    width: 50%;
+}
+
+#btnAnyadirDiaFest {
+    margin: .5em 0em;
+}
+
+#divCalDiasFest {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    width: 1300px;
-    height: 700px;
-    margin: 0 auto;
-    box-shadow: 6px 6px 12px black;
-    border-radius: 25px 0px 0px 25px;
+    justify-content: center;
+    width: 100%;
+}   
+
+#divCalDiasFest a {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
-#tituloCal {
-    color: #00365A;
-    text-align: center;
-    margin-bottom: 0.3em;
+
+#divCalDiasFest .divFilaDiaFest {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 90px;
+    width: 100%;
+    padding-left: 5px;
+    margin: 5px 0px;
 }
 
-#calendarioInfo {
-    width: 500px;
-    height: 700px;
-    padding: 1em;
-    color: white;
-    background-color: #008b8b;
-    border-radius: 25px 0px 0px 25px;
-    font-size: 17px;
-}
-
-#calendarioInfo>div:first-of-type {
-    text-align: end;
-    font-size: 35px;
-    margin-bottom: 3.5em;
-    padding: 0em;
-}
-
-#calendarioInfo div div {
-    padding: .5em;
-}
-
-#calendarioGeneral {
-    width: 800px;
-    height: 700px;
-    padding: 3em;
-    background-color: rgb(240, 196, 196);
-}
-
-#calendarioGeneral h2 {
-    text-align: end;
-    font-size: 32px;
-    color: #008b8b;
-}
-
-#calendarioGeneral .enlMesesCalendario {
-    margin: 5em 0em 1em 0em;
-    text-align: center;
-    background-color: lightseagreen;
-    padding: .5em;
+#divCalDiasFest .divFilaDiaFest:hover {
+    cursor: pointer;
+    background-color: lightgray;
     border-radius: 10px;
 }
 
-#calendarioGeneral .enlMesesCalendario span {
-    padding: 0em .3em;
+#divCalDiasFest .divNDiaFest {
+    border-radius: 100%;
+    width: 70px;
+    height: 70px;
+    padding: 1em;
+    margin-right: .5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
     font-weight: bold;
-    font-size: 17px;
+    color: white;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+#divCalDiasFest .divContenidoDiaFest {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 80%;
+    height: 80px;
     color: black;
 }
 
-#calendarioGeneral .enlMesesCalendario span:hover {
-    color: darkviolet;
-    cursor: pointer;
+#divCalDiasFest .divContenidoDiaFest p {
+    margin: 0px;
+    display: inline;
+    width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
 }
 
-#infoDiaSelec div {
-    padding: 1em;
+#divCalDiasFest .divContenidoDiaFest .divDiaFestNombre {
+    font-weight: bold;
 }
 
-#calendarioMes {
+.divFilaDiaFest .btnEliminar {
+    width: 30px;
+    height: 100%;
+    padding: 1.9em 0.3em;
+    align-self: flex-end;
+}
+
+.divRadioColores {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: start;
     align-items: center;
+    flex-wrap: wrap;
+    background-color: rgb(238, 238, 238);
+    border-radius: 15px;
+    padding: 1.2em 0em;
+    gap: 20px;
+    outline: 1px solid black;
+    box-shadow: 2px 2px 4px black;
 }
 
-.calendarioDia {
-    width: 150px;
-    display: flex;
-    justify-content: center;
-    margin: 2em;
+.divRadioColores div {
+    width: 20%;
 }
 
-.atributo {
-    font-weight: bold;
-    font-size: 19px;
-}
-
-.calendario {
-    /* el contenedor */
-    color: #000;
-    background: #EDEDEF;
-    background: -webkit-gradient(linear, left top, left bottom, from(#EDEDEF), to(#CCC));
-    background: -moz-linear-gradient(top, #EDEDEF, #CCC);
-    font-family: Arial Black, Arial, Helvetica, sans-serif;
-    font-weight: bold;
-    padding-top: 5px;
-    position: relative;
-    text-align: center;
-    text-shadow: #FFF 0 1px 0;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    border-radius: 3px;
-    -moz-box-shadow: 0 2px 2px #888;
-    -webkit-box-shadow: 0 2px 2px #888;
-    box-shadow: 0 2px 2px #888;
-    /* esto define el tamaño */
-    font-size: 30px;
-    line-height: 60px;
-    width: 80px;
-    /* si se quiere mas pequeño, se pueden usar otros valores: 20px 40px y 50px respectivamente */
-}
-
-.calendario:hover {
+.divRadioColores input[type="radio"] {
     cursor: pointer;
-    box-shadow: 4px 4px 8px black;
-    -webkit-transform: scale(1.1);
+    width: 40px;
+    height: 40px;
+    margin: 0 auto;
+    transition: 0.3s;
+    border-radius: 15px 5px;
+}
+
+.divRadioColores input[type="radio"]:hover {
     transform: scale(1.15);
-    transition: .5s;
+    transition: 0.3s;
 }
 
-.calendario em {
-    /* el mes */
-    background: #04599A;
-    background: -webkit-gradient(linear, left top, left bottom, from(#04599A), to(#00365A));
-    background: -moz-linear-gradient(top, #04599A, #00365A);
-    color: #FFF;
-    display: block;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 11px;
+.divRadioColores input[type="radio"]:checked {
+    background-image: none;
+    outline: 3px solid black;
+    box-shadow: 4px 4px 8px black;
+    border: 0px;
+    transform: scale(1.15);
+}
+
+.divRadioColores .azul, .azul {
+    background-color: dodgerblue !important;
+}
+
+.divRadioColores .rojoOscuro, .rojoOscuro {
+    background-color: darkred !important;
+}
+
+.divRadioColores .purpura, .purpura {
+    background-color: purple !important;
+}
+
+.divRadioColores .cianOscuro, .cianOscuro {
+    background-color: darkcyan !important;
+}
+
+.divRadioColores .verde, .verde {
+    background-color: green !important;
+}
+
+.divRadioColores .naranja, .naranja {
+    background-color: orangered !important;
+}
+
+.divRadioColores .rosa, .rosa {
+    background-color: deeppink !important;
+}
+
+.divRadioColores .amarillo, .amarillo {
+    background-color: goldenrod !important;
+}
+
+.divRadioColores .rojoclaro, .rojoclaro {
+    background-color: red !important;
+}
+
+.divRadioColores .oliva, .oliva {
+    background-color: olivedrab !important;
+}
+
+.bordePendiente {
+    border-top: 5px solid goldenrod;
+    border-right: 5px solid goldenrod;
+    background-color: rgba(218, 165, 32, 0.07);
+}
+
+.bordeAceptada {
+    border-top: 5px solid olivedrab;
+    border-right: 5px solid olivedrab;
+    background-color: rgba(107, 142, 35, 0.07);
+}
+
+.bordeRechazada {
+    border-top: 5px solid darkred;
+    border-right: 5px solid darkred;
+    background-color: rgba(139, 0, 0, 0.07);
+}
+
+/*Calendario Solicitar Días*/
+#divCalSolicitud {
+
+}
+
+.divFilaDiaSolicitado {
+    position: relative;
+    border-radius: 15px;
+}
+
+.divFilaDiaSolicitado > * {
+    padding: .5em 1em;
+}
+
+#divMenuDiasSol {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    padding: 0em 1em;
+    margin-bottom: .5em;
+    border-bottom: 2px solid gray;
+}
+
+.btnMenuDiasSol {
+    width: 30px;
+    margin-left: 20px;
+    padding-bottom: 5px;
+}
+
+.btnMenuDiasSolSlc {
+    border-bottom: 3px solid dodgerblue;
+}
+
+.divAsunto {
+    margin-top: 30px;
+}
+
+.divFechaComienzo, .divFechaFin {
+    display: flex;
+    flex-direction: row;
+}
+
+.divFechaComienzo img, .divFechaFin img {
+    width: 30px;
+    margin-right: 15px;
+    filter: invert(.25);
+}
+
+.divFooterDiaSol {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.divFooterDiaSol a {
+    cursor: pointer;
+    color: darkblue;
     font-weight: bold;
-    text-shadow: #00365A 0 -1px 0;
-    -moz-border-radius-bottomright: 3px;
-    -webkit-border-bottom-right-radius: 3px;
-    border-bottom-right-radius: 3px;
-    -moz-border-radius-bottomleft: 3px;
-    -webkit-border-bottom-left-radius: 3px;
-    border-bottom-left-radius: 3px;
-    border-top: 1px solid #00365A;
-    line-height: 30px;
-    /* esto define la altura */
 }
 
-.calendario:before,
-.calendario:after {
-    /* los anillos superiores */
-    background: #111;
-    content: '';
-    float: left;
+.divFooterDiaSol a:hover {
+    color: purple;
+}
+
+.divEstadoSolicitud {
     position: absolute;
-    z-index: 1;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
-    -moz-box-shadow: 0 1px 1px #FFF;
-    -webkit-box-shadow: 0 1px 1px #FFF;
-    box-shadow: 0 1px 1px #FFF;
-    /* esto define el tamaño */
-    height: 8px;
-    top: 5px;
-    width: 8px;
-    /* si se quiere mas pequeño, se pueden usar otros valores: 6px 4px y 6px respectivamente */
+    right: 0;
+    padding: 0px;
 }
 
-.calendario:before {
-    left: 11px;
-    /* o 7px si es pequeño */
+.divEstadoSolicitud * {
+    padding: 5px;
+    color: white;
+    font-weight: bolder;
 }
 
-.calendario:after {
-    right: 11px;
-    /* o 7px si es pequeño */
+
+@media only screen and (max-width: 991px) {
+    #divCalendario {
+        display: flex;
+        flex-direction: row;
+        padding-top: 2em;
+        gap: 0px 20px;
+        width: 100%;
+        overflow-x: scroll;
+        scroll-snap-type: x mandatory;
+    }
+    
+    #divCalendario .divCalendarioOp {
+        width: 100%;
+        min-width: 100%;
+        scroll-snap-align: center;
+    }
 }
 
-.calendario em:before,
-.calendario em:after {
-    /*los círculos */
-    background: #DADADA;
-    background: -webkit-gradient(linear, left top, left bottom, from(#F1F1F1), to(#AAA));
-    background: -moz-linear-gradient(top, #F1F1F1, #AAA);
-    content: '';
-    float: left;
-    position: absolute;
-    z-index: 2;
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-    border-radius: 2px;
-    /* esto define el tamaño */
-    height: 14px;
-    top: -5px;
-    width: 4px;
-    /* si se quiere mas pequeño, se pueden usar otros valores: 10px -3px y 2px respectivamente */
+@media only screen and (max-width: 600px) {
+    #divCalDiasFest .divFilaDiaFest {
+        height: 60px;
+    }
+    
+    #divCalDiasFest .divNDiaFest {
+        width: 50px;
+        height: 50px;
+        padding: 1em;
+        font-size: 25px;
+    }
+    
+    #divCalDiasFest .divContenidoDiaFest {
+        justify-content: space-evenly;
+    }
+
+    #divCalDiasFest .divContenidoDiaFest p {
+        font-size: 14px;
+    }
+    
+    #divCalDiasFest .divContenidoDiaFest .divDiaFestNombre {
+        font-weight: bold;
+    }
+    
+    .divFilaDiaFest .btnEliminar {
+        width: 25px;
+        padding: 1.1em 0.2em;
+        align-self: flex-end;
+    }
+
+    .btnMenuDiasSol {
+        width: 20px;
+        margin-left: 20px;
+        padding-bottom: 5px;
+    }
 }
 
-.calendarioBIG em:before {
-    left: 13px;
-    /* o 9px si es pequeño */
-}
-
-.calendarioBIG em:after {
-    right: 13px;
-    /* o 9px si es pequeño */
+/* MODAL RESOLUCIÓN */
+#formResolucionDia > * {
+    padding: .5em;
 }

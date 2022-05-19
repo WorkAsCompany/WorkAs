@@ -2,6 +2,8 @@ import { BD_Firebase } from "./bd_firebase.js";
 import { RotarTurno } from "./rotarTurno.js";
 import * as Plantilla from "../bibliotecas/plantilla.js";  
 import * as General from "../bibliotecas/general.js";
+
+import { onSnapshot, where, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
    
    /*  --- BIBLIOTECA TABLÓN DE ANUNCIO ---  */
 //Tenemos todas las fuciones o procedimientos que nos pueden ser utiles para trabajar con los tablones de anuncio.
@@ -233,7 +235,7 @@ class TablonAnuncio extends RotarTurno {
         if (arrayAnuncios.docs.length > 0) {
             arrayAnuncios.docs.map((anuncio) => {
                 var date = new Date(anuncio.data().fPubli.seconds * 1000);
-                if(date.getMonth() != mes && date.getFullYear() != anyo) {
+                if(date.getMonth() != mes || (date.getMonth() == mes && date.getFullYear() != anyo)) {
                     divTablonMes = doc.createElement("div");
                     divTablonMes.classList.add("divTablonMes");
                     divTablonMes.innerHTML = `<h2 class="tituloMesTablon">${month[date.getMonth()]}, ${date.getFullYear()}</h2>`;
@@ -317,6 +319,16 @@ class TablonAnuncio extends RotarTurno {
         );
     }
 
+    //Genera un código de 8 carácteres aleatorios.
+    generarCodTablon() {
+        var caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var codigo = "";
+        for (var i = 0; i < 8; i++) {
+            codigo += `${caracteres.charAt(Math.floor(Math.random() * caracteres.length))}`;
+        }
+        return codigo;
+    }
+
     crearAnuncio = async() => {
         var div = doc.getElementById("principalCrearAnuncio");
         var alert;
@@ -345,6 +357,7 @@ class TablonAnuncio extends RotarTurno {
                 visualizaciones: 0,
                 likes: 0,
                 arrayUsuarioLikes: [],
+                arrayUsuarioNotificados: [],
                 comentarios: [],
                 idEmpresa: idEmpresa
             }
@@ -359,13 +372,14 @@ class TablonAnuncio extends RotarTurno {
                                                                     <img src="./img/añadir.png" alt="">
                                                                 </div>`
 
-            var anuncio = await this.anyadirAnuncio(anuncio);
-            var nombreImg = `${anuncio.id}.${file.name.substr( (file.name.lastIndexOf(".")+1 - file.name.length) )}`;
+            var nombreImg = `${this.generarCodTablon()}.${file.name.substr( (file.name.lastIndexOf(".")+1 - file.name.length) )}`;
             await this.subirImgBD(`imgAnuncio/${nombreImg}`, file);
 
             var ruta = await this.descargarImgBD(`imgAnuncio/${nombreImg}`);
 
-            await this.actualizarImgAnuncio(anuncio.id, ruta);
+            anuncio.imgAnuncio = ruta;
+            var anuncio = await this.anyadirAnuncio(anuncio);
+
             doc.getElementById("formAnuncio").reset();
             this.mostrarTablonAnuncio("empresa");
 
@@ -422,8 +436,8 @@ class TablonAnuncio extends RotarTurno {
         var div = doc.getElementById("bodyEstadisticasAnuncio");
 
         var arrayAnuncios = await this.devolverAnunciosEmpresa(this.getUsu().id);
-        var empresa = await this.devolverEmpresa(this.getUsu().id);
-        var nEmpleados = await this.devolverEmpleadosEmpresa(this.getUsu().id);
+        /*var empresa = await this.devolverEmpresa(this.getUsu().id);
+        var nEmpleados = await this.devolverEmpleadosEmpresa(this.getUsu().id);*/
         var anunciosMasVistos = await this.devolverAnunciosEmpresaMasVistos(this.getUsu().id);
         var divMasVistos = "<div>";
         var nVisitas = 0, nLikes = 0, nComentarios = 0, engagement = 0;
@@ -473,6 +487,45 @@ class TablonAnuncio extends RotarTurno {
         );
     }
 
+    mostrarToastAnuncioNuevo = async() =>  {
+        var usuSesion = await this.devolverEmpleado(this.getUsu().id);
+        var divContenedorToast = doc.getElementById("divToastTablonAnuncio");
+
+        const q = query(this.devolverEnlace("tablonAnuncio"), where("idEmpresa", "==", usuSesion.data().idEmpresa), orderBy("fPubli", "desc"), limit(3));
+        onSnapshot(q, {includeMetadataChanges: true}, async(snapshot) => {
+            var promesas = [];
+            snapshot.docChanges().forEach((anuncio) => {
+                if(anuncio.type === "added" && !anuncio.doc.data().arrayUsuarioNotificados.includes(usuSesion.id) && usuSesion.data().conectado) {
+                    promesas.push(this.actualizarArrayNotificacionesAnuncio(anuncio.doc.id, usuSesion.id));
+                    divContenedorToast.appendChild(General.eventoToastAnuncio(Plantilla.crearToastAnuncio(anuncio.doc)));
+                    contenido += Plantilla.crearToastAnuncio(anuncio.doc);
+                   
+                }
+            })
+
+            if(promesas.length > 0) {
+                this.asignarEvToastDirigirAnuncio();
+                promesas = await Promise.allSettled(promesas);         
+            }
+        });
+    }
+
+    toastDirigirAnuncio(idAnuncio, tipoUsu) {
+        this.mostrarAnuncio(idAnuncio, tipoUsu);
+    }
+
+    asignarEvToastDirigirAnuncio() {
+        var toasts = doc.getElementsByClassName("toast");
+        for (let i = 0; i < toasts.length; i++) {
+            toasts[i].addEventListener(
+                "click",
+                (e) => {
+                    this.toastDirigirAnuncio(toasts[i].id, "empleado");
+                },
+                false
+            );
+        }
+    }
 }
 
 //Exportamos.
