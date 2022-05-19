@@ -2,10 +2,13 @@
     display: flex;
     flex-direction: row;
     gap: 30px;
-    padding-top: 2em;
+    padding-top: .5em;
     padding-bottom: 6em;
 }
 
+#divMenuCalendarioMovil {
+    display: none;
+}
 /*Calendario Dia Festivo*/
 
 #divCalendario .divCalendarioOp {
@@ -269,10 +272,22 @@
 
 
 @media only screen and (max-width: 991px) {
+    #divMenuCalendarioMovil {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    #divMenuCalendarioMovil span {
+        text-align: center;
+        border-bottom: 2px solid lightgreen;
+        width: 50%;
+        margin: 0px 5px;
+        font-style: italic;
+    }
+
     #divCalendario {
         display: flex;
         flex-direction: row;
-        padding-top: 2em;
         gap: 0px 20px;
         width: 100%;
         overflow-x: scroll;
@@ -326,4 +341,8 @@
 /* MODAL RESOLUCIÓN */
 #formResolucionDia > * {
     padding: .5em;
+}
+
+#formDiaFest .btn-close, #formSolicitarDias .btn-close {
+    filter: invert(0) !important;
 }

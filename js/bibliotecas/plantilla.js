@@ -1001,13 +1001,18 @@ export const crearToastAnuncio = (anuncio) => {
 export const crearDivCalendario = () => {
     return `<div id="calendario">
                 <h2 id="tituloCalendario">Calendario</h2>
+                <hr>
+                <div id="divMenuCalendarioMovil">
+                    <span>Días festivos</span>
+                    <span>Solicitudes</span>
+                </div>
                 <div id="divCalendario">
                 <div class="divCalendarioOp">
                     <h3>Días Festivos</h3>
                     <div id="divCalDiasFest"></div>
                 </div>
                 <div class="divCalendarioOp">
-                    <h3>Solicitudes Empleados</h3>
+                    <h3>Solicitudes</h3>
                     <div id="divMenuDiasSol">
                         <input id="btnSolPendientes" class="btnMenuDiasSol btnMenuDiasSolSlc" type="image" src="././././img/iconoListCheck.png" alt="">
                         <input id="btnSolResueltas" class="btnMenuDiasSol" type="image" src="././././img/iconoHistorial.png" alt="">
