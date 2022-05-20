@@ -88,7 +88,7 @@ export const devolverFormRegistroEmpresa = () => {
                     es obligatorio</span>
             </fieldset>
             <div id="aceptarPoliticas"><input type="checkbox" id="checkAceptarPoliticas" class="inputForm"
-                    name="aceptar_politicas"><label for=""> He leído y acepto la </label><a>política de privacidad.</a><span
+                    name="aceptar_politicas"><label for=""> He leído y acepto la </label> <a>política de privacidad.</a><span
                     class="error ocultar">(*) Este campo es obligatorio</span></div>
             <div id="btnForm"><input id="btnLoginRegistrar" type="button" value="Crear cuenta"></div><span
                 id="errorLoginSingup" class="error ocultar">Error</span>
