@@ -48,30 +48,6 @@
     overflow-y: scroll;
 }
 
-#divSlcTipoChat {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-}
-
-#divSlcTipoChat > div {
-    width: 50%;
-    text-align: center;
-    border-bottom: 2px solid gray;
-    padding: 5px;
-    margin: 10px 5px;
-    font-size: 17px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-#divSlcTipoChat .tipoChatSlc {
-    color: #055759;
-    border-bottom: 2px solid #055759;
-    transition: 0.3s;
-}
-
 /* LISTADO USUARIOS */
 
 #empresaChat {
@@ -83,9 +59,6 @@
     width: 100%;
 }
 
-#listadoGruposChat {
-    width: 100%;
-}
 #divChatListadoUsuarios {
     height: 800px;
     background-color: white;

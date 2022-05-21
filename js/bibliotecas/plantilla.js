@@ -1424,7 +1424,6 @@ export const crearPlantillaChat = (tipoUsu) => {
                     <div id="headerChatUsuario">
                         <div id="imgChatSlc"></div>
                         <h4 id="nombreUsuChatSlc"></h4>
-                        <div id="iconoConectado2" class="iconoConectado2"></div>
                     </div>
                     <div id="conversacion"></div>
                     <div id="divInputChatUsuario">
@@ -1440,16 +1439,11 @@ export const crearPlantillaChat = (tipoUsu) => {
                         <h2>Chat</h2>
                         <input id="inputBuscarUsuarioChat" type="text" placeholder="Buscar">
                     </div>
-                    <div id="divSlcTipoChat">
-                        <div id="divSlcPrivadoChat" class="tipoChatSlc">Privado</div>
-                        <div id="divSlcGrupoChat">Grupo</div>
-                    </div>
                     <div id="divListadoUsuarioGrupoChat">
                         <div id="listadoUsuarios">
                             ${tipoUsu === "empleado" ? "<div id='empresaChat'></div>" : ""}
                             <div id="listadoUsuariosChat"></div>
                         </div>
-                        <div id="listadoGruposChat"></div>
                     </div>
                 </div>
             </div>

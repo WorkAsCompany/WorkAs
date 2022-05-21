@@ -101,6 +101,15 @@ hr {
     text-align: center;
 }
 
+#tablaEmpleados thead th:first-child {
+    width: 70px !important;
+    padding: 0px !important;
+}
+
+#tablaEmpleados thead th:last-child {
+    width: 70px !important;
+}
+
 #tablaEmpleados thead th:last-child, #tablaEmpleados thead th:first-child {
     cursor: unset;
     width: 10px;   
@@ -122,6 +131,14 @@ hr {
 
 #tablaEmpleados tbody td {
     text-align: center;
+}
+
+.dtr-title {
+    white-space: nowrap;
+}
+
+.dtr-data {
+    white-space: nowrap;
 }
 
 #tablaEmpleados {
@@ -254,7 +271,6 @@ ul.dtr-details {
     height: 65px;
     display: flex;
     align-items: center;
-    margin-right: .5em;
     width: 70px;
 }
 

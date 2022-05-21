@@ -457,7 +457,6 @@ class Workas extends Calendario {
 
     //Muestra la página principal con todas las funciones correspondientes si se ha iniciado sesión como empresa.
     crearPaginaInicialWorkasEmpresa = async() => {
-        console.log("fdfdf")
         var iconoPerfil = doc.getElementsByClassName("imgIconoPerfil");
         var empresa = await this.devolverEmpresa(this.getUsu().id);
         await this.actualizarEstadoConectado(empresa.id, true, "empresa")
@@ -471,6 +470,8 @@ class Workas extends Calendario {
         doc.getElementById("contenido").innerHTML = Plantilla.crearPaginaInicialEmpresa(empresa, imgPerfil);
         opAside = doc.getElementById("asideOpciones");
 
+        var divChat = doc.getElementById("btnChat");
+
         //this.mostrarDatosEmpresa();
         this.modificarPaginaOpNavEmpleados();
         this.asignarEvColapsarAside();
@@ -479,6 +480,7 @@ class Workas extends Calendario {
         doc.getElementById("opNavEmpleados").addEventListener(
             "click",
             (e) => {
+                divChat.classList.remove("ocultar");
                 this.modificarPaginaOpNavEmpleados();
             },
             false
@@ -487,6 +489,7 @@ class Workas extends Calendario {
         doc.getElementById("opNavTablon").addEventListener(
             "click",
             (e) => {
+                divChat.classList.remove("ocultar");
                 this.modificarPaginaOpNavTablonAnuncio("empresa");
             },
             false
@@ -495,6 +498,7 @@ class Workas extends Calendario {
         doc.getElementById("opNavCalendario").addEventListener(
             "click",
             (e) => {
+                divChat.classList.remove("ocultar");
                 this.modificarPaginaOpNavCalendario("empresa");
             },
             false
@@ -503,6 +507,7 @@ class Workas extends Calendario {
         doc.getElementById("btnChat").addEventListener(
             "click",
             async(e) => {
+                divChat.classList.add("ocultar");
                 this.modificarPaginaOpNavChat("empresa");
             },
             false
@@ -600,6 +605,8 @@ class Workas extends Calendario {
         doc.getElementById("contenido").innerHTML = Plantilla.crearPaginaInicialEmpleado(empleado, imgPerfil);
         opAside = doc.getElementById("asideOpciones");
 
+        var divChat = doc.getElementById("btnChat");
+
         this.asignarEvColapsarAside();
         this.mostrarToastAnuncioNuevo();
         this.modificarPaginaOpNavTablonAnuncio("empleado");
@@ -625,7 +632,8 @@ class Workas extends Calendario {
 
         doc.getElementById("opNavTablon").addEventListener(
             "click",
-            (e) => {this
+            (e) => {
+                divChat.classList.remove("ocultar");
                 this.modificarPaginaOpNavTablonAnuncio("empleado");
             },
             false
@@ -634,6 +642,7 @@ class Workas extends Calendario {
         doc.getElementById("opNavCalendario").addEventListener(
             "click",
             (e) => {
+                divChat.classList.remove("ocultar");
                 this.modificarPaginaOpNavCalendario("empleado");
             },
             false
@@ -642,6 +651,7 @@ class Workas extends Calendario {
         doc.getElementById("btnChat").addEventListener(
             "click",
             async(e) => {
+                divChat.classList.add("ocultar");
                 this.modificarPaginaOpNavChat("empleado");
             },
             false
@@ -728,34 +738,6 @@ class Workas extends Calendario {
         });
     }
 
-    evCambiarChatPrivado() {
-        var btn = doc.getElementById("divSlcPrivadoChat");
-        btn.addEventListener(
-            "click",
-            (e) => {
-                doc.getElementById("divSlcGrupoChat").classList.remove("tipoChatSlc");
-                doc.getElementById("divSlcPrivadoChat").classList.add("tipoChatSlc");
-                doc.getElementById("listadoUsuariosChat").scrollIntoView({ behavior: "smooth" });
-
-            },
-            false
-        );
-    }
-
-    evCambiarChatGrupo() {
-        var btn = doc.getElementById("divSlcGrupoChat");
-        btn.addEventListener(
-            "click",
-            (e) => {
-                doc.getElementById("divSlcPrivadoChat").classList.remove("tipoChatSlc");
-                doc.getElementById("divSlcGrupoChat").classList.add("tipoChatSlc");
-                doc.getElementById("listadoGruposChat").scrollIntoView({ behavior: "smooth" });
-
-            },
-            false
-        );
-    }
-
     mostrarMsgConversacion = async(chat, nMsgSinLeer) =>  {
         doc.getElementById("conversacion").innerHTML = "";
         var usuSesion = await this.devolverEmpresa(this.getUsu().id);
@@ -834,11 +816,9 @@ class Workas extends Calendario {
                     idUsu = idUsu[0];
         
                     var usu = empleadosArray.docs.filter(usu => usu.id === idUsu)[0];
-                   /* var conectadoClass = usu.data().conectado ? "conectado" : "desconectado";*/
 
                     doc.getElementById("imgChatSlc").innerHTML = usu.data().iconoPerfil ? `<img src="${usu.data().iconoPerfil}" alt="">` : "<img src='./img/empleadoIcono.png' alt=''>";
                     doc.getElementById("nombreUsuChatSlc").innerHTML = `${usu.data().nombre} ${usu.data().apellidos}`;
-                   /* doc.getElementById("iconoConectado2").classList.add(conectadoClass);*/
 
                     this.mostrarMsgConversacion(chat, nMsgSinLeer.data().nMsgSinLeer);
 
@@ -881,8 +861,6 @@ class Workas extends Calendario {
 
         doc.getElementById("principal").innerHTML = Plantilla.crearPlantillaChat(tipoUsu);
         this.obtenerListadoUsuariosChat(tipoUsu)
-        this.evCambiarChatPrivado();
-        this.evCambiarChatGrupo();
 
         //Emojis
         $(doc).ready(function() {
@@ -895,7 +873,6 @@ class Workas extends Calendario {
     obtenerListadoUsuariosChat = async (tipoUsu) => {
         var divListadoUsu = doc.getElementById("listadoUsuariosChat");
         var divChatEmpresa = doc.getElementById("empresaChat");
-        var divListadoGrupo = doc.getElementById("listadoGruposChat");
         this.asignarEvEnviarMensajeChat();
 
         if(tipoUsu === "empresa") {
@@ -905,7 +882,7 @@ class Workas extends Calendario {
 
             const usuarios = await onSnapshot(this.devolverEnlace("empleado"), (usuarios) => {
                 usuarios.docs.map((usuario) => {
-                    if(doc.getElementById(usuario.id) != undefined) {
+                    if(doc.getElementById("divChat") && doc.getElementById(usuario.id) != undefined) {
                         var conectadoClass = usuario.data().conectado ? "conectado" : "desconectado";
                         doc.getElementById(usuario.id).classList.remove("conectado");
                         doc.getElementById(usuario.id).classList.remove("desconectado");
