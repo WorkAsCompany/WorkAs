@@ -642,7 +642,7 @@
     position: absolute;
     bottom: 0;
     left: 0;
-    rotate: 180deg;
+    transform: rotate(180deg);
     border-width: 0 0 11vh 100vw;
     border-style: solid;
     border-color: transparent transparent transparent #F2EEF7;
@@ -683,7 +683,7 @@
     position: absolute;
     bottom: 0;
     left: 0;
-    rotate: 180deg;
+    transform: rotate(180deg);
     border-width: 0 0 11vh 100vw;
     border-style: solid;
     border-color: transparent transparent transparent #08274C;
