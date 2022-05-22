@@ -797,8 +797,15 @@ class Workas extends Calendario {
     }
 
     slcUsuListChat = async(tipoUsu) => {
-        var empleadosArray = await this.devolverEmpleadosEmpresa(this.getUsu().id);
-        var usuSesion = await this.devolverEmpresa(this.getUsu().id);
+        if(tipoUsu === "empresa") {
+            var empleadosArray = await this.devolverEmpleadosEmpresa(this.getUsu().id);
+            var usuSesion = await this.devolverEmpresa(this.getUsu().id);
+        } else {
+            console.log("asdasdasd")
+            var usuSesion = await this.devolverEmpleado(this.getUsu().id);
+            var empleadosArray = await this.devolverEmpleadosEmpresa(usuSesion.data().idEmpresa);
+        }
+
         var nMsgSinLeer =  await this.devolverChat(chatSlc);
         doc.getElementById("divChatConversacion").classList.remove("ocultar")
         doc.getElementById("divChatConversacion").classList.add("animate__animated", "animate__fadeIn")
@@ -904,8 +911,6 @@ class Workas extends Calendario {
     
                         divListadoUsu.innerHTML += Plantilla.crearFilaListUsuChat(usu[0], chat, chatSlc);
                     }
-
-
                 });  
 
                 this.asignarEvSlcUsuListChat(tipoUsu);
@@ -913,20 +918,44 @@ class Workas extends Calendario {
 
         } else if(tipoUsu === "empleado") {
             var usuSesion = await this.devolverEmpleado(this.getUsu().id);
+            var empleadosArray = await this.devolverEmpleadosEmpresa(usuSesion.data().idEmpresa);
 
             const usuarios = await onSnapshot(this.devolverEnlace("empleado"), (usuarios) => {
-                divListadoUsu.innerHTML = "";
-    
                 usuarios.docs.map((usuario) => {
 
-                    if(usuSesion.idEmpresa === usuario.idEmpresa && usuSesion.id !== usuario.id) {
-                        divListadoUsu.innerHTML += Plantilla.crearFilaListUsuChat(usuario, chat, chatSlc);
+                    if(doc.getElementById(usuario.id) != undefined) {
+     
+                        var conectadoClass = usuario.data().conectado ? "conectado" : "desconectado";
+                        doc.getElementById(usuario.id).classList.remove("conectado");
+                        doc.getElementById(usuario.id).classList.remove("desconectado");
+                        doc.getElementById(usuario.id).classList.add(conectadoClass);
                     }
-                });
-                this.asignarEvSlcUsuListChat(tipoUsu)
+                })
             });
 
-            const empresa = await onSnapshot(this.devolverEnlace("empresa"), (empresas) => {
+            const chats = await onSnapshot(this.devolverEnlace("chat"), (chats) => {
+                divListadoUsu.innerHTML = "";
+                chats = chats.docs.sort((a, b) => a.data().fLastMsg < b.data().fLastMsg) 
+
+                chats.map((chat) => {
+                    var idUsu = chat.data().arrayUsuariosChat;
+                    idUsu.splice(chat.data().arrayUsuariosChat.indexOf(usuSesion.id), 1);
+                    console.log(idUsu)
+                    var usu = empleadosArray.docs.filter(usu => usu.id === idUsu[0]);
+
+                    if(usu.length > 0) {
+                        usu = usu[0];
+                        if(usuSesion.data().idEmpresa === chat.data().idEmpresa && chat.data().arrayUsuariosChat.includes(usu.id) && chat.data().arrayUsuariosChat.includes(usuSesion.id)) {
+    
+                            divListadoUsu.innerHTML += Plantilla.crearFilaListUsuChat(usu, chat, chatSlc);
+                        }
+                    }
+                });  
+
+                this.asignarEvSlcUsuListChat(tipoUsu);
+            }); 
+
+            /*const empresa = await onSnapshot(this.devolverEnlace("empresa"), (empresas) => {
                 divChatEmpresa.innerHTML = "";
                 empresas.docs.map((usuario) => {
                     if(usuSesion.data().idEmpresa === usuario.id) {
@@ -934,7 +963,7 @@ class Workas extends Calendario {
                     }
                 });
                 this.asignarEvSlcUsuListChat(tipoUsu)
-            });
+            });*/
         }
         
         //Filtrar nombre usuario por input.
