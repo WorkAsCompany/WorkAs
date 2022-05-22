@@ -1422,6 +1422,7 @@ export const crearPlantillaChat = () => {
     return `<div id="divChat" class="animate__animated animate__fadeIn">
                 <div id="divChatConversacion" class="ocultar">
                     <div id="headerChatUsuario">
+                        <img id="btnVolverListChat" src="./img/abrirAside.png" alt="">
                         <div id="imgChatSlc"></div>
                         <h4 id="nombreUsuChatSlc"></h4>
                     </div>
@@ -1436,7 +1437,7 @@ export const crearPlantillaChat = () => {
                 </div>
                 <div id="divChatListadoUsuarios">
                     <div id="headerListadoUsuarios">
-                        <h2>Chat</h2>
+                        <h2>Chat</h2>             
                         <input id="inputBuscarUsuarioChat" type="text" placeholder="Buscar">
                     </div>
                     <div id="listadoUsuarios">

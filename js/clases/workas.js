@@ -855,22 +855,34 @@ class Workas extends Calendario {
                     }*/
                 }
             });  
-
         });
     }
 
     asignarEvSlcUsuListChat(tipoUsu) {
         var divChats = doc.getElementsByClassName("divUsuarioChat");
+        this.asignarEvVolverListChat();
         for (let i = 0; i < divChats.length; i++) {
             divChats[i].addEventListener(
                 "click",
                 async(e) => {
                     chatSlc = divChats[i].id;
                     this.slcUsuListChat(tipoUsu);
+                    doc.getElementById("divChatConversacion").classList.add("zIndexChat")
                 },
                 false
             );
         }
+    }
+
+    asignarEvVolverListChat() {
+        var btnVolver = doc.getElementById("btnVolverListChat");
+        btnVolver.addEventListener(
+            "click",
+            async(e) => {
+                doc.getElementById("divChatConversacion").classList.remove("zIndexChat")
+            },
+            false
+        );
     }
 
     modificarPaginaOpNavChat = async(tipoUsu) => {
