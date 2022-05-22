@@ -57,6 +57,27 @@
     }
 }
 
+@media only screen and (max-width: 991px) {
+    #navBarPrincipal {
+        height: 60px;
+        padding: 0px;
+        z-index: 999;
+    }
+
+    #navBarPrincipal img {
+        width: 45px;
+        height: 45px;
+    }
+
+    #navBarPrincipal .tituloNav {
+        font-size: 24px;
+    } 
+
+    #navBarPrincipal .divLogotipo {
+        width: 140px;
+    }
+}
+
 
 /** {
     margin: 0px;

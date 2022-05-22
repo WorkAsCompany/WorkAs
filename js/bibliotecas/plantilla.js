@@ -299,16 +299,20 @@ export const crearPaginaInicialEmpresa = (usu, imgPerfil) => {
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <div class="navbar-nav me-auto mb-2 mb-lg-0"></div>
                         <ul class="navbar-nav">
-                            <li id="opNavEmpleados" class="nav-item">
+                            <li id="opNavEmpleados" class="nav-item" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
                                 <a class="nav-link active" aria-current="page">Empleados</a>
                             </li>
-                            <li id="opNavCalendario" class="nav-item">
+                            <li id="opNavCalendario" class="nav-item" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
                                 <a class="nav-link active" aria-current="page">Calendario</a>
                             </li>
-                            <li id="opNavTablon" class="nav-item">
+                            <li id="opNavTablon" class="nav-item" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
                                 <a class="nav-link active" aria-current="page">Tablón</a>
                             </li>
-                            <li id="opNavLogout" class="nav-item">
+                            <li id="opNavLogout" class="nav-item" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
                                 <a class="nav-link active" aria-current="page">Cerrar sesión</a>
                             </li>                            
                             <li id="iconoPerfil" class="divIconoPerfil collapse navbar-collapse">
@@ -357,13 +361,16 @@ export const crearPaginaInicialEmpleado = (usu, imgPerfil) => {
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <div class="navbar-nav me-auto mb-2 mb-lg-0"></div>
                         <ul class="navbar-nav">
-                            <li id="opNavCalendario" class="nav-item">
+                            <li id="opNavCalendario" class="nav-item" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
                                 <a class="nav-link active" aria-current="page">Calendario</a>
                             </li>
-                            <li id="opNavTablon" class="nav-item">
+                            <li id="opNavTablon" class="nav-item" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
                                 <a class="nav-link active" aria-current="page">Tablón</a>
                             </li>
-                            <li id="opNavLogout" class="nav-item">
+                            <li id="opNavLogout" class="nav-item" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
                                 <a class="nav-link active" aria-current="page">Cerrar sesión</a>
                             </li>
                             <li id="iconoPerfil" class="divIconoPerfil collapse navbar-collapse">
@@ -399,23 +406,24 @@ export const crearPaginaInicialEmpleado = (usu, imgPerfil) => {
 
 //Devuelve la estructura de las opciones de empleados.
 export const crearOpAsideNavEmpleados = () => {
+    var estadoAside = doc.getElementById("contenido").classList.contains("noColapsarContenido");
     return `<div id="asideAnyadirEmpleado" class="divServicioAside" data-bs-toggle="modal" data-bs-target="#modalAnyadirEmpleado">
                 <img src="./img/anyadirEmpleadoServicio.png" alt="">
-                <div class="asideElInfo ocultarAsideHover ocultarElAside">
+                <div class="asideElInfo ${estadoAside ? "ocultarAsideClic": "ocultarAsideHover"} ocultarElAside">
                     <p>Añadir</p>
                     <p>Añadir empleado</p>
                 </div>
             </div>
             <div id="asideRotarTurno" class="divServicioAside">
                 <img src="./img/rotarTurnoServicio.png" alt="">
-                <div class="asideElInfo ocultarAsideHover ocultarElAside">
+                <div class="asideElInfo ${estadoAside ? "ocultarAsideClic": "ocultarAsideHover"} ocultarElAside">
                     <p>Rotar Turno</p>
                     <p>Rotar turno del empleado</p>
                 </div>
             </div>
             <div id="asideAdministrarEmpleado" class="divServicioAside">
                 <img src="./img/imgAdministrarEmpleado.png" alt="">
-                <div class="asideElInfo ocultarAsideHover ocultarElAside">
+                <div class="asideElInfo ${estadoAside ? "ocultarAsideClic": "ocultarAsideHover"} ocultarElAside">
                     <p>Administrar</p>
                     <p>Administrar empleado</p>
                 </div>
@@ -424,9 +432,10 @@ export const crearOpAsideNavEmpleados = () => {
 
 //Devuelve la estructura de las opciones del perfil de usuario.
 export const crearOpAsideNavPerfil = () => {
+    var estadoAside = doc.getElementById("contenido").classList.contains("noColapsarContenido");
     return `<div id="asideCambiarImgPerfil" class="divServicioAside" data-bs-toggle="modal" data-bs-target="#modalIconoPerfil">
                 <img src="./img/empleadoIcono.png" alt="">
-                <div class="asideElInfo ocultarAsideHover ocultarElAside">
+                <div class="asideElInfo ${estadoAside ? "ocultarAsideClic": "ocultarAsideHover"} ocultarElAside">
                     <p>Actualizar</p>
                     <p>Actualizar icono de perfil</p>
                 </div>
@@ -435,10 +444,11 @@ export const crearOpAsideNavPerfil = () => {
 
 //Devuelve la estructura de las opciones del tablón de anuncio.
 export const crearOpAsideNavTablonAnuncio = (tipoUsuario) => {
+    var estadoAside = doc.getElementById("contenido").classList.contains("noColapsarContenido");
     if(tipoUsuario === "empleado") {
         return `<div id="asideListarTablon" class="divServicioAside">
                     <img src="./img/tablonNoticiaServicio.png" alt="">
-                    <div class="asideElInfo ocultarAsideHover ocultarElAside">
+                    <div class="asideElInfo ${estadoAside ? "ocultarAsideClic": "ocultarAsideHover"} ocultarElAside">
                         <p>Listar</p>
                         <p>Listar tablón anuncio</p>
                     </div>
@@ -446,21 +456,21 @@ export const crearOpAsideNavTablonAnuncio = (tipoUsuario) => {
     } else {
         return `<div id="asideCrearAnuncio" class="divServicioAside">
                     <img src="./img/agregarAnuncio.png" alt="">
-                    <div class="asideElInfo ocultarAsideHover ocultarElAside">
+                    <div class="asideElInfo ${estadoAside ? "ocultarAsideClic": "ocultarAsideHover"} ocultarElAside">
                         <p>Crear</p>
                         <p>Crear anuncio</p>
                     </div>
                 </div>
                 <div id="asideListarTablon" class="divServicioAside">
                     <img src="./img/tablonNoticiaServicio.png" alt="">
-                    <div class="asideElInfo ocultarAsideHover ocultarElAside">
+                    <div class="asideElInfo ${estadoAside ? "ocultarAsideClic": "ocultarAsideHover"} ocultarElAside">
                         <p>Listar</p>
                         <p>Listar tablón anuncio</p>
                     </div>
                 </div>
                 <div id="asideEstadisticasTablon" class="divServicioAside" data-bs-toggle="offcanvas" data-bs-target="#canvasEstadisticas" aria-controls="offcanvasTop">
                     <img src="./img/iconoEstadisticas.png" alt="">
-                    <div class="asideElInfo ocultarAsideHover ocultarElAside">
+                    <div class="asideElInfo ${estadoAside ? "ocultarAsideClic": "ocultarAsideHover"} ocultarElAside">
                         <p>Datos</p>
                         <p>Estadísticas del tablón</p>
                     </div>
@@ -470,10 +480,11 @@ export const crearOpAsideNavTablonAnuncio = (tipoUsuario) => {
 
 //Devuelve la estructura de las opciones del calendario.
 export const crearOpAsideNavCalendario = (tipoUsuario) => {
+    var estadoAside = doc.getElementById("contenido").classList.contains("noColapsarContenido");
     if(tipoUsuario === "empleado") {
         return `<div id="asideSolicitarDia" class="divServicioAside" data-bs-toggle="offcanvas" data-bs-target="#formSolicitarDias" aria-controls="offcanvasTop">
                     <img src="./img/solicitarDia.png" alt="">
-                    <div class="asideElInfo ocultarAsideHover ocultarElAside">
+                    <div class="asideElInfo ${estadoAside ? "ocultarAsideClic": "ocultarAsideHover"} ocultarElAside">
                         <p>Solicitar</p>
                         <p>Solicitar días</p>
                     </div>
@@ -481,44 +492,9 @@ export const crearOpAsideNavCalendario = (tipoUsuario) => {
     } else {
         return `<div id="asideAnyadirFestivo" class="divServicioAside" data-bs-toggle="offcanvas" data-bs-target="#formDiaFest" aria-controls="offcanvasTop">
                     <img src="./img/agregarDiaFest.png" alt="">
-                    <div class="asideElInfo ocultarAsideHover ocultarElAside">
+                    <div class="asideElInfo ${estadoAside ? "ocultarAsideClic": "ocultarAsideHover"} ocultarElAside">
                         <p>Añadir</p>
                         <p>Añadir día festivo</p>
-                    </div>
-                </div>`;
-    }
-}
-
-//Devuelve la estructura de las opciones del chat.
-export const crearOpAsideChat = (tipoUsuario) => {
-    if(tipoUsuario === "empleado") {
-        return `<div id="asideListarTablon" class="divServicioAside">
-                    <img src="./img/tablonNoticiaServicio.png" alt="">
-                    <div class="asideElInfo ocultarAsideHover ocultarElAside">
-                        <p>Listar</p>
-                        <p>Listar tablón anuncio</p>
-                    </div>
-                </div>`;
-    } else {
-        return `<div id="asideCrearAnuncio" class="divServicioAside">
-                    <img src="./img/agregarAnuncio.png" alt="">
-                    <div class="asideElInfo ocultarAsideHover ocultarElAside">
-                        <p>Crear</p>
-                        <p>Crear anuncio</p>
-                    </div>
-                </div>
-                <div id="asideListarTablon" class="divServicioAside">
-                    <img src="./img/tablonNoticiaServicio.png" alt="">
-                    <div class="asideElInfo ocultarAsideHover ocultarElAside">
-                        <p>Listar</p>
-                        <p>Listar tablón anuncio</p>
-                    </div>
-                </div>
-                <div id="asideEstadisticasTablon" class="divServicioAside" data-bs-toggle="offcanvas" data-bs-target="#canvasEstadisticas" aria-controls="offcanvasTop">
-                    <img src="./img/iconoEstadisticas.png" alt="">
-                    <div class="asideElInfo ocultarAsideHover ocultarElAside">
-                        <p>Datos</p>
-                        <p>Estadísticas del tablón</p>
                     </div>
                 </div>`;
     }
@@ -1344,7 +1320,7 @@ export const crearFilaListUsuChat = (usuario, chat, chatSlc) => {
     var nombreChat = "";
     var iconoPerfil = "";
     var nMsg = 0;
-console.log(chat.data().conversacion)
+
     var lastMsg = (chat.data().conversacion == null || chat.data().conversacion.length === 0)
         ? "No hay mensajes todavía."
         : chat.data().conversacion[chat.data().conversacion.length-1] ;

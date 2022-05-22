@@ -100,14 +100,8 @@ class Workas extends Calendario {
 
                 chat = {
                     arrayUsuariosChat: [this.getUsu().id, usuAnyadido.id],
-                    tipoConver: "privado",
                     conversacion: null,
                     nMsgSinLeer: 0,
-                    capacidadGrupo: 2,
-                    nombreGrupo: "",
-                    imgGrupo: "",
-                    infoGrupo: "",
-                    pinGrupo: null,
                     idEmpresa: this.getUsu().id,
                     fLastMsg: null
                 }
@@ -118,14 +112,8 @@ class Workas extends Calendario {
                     if(empleado.id !== usuAnyadido.id) {
                         chat = {
                             arrayUsuariosChat: [empleado.id, usuAnyadido.id],
-                            tipoConver: "privado",
                             conversacion: null,
                             nMsgSinLeer: 0,
-                            capacidadGrupo: 2,
-                            nombreGrupo: "",
-                            imgGrupo: "",
-                            infoGrupo: "",
-                            pinGrupo: null,
                             idEmpresa: this.getUsu().id,
                             fLastMsg: null
                         }
@@ -239,8 +227,18 @@ class Workas extends Calendario {
         var div = doc.getElementById("divPrincipalTabla");
         div.innerHTML = "";
         var alert;
+        var promesas = [];
 
         var empleado = await this.devolverEmpleado(btn.parentNode.parentNode.id)
+        var chats = await this.devolverChatsEmpresa(empleado.data().idEmpresa);
+
+        chats.docs.map((chat) => {
+            if(chat.data().arrayUsuariosChat.includes(empleado.id)) {
+                promesas.push(this.eliminarChat(chat.id));
+            }
+        });
+
+        await Promise.all(promesas);
         await this.eliminarEmpleadoEmpresa(btn.parentNode.parentNode.id);
         
         this.opListarEmpleados();
@@ -481,6 +479,8 @@ class Workas extends Calendario {
             "click",
             (e) => {
                 divChat.classList.remove("ocultar");
+                doc.getElementById("asidePrincipal").classList.remove("contenidoChat");
+                doc.getElementById("contenido").classList.remove("contenidoChat");
                 this.modificarPaginaOpNavEmpleados();
             },
             false
@@ -490,6 +490,8 @@ class Workas extends Calendario {
             "click",
             (e) => {
                 divChat.classList.remove("ocultar");
+                doc.getElementById("asidePrincipal").classList.remove("contenidoChat");
+                doc.getElementById("contenido").classList.remove("contenidoChat");
                 this.modificarPaginaOpNavTablonAnuncio("empresa");
             },
             false
@@ -499,6 +501,8 @@ class Workas extends Calendario {
             "click",
             (e) => {
                 divChat.classList.remove("ocultar");
+                doc.getElementById("asidePrincipal").classList.remove("contenidoChat");
+                doc.getElementById("contenido").classList.remove("contenidoChat");
                 this.modificarPaginaOpNavCalendario("empresa");
             },
             false
@@ -508,6 +512,8 @@ class Workas extends Calendario {
             "click",
             async(e) => {
                 divChat.classList.add("ocultar");
+                doc.getElementById("asidePrincipal").classList.add("contenidoChat");
+                doc.getElementById("contenido").classList.add("contenidoChat");
                 this.modificarPaginaOpNavChat("empresa");
             },
             false
@@ -634,6 +640,8 @@ class Workas extends Calendario {
             "click",
             (e) => {
                 divChat.classList.remove("ocultar");
+                doc.getElementById("asidePrincipal").classList.remove("contenidoChat");
+                doc.getElementById("contenido").classList.remove("contenidoChat");
                 this.modificarPaginaOpNavTablonAnuncio("empleado");
             },
             false
@@ -643,6 +651,8 @@ class Workas extends Calendario {
             "click",
             (e) => {
                 divChat.classList.remove("ocultar");
+                doc.getElementById("asidePrincipal").classList.remove("contenidoChat");
+                doc.getElementById("contenido").classList.remove("contenidoChat");
                 this.modificarPaginaOpNavCalendario("empleado");
             },
             false
@@ -652,6 +662,8 @@ class Workas extends Calendario {
             "click",
             async(e) => {
                 divChat.classList.add("ocultar");
+                doc.getElementById("asidePrincipal").classList.add("contenidoChat");
+                doc.getElementById("contenido").classList.add("contenidoChat");
                 this.modificarPaginaOpNavChat("empleado");
             },
             false
@@ -886,9 +898,6 @@ class Workas extends Calendario {
     }
 
     modificarPaginaOpNavChat = async(tipoUsu) => {
-        opAside.innerHTML = Plantilla.crearOpAsideChat(tipoUsu);
-
-
         if(tipoUsu === "empresa") {
 
         }
@@ -933,7 +942,7 @@ class Workas extends Calendario {
                     idUsu = idUsu[0];
     
                     var usu = empleadosArray.docs.filter(usu => usu.id ===  idUsu);
-                    if(usuSesion.id === chat.data().idEmpresa && chat.data().arrayUsuariosChat.includes(usuSesion.id)) {
+                    if(usu != undefined && usuSesion.id === chat.data().idEmpresa && chat.data().arrayUsuariosChat.includes(usuSesion.id)) {
     
                         divListadoUsu.innerHTML += Plantilla.crearFilaListUsuChat(usu[0], chat, chatSlc);
                     }

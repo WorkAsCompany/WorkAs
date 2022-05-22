@@ -77,6 +77,10 @@ hr {
 
 /* TABLA  EMPLEADOS */
 
+#tablaEmpleados_length {
+    padding-bottom: 1.5em;
+}
+
 #tablaEmpleados_wrapper .row {
     padding: 20px 0px;
 }

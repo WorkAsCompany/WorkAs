@@ -42,6 +42,7 @@
     transform: rotate(90deg);
     -webkit-transform: rotate(90deg);
     cursor: pointer;
+    display: none;
 }
 
 .zIndexChat {
@@ -56,6 +57,14 @@
     #divChatConversacion {
         width: 50%;
     }
+}
+
+#imgChatSlc img {
+    width: 70px;
+    height: 70px;
+    margin: 5px 10px;
+    border-radius: 100%;
+    background-color: powderblue;
 }
 
 @media (max-width: 850px) {
@@ -81,8 +90,42 @@
         width: 150px;
     }
 
-    #headerListadoUsuarios img {
+    #btnVolverListChat {
         display: block;
+    }
+
+    #imgChatSlc img {
+        width: 60px;
+        height: 60px;
+    }
+
+    #nombreUsuChatSlc {
+        font-size: 18px;
+    }
+}
+
+#asidePrincipal.contenidoChat {
+    display: none;
+}
+
+#contenido.contenidoChat {
+    grid-template-rows: 80px repeat(3,1fr);
+    grid-template-columns: repeat(4,1fr);
+
+    grid-template-areas:
+    "menu menu menu menu"
+    "main main main main"
+    "main main main main"
+    "main main main main";  
+}
+
+#contenido.contenidoChat #principal {
+    padding-bottom: 0px;
+}
+
+@media (max-width: 992px) {
+    #contenido.contenidoChat #principal {
+        min-height: 93.1vh;
     }
 }
 
@@ -217,14 +260,6 @@
     height: 15px;
     border-radius: 100%;
 } 
-
-#imgChatSlc img {
-    width: 70px;
-    height: 70px;
-    margin: 5px 10px;
-    border-radius: 100%;
-    background-color: powderblue;
-}
 
 #conversacion {
     height: 100%;

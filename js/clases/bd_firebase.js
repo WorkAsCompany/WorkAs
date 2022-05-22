@@ -416,6 +416,11 @@ class BD_Firebase {
         return coleccion;
     }
 
+    //Elimina un chat.
+    eliminarChat(idChat) {
+        deleteDoc(doc(this.devolverEnlace("chat"), idChat));
+    }
+
     //Devuelve la lista de chats que pertenecen a la empresa.
     devolverChatsEmpresa(idEmpresa) {
         var consulta = query(
