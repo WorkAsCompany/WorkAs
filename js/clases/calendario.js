@@ -276,7 +276,7 @@ class Calendario extends TablonAnuncio {
                 descResolucion: descripcion,
                 pendiente: false,   
             }
-            console.log(resolucion)
+
             alert = General.crearAlert("La resolución ha sido enviada correctamente.", "exitoAlert");
             doc.getElementById("formResolucionDia").reset();
 

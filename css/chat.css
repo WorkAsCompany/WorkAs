@@ -6,7 +6,8 @@
     display: flex;
     flex-direction: row;
     gap: 1em;
-    height: 800px;
+    height: 100%;
+    padding-bottom: 10px;
 }
 
 #divChatListadoUsuarios {
@@ -69,19 +70,16 @@
 
 @media (max-width: 850px) {
     #divChat {
-        height: 200px;
         position: relative;
     }
 
     #divChatListadoUsuarios {
         width: 100%;
-        height: 87vh !important;
         position: absolute;
     }
 
     #divChatConversacion {
         width: 100%;
-        height: 87vh !important;
         position: absolute;
 
     }
@@ -120,13 +118,8 @@
 }
 
 #contenido.contenidoChat #principal {
-    padding-bottom: 0px;
-}
-
-@media (max-width: 992px) {
-    #contenido.contenidoChat #principal {
-        min-height: 93.1vh;
-    }
+    padding-bottom: 10px;
+    height: 100vh;
 }
 
 #headerListadoUsuarios input {
@@ -147,7 +140,7 @@
 }
 
 #divChatListadoUsuarios {
-    height: 800px;
+
     background-color: white;
 }
 
@@ -272,7 +265,6 @@
 
 #divInputChatUsuario {
     border-radius: 10px;
-    height: 60px;
     display: flex;
     flex-direction: row;
 }

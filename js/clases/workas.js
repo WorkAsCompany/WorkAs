@@ -1,12 +1,10 @@
 "use strict";
-import { Calendario } from "./calendario.js";
+import { Chat } from "./chat.js";
 
 import * as Plantilla from "../bibliotecas/plantilla.js";
 import * as General from "../bibliotecas/general.js";
 
-import { onSnapshot } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-
-/*  --- BIBLIOTECA WORKAS ---  */
+/*  --- CLASE WORKAS ---  */
 //Tenemos todas las fuciones o procedimientos que nos pueden ser utiles para trabajar con nuestra aplicación principal.
 var doc = document;
 var opAside;
@@ -14,9 +12,7 @@ var opAside;
 var arrayEmpleados = [];
 var empleadoEnEdicion;
 
-var chatSlc = "";
-
-class Workas extends Calendario {
+class Workas extends Chat {
     constructor() {
         super();
     }
@@ -185,12 +181,6 @@ class Workas extends Calendario {
             div.innerHTML = `<p class="mensajeInfo">No hay empleados añadidos todavía.</p>`;
         } 
 
-        //Realizará la tabla con dataTables
-        /*$(doc).ready(function() {
-            $('#tablaEmpleados').DataTable({
-                responsive: true
-            });
-        } ); */
         $(doc).ready(function() {    
             $('#tablaEmpleados').DataTable({
                 responsive: true,
@@ -457,7 +447,6 @@ class Workas extends Calendario {
     crearPaginaInicialWorkasEmpresa = async() => {
         var iconoPerfil = doc.getElementsByClassName("imgIconoPerfil");
         var empresa = await this.devolverEmpresa(this.getUsu().id);
-        await this.actualizarEstadoConectado(empresa.id, true, "empresa")
 
         var imgPerfil = (empresa.data().iconoPerfil === "") ? "./img/empresaIcono.png" : empresa.data().iconoPerfil;
 
@@ -470,7 +459,6 @@ class Workas extends Calendario {
 
         var divChat = doc.getElementById("btnChat");
 
-        //this.mostrarDatosEmpresa();
         this.modificarPaginaOpNavEmpleados();
         this.asignarEvColapsarAside();
         this.chatMostrarMsgChat();
@@ -545,64 +533,12 @@ class Workas extends Calendario {
                 false
             );
         }
-
-
-        /*//Añade las funciones a los elementos de menú de empleado.
-        var opcionTablonAnuncio = doc.getElementsByClassName("listOpcionesTablonAnuncio");
-        var opPerfil = doc.getElementById("iconoPerfil");
-        var opCalendario = doc.getElementById("enlCalendario");
-        for (let i = 0; i < opcionEmpleados.length; i++) {
-            if (opcionEmpleados[i].id === "listAnyadirEmp") {
-                this.asignarEvOpAnyadirEmpleado(opcionEmpleados[i]);
-            } else if (opcionEmpleados[i].id === "listListarEmp") {
-                this.asignarEvOpListarEmpleados(opcionEmpleados[i]);
-            }
-        }
-
-        //Añade las funciones a los elementos de menú de tablón de anuncio.
-        for (let i = 0; i < opcionTablonAnuncio.length; i++) {
-            if (opcionTablonAnuncio[i].id === "listCrearTablonAnuncio") {
-                this.asignarEvOpCrearTablonAnuncio(opcionTablonAnuncio[i]);
-            } else if (opcionTablonAnuncio[i].id === "listListarTablonAnuncio") {
-                this.asignarEvOpListarTablonAnuncio(opcionTablonAnuncio[i]);
-            }
-        }
-
-        opCalendario.addEventListener(
-            "click",
-            () => {
-                var calendario = doc.createElement("div");
-                calendario.setAttribute("id", "calendarioFestivos");
-                calendario.innerHTML = Plantilla.crearDivCalendarioInfo();
-                calendario.innerHTML += Plantilla.crearDivCalendarioGeneral();
-                doc.getElementById("principal").innerHTML = "<h2 id='tituloCal'>Calendario de Días Festivos</h2>";
-                doc.getElementById("principal").appendChild(calendario);
-                Calendario.evMeses();
-            },
-            false
-        );
-
-        opPerfil.addEventListener(
-            "mouseover",
-            (e) => {
-                doc.getElementById("iconoPerfil").getElementsByClassName("infoPerfil")[0].classList.remove("ocultar");
-            },
-            false
-        );
-
-        opPerfil.addEventListener(
-            "mouseout",
-            (e) => {
-                doc.getElementById("iconoPerfil").getElementsByClassName("infoPerfil")[0].classList.add("ocultar");
-            },
-            false
-        );*/
+        await this.actualizarEstadoConectado(empresa.id, true, "empresa")
     }
 
     crearPaginaInicialWorkasEmpleado = async() => {
         var iconoPerfil = doc.getElementsByClassName("imgIconoPerfil");
         var empleado = await this.devolverEmpleado(this.getUsu().id);
-        await this.actualizarEstadoConectado(empleado.id, true, "empleado");
 
         var imgPerfil = (empleado.data().iconoPerfil === "") ? "./img/empleadoIcono.png" : empleado.data().iconoPerfil;
 
@@ -617,14 +553,6 @@ class Workas extends Calendario {
         this.mostrarToastAnuncioNuevo();
         this.modificarPaginaOpNavTablonAnuncio("empleado");
         this.chatMostrarMsgChat();
-
-        /*doc.getElementById("").addEventListener(
-            "click",
-            (e) => {
- 
-            },
-            false
-        );*/
 
         for (let i = 0; i < iconoPerfil.length; i++) {
             iconoPerfil[i].addEventListener(
@@ -685,341 +613,8 @@ class Workas extends Calendario {
             },
             false
         );
+        await this.actualizarEstadoConectado(empleado.id, true, "empleado");
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    mostrarListadoUsuChat = async(tipoUsu) => {
-        var conversacion = [
-            {
-                idUsu: "",
-                fecha: new Date(),
-                mensaje: ""
-            }
-        ]
-
-        var pinGrupo = [
-            {
-                texto: "",
-                fPubli: new Date(),
-                imgPin: "",
-                enlaces: []
-            }
-        ]
-
-        var status = {
-            info: "",
-            emoji: ""
-        }
-
-    }
-
-    chatMostrarMsgChat = async() => {
-        var usuSesion = await this.devolverEmpresa(this.getUsu().id);
-        const chats = await onSnapshot(this.devolverEnlace("chat"), (chats) => {
-            var nMsg = 0;
-            chats.docs.map((chat) => {
-                if(chat.data().conversacion != null && chat.data().conversacion.length > 0 && chat.data().arrayUsuariosChat.includes(usuSesion.id) && chat.data().conversacion[chat.data().conversacion.length-1].idUsu != usuSesion.id) {
-                    nMsg += chat.data().nMsgSinLeer;
-                }
-            });
-            nMsg = nMsg === 0 ? "0": nMsg < 100 ? `${nMsg}+`: "99+";
-            doc.getElementById("btnChat").getElementsByClassName("badge")[0].innerHTML = "";
-            doc.getElementById("btnChat").getElementsByClassName("badge")[0].innerHTML = nMsg;
-
-        });
-    }
-
-    mostrarMsgConversacion = async(chat, nMsgSinLeer) =>  {
-        doc.getElementById("conversacion").innerHTML = "";
-        var usuSesion = await this.devolverEmpresa(this.getUsu().id);
-        var conver = "";
-
-            if(chatSlc === chat.id && chat.data().conversacion != null) {
-                var conversacion = chat.data().conversacion;
-                var cambioDia = new Date(0);
-                for (let i = 0; i < conversacion.length; i++) {
-                    var fechaMsg = new Date(conversacion[i].fecha.seconds * 1000)
-
-                    if(fechaMsg.getDay() !== cambioDia.getDay()) {
-                        conver += Plantilla.crearDivMostrarDiaConversacion(fechaMsg);
-                        cambioDia = new Date(conversacion[i].fecha.seconds * 1000)
-                    }
-
-                    if(nMsgSinLeer !== 0 && nMsgSinLeer === (conversacion.length-i) && chat.data().conversacion[chat.data().conversacion.length-1].idUsu != usuSesion.id) {
-                        conver += "<div class='divMsgSinLeer'>Mensajes no leídos</div>";
-                    }
-
-                    var esUsuSesion = conversacion[i].idUsu === usuSesion.id;
-
-                    conver += Plantilla.crearPlantillaMensaje(conversacion[i], esUsuSesion);
-                }
-            }
-
-        doc.getElementById("conversacion").innerHTML = conver;
-        doc.getElementById("conversacion").scrollTop = doc.getElementById("conversacion").scrollHeight;
-    }
-
-    enviarMensajeChat = async() =>  {
-        var inputTxt = doc.getElementsByClassName("emojionearea-editor")[0];
-
-        if(inputTxt.innerHTML === "") return;
-
-        var msg =   {
-                        idUsu: this.getUsu().id,
-                        fecha: new Date(),
-                        mensaje: inputTxt.innerHTML
-                    };
-
-        var chat = await this.devolverChat(chatSlc);
-        await this.actualizarConversacion(chatSlc, chat.data().nMsgSinLeer, msg);
-
-        inputTxt.innerHTML = "";
-    }
-
-    asignarEvEnviarMensajeChat() {
-        var btn = doc.getElementById("inputEnviarMsg");
-        btn.addEventListener(
-            "click",
-            (e) => {
-                this.enviarMensajeChat();
-            },
-            false
-        );
-    }
-
-    slcUsuListChat = async(tipoUsu) => {
-        if(tipoUsu === "empresa") {
-            var empleadosArray = await this.devolverEmpleadosEmpresa(this.getUsu().id);
-            var usuSesion = await this.devolverEmpresa(this.getUsu().id);
-        } else {
-            var usuSesion = await this.devolverEmpleado(this.getUsu().id);
-            var empresaEmpleado = await this.devolverEmpresa(usuSesion.data().idEmpresa);
-            var empleadosArray = await this.devolverEmpleadosEmpresa(usuSesion.data().idEmpresa);
-        }
-
-        var nMsgSinLeer =  await this.devolverChat(chatSlc);
-        doc.getElementById("divChatConversacion").classList.remove("ocultar")
-        doc.getElementById("divChatConversacion").classList.add("animate__animated", "animate__fadeIn")
-
-        await this.actualizarNMsgSinLeer(chatSlc, 0);
-        doc.getElementsByClassName("emojionearea-editor")[0].innerHTML = "";
-
-        const chats = await onSnapshot(this.devolverEnlace("chat"), (chats) => {
-
-            chats.docs.map((chat) => {
-
-                if(chatSlc === chat.id) {
-                    var idUsu = chat.data().arrayUsuariosChat;
-                    idUsu.splice(chat.data().arrayUsuariosChat.indexOf(usuSesion.id), 1);
-                    idUsu = idUsu[0];
-                    console.log(idUsu)
-                    var usu = empleadosArray.docs.filter(usu => usu.id === idUsu)[0];
-
-                    if(tipoUsu === "empresa") {
-                        doc.getElementById("imgChatSlc").innerHTML = usu.data().iconoPerfil ? `<img src="${usu.data().iconoPerfil}" alt="">` : "<img src='./img/empleadoIcono.png' alt=''>";
-                        doc.getElementById("nombreUsuChatSlc").innerHTML = `${usu.data().nombre} ${usu.data().apellidos}`;
-
-                        this.mostrarMsgConversacion(chat, nMsgSinLeer.data().nMsgSinLeer);     
-
-                    } else if(idUsu !== empresaEmpleado.id) {
-                        doc.getElementById("imgChatSlc").innerHTML = usu.data().iconoPerfil ? `<img src="${usu.data().iconoPerfil}" alt="">` : "<img src='./img/empleadoIcono.png' alt=''>";
-                        doc.getElementById("nombreUsuChatSlc").innerHTML = `${usu.data().nombre} ${usu.data().apellidos}`;
-
-                        this.mostrarMsgConversacion(chat, nMsgSinLeer.data().nMsgSinLeer);
-
-                    } else if(idUsu === empresaEmpleado.id) {
-                        doc.getElementById("imgChatSlc").innerHTML = empresaEmpleado.data().iconoPerfil ? `<img src="${empresaEmpleado.data().iconoPerfil}" alt="">` : "<img src='./img/empresaIcono.png' alt=''>";
-                        doc.getElementById("nombreUsuChatSlc").innerHTML = empresaEmpleado.data().rznSocial;
-
-                        this.mostrarMsgConversacion(chat, nMsgSinLeer.data().nMsgSinLeer);
-                    }
-
-                    
-
-                    /*var conversacion = chat.data().conversacion;
-
-                    if (conversacion == null) return;
-
-                    for (let i = 0; i < conversacion.length; i++) {
-                        doc.getElementById("conversacion"). innerHTML = this.getUsu().id === conversacion[i].idUsu 
-                        ? Plantilla.crearPlantillaMensaje(conversacion[i].mensaje, true) 
-                        : Plantilla.crearPlantillaMensaje(conversacion[i].mensaje, false);
-                    }*/
-                }
-            });  
-        });
-    }
-
-    asignarEvSlcUsuListChat(tipoUsu) {
-        var divChats = doc.getElementsByClassName("divUsuarioChat");
-        this.asignarEvVolverListChat();
-        for (let i = 0; i < divChats.length; i++) {
-            divChats[i].addEventListener(
-                "click",
-                async(e) => {
-                    chatSlc = divChats[i].id;
-                    this.slcUsuListChat(tipoUsu);
-                    doc.getElementById("divChatConversacion").classList.add("zIndexChat")
-                },
-                false
-            );
-        }
-    }
-
-    asignarEvVolverListChat() {
-        var btnVolver = doc.getElementById("btnVolverListChat");
-        btnVolver.addEventListener(
-            "click",
-            async(e) => {
-                doc.getElementById("divChatConversacion").classList.remove("zIndexChat")
-            },
-            false
-        );
-    }
-
-    modificarPaginaOpNavChat = async(tipoUsu) => {
-        if(tipoUsu === "empresa") {
-
-        }
-
-        doc.getElementById("principal").innerHTML = Plantilla.crearPlantillaChat();
-        this.obtenerListadoUsuariosChat(tipoUsu)
-
-        //Emojis
-        $(doc).ready(function() {
-            $("#inputMsgChat").emojioneArea({
-                pickerPosition: "top"
-            });
-        })
-    }
-
-    obtenerListadoUsuariosChat = async (tipoUsu) => {
-        var divListadoUsu = doc.getElementById("listadoUsuariosChat");
-        this.asignarEvEnviarMensajeChat();
-
-        if(tipoUsu === "empresa") {
-            var usuSesion = await this.devolverEmpresa(this.getUsu().id);
-            var empleadosArray = await this.devolverEmpleadosEmpresa(this.getUsu().id);
-            /*var arrayChat = await this.devolverColeccion("chat");*/
-
-            const usuarios = await onSnapshot(this.devolverEnlace("empleado"), (usuarios) => {
-                usuarios.docs.map((usuario) => {
-                    if(doc.getElementById("divChat") && doc.getElementById(usuario.id) != undefined) {
-                        var conectadoClass = usuario.data().conectado ? "conectado" : "desconectado";
-                        doc.getElementById(usuario.id).classList.remove("conectado");
-                        doc.getElementById(usuario.id).classList.remove("desconectado");
-                        doc.getElementById(usuario.id).classList.add(conectadoClass);
-                    }
-                })
-            });
-
-            const chats = await onSnapshot(this.devolverEnlace("chat"), (chats) => {
-                divListadoUsu.innerHTML = "";
-                chats = chats.docs.sort((a, b) => a.data().fLastMsg < b.data().fLastMsg) 
-                chats.map((chat) => {
-                    var idUsu = chat.data().arrayUsuariosChat;
-                    idUsu.splice(chat.data().arrayUsuariosChat.indexOf(usuSesion.id), 1);
-                    idUsu = idUsu[0];
-    
-                    var usu = empleadosArray.docs.filter(usu => usu.id ===  idUsu);
-                    if(usu != undefined && usuSesion.id === chat.data().idEmpresa && chat.data().arrayUsuariosChat.includes(usuSesion.id)) {
-    
-                        divListadoUsu.innerHTML += Plantilla.crearFilaListUsuChat(usu[0], chat, chatSlc);
-                    }
-                });  
-
-                this.asignarEvSlcUsuListChat(tipoUsu);
-            }); 
-
-        } else if(tipoUsu === "empleado") {
-            var usuSesion = await this.devolverEmpleado(this.getUsu().id);
-            var empresaEmpleado = await this.devolverEmpresa(usuSesion.data().idEmpresa);
-            var empleadosArray = await this.devolverEmpleadosEmpresa(usuSesion.data().idEmpresa);
-
-            const usuarios = await onSnapshot(this.devolverEnlace("empleado"), (usuarios) => {
-                usuarios.docs.map((usuario) => {
-
-                    if(doc.getElementById("divChat") && doc.getElementById(usuario.id) != undefined) {
-     
-                        var conectadoClass = usuario.data().conectado ? "conectado" : "desconectado";
-                        doc.getElementById(usuario.id).classList.remove("conectado");
-                        doc.getElementById(usuario.id).classList.remove("desconectado");
-                        doc.getElementById(usuario.id).classList.add(conectadoClass);
-                    }
-                })
-            });
-
-            const empresa = await onSnapshot(this.devolverEnlace("empresa"), (empresa) => {
-                empresa = empresa.docs[0];
-
-                if(doc.getElementById("divChat") && doc.getElementById(empresa.id) != undefined) {
-                    var conectadoClass = empresa.data().conectado ? "conectado" : "desconectado";
-                    doc.getElementById(empresa.id).classList.remove("conectado");
-                    doc.getElementById(empresa.id).classList.remove("desconectado");
-                    doc.getElementById(empresa.id).classList.add(conectadoClass);
-                }
-            });
-
-            const chats = await onSnapshot(this.devolverEnlace("chat"), (chats) => {
-                divListadoUsu.innerHTML = "";
-                chats = chats.docs.sort((a, b) => a.data().fLastMsg < b.data().fLastMsg) 
-
-                chats.map((chat) => {
-                    var idUsu = chat.data().arrayUsuariosChat;
-                    idUsu.splice(chat.data().arrayUsuariosChat.indexOf(usuSesion.id), 1);
-                    var usu = empleadosArray.docs.filter(usu => usu.id === idUsu[0]);
-
-                    if(idUsu[0] === usuSesion.data().idEmpresa) {
-                        usu = empresaEmpleado;
-                        
-                    } else if(usu.length > 0) {
-                        usu = usu[0];
-                    } else {
-                        usu = null;
-                    }
-
-                    if(usu != null && usuSesion.data().idEmpresa === chat.data().idEmpresa && chat.data().arrayUsuariosChat.includes(usu.id) && chat.data().arrayUsuariosChat.includes(usuSesion.id)) {
-                        divListadoUsu.innerHTML += Plantilla.crearFilaListUsuChat(usu, chat, chatSlc);
-                    }
-
-                });  
-
-                this.asignarEvSlcUsuListChat(tipoUsu);
-            }); 
-        }
-        
-        //Filtrar nombre usuario por input.
-        $(doc).ready(function() {
-            $("#inputBuscarUsuarioChat").on("keyup", function() {
-                var value = $(this).val().toLowerCase();
-                $(".nombreUsuGrupoChat").filter(function() {
-                    $(this.parentNode.parentNode).toggle($(this).text()
-                    .toLowerCase().indexOf(value) > -1)
-                });
-            });
-        });
-        doc.getElementsByClassName("emojionearea-editor")[0].innerHTML = "";
-    };
 }
 //Exportamos.
 export { Workas };

@@ -4,7 +4,7 @@ import * as Plantilla from "../bibliotecas/plantilla.js";
 
 import * as General from "../bibliotecas/general.js";
 
-/*  --- BIBLIOTECA Rotar Turno ---  */
+/*  --- CLASE ROTAR TURNO ---  */
 //Tenemos todas las fuciones o procedimientos que nos pueden ser utiles para trabajar con la rotación de turnos de los empleados pertenecientes a una empresa.
 var doc = document;
 

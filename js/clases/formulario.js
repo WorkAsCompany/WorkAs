@@ -9,7 +9,7 @@ import {
     signOut
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
    
-   /*  --- BIBLIOTECA FORMULARIO ---  */
+   /*  --- CLASE FORMULARIO ---  */
 //Tenemos todas las fuciones o procedimientos que nos pueden ser utiles para trabajar con los formularios.
 var doc = document;
 

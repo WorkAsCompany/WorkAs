@@ -297,23 +297,14 @@
     right: 0px;
 }
 
-.tablonMes > * {
-
-}
-
-  
-  /* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
-
 .cardAnuncio {
     width: 300px;
     margin: 0em auto;
     margin-bottom: 5em;
     break-inside: avoid-column;
     page-break-inside: avoid;
-    overflow: hidden; /* fix for firefox */
+    overflow: hidden;
 }
-
-
 
 .cardAnuncio:hover {
     transform: rotate(-2deg);
@@ -428,10 +419,6 @@
 }
 
 /* ESTADÍSTICAS ANUNCIO */
-#bodyEstadisticasAnuncio {
-
-}
-
 #bodyEstadisticasAnuncio .divEstadistica {
     display: flex;
     flex-direction: row;

@@ -64,14 +64,6 @@
     color: white;
 }
 
-/*#asidePrincipal .asideElInfo {
-    visibility: hidden;
-}
-
-#asidePrincipal:hover .asideElInfo {
-    visibility: visible;
-}*/
-
 #asidePrincipal .ocultarAsideHover {
     position: absolute;
     top: -9999px;
@@ -215,10 +207,6 @@
         gap: 5px;
     }
 
-    #asidePrincipal .divServicioAside {
- 
-    }
-    
     #asidePrincipal .divServicioAside:hover {
         cursor: pointer;
         background-color: #08274C;

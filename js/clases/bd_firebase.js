@@ -1,24 +1,20 @@
 "use strict";
-import { app, autentificacion } from "../bibliotecas/datosFirebase.js";
+import { app } from "../bibliotecas/datosFirebase.js";
 import { getStorage, ref, uploadBytes, getDownloadURL  } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
 import {
     getFirestore,
     collection,
     getDocs,
     getDoc,
-    onSnapshot,
     doc,
     query,
     where,
     orderBy,
     limit,
     addDoc,
-    setDoc,
     updateDoc,
     arrayUnion,
-    arrayRemove,
     deleteDoc,
-    deleteField
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 /*  --- CLASE BD_FIREBASE ---  */
 //Tenemos todas las fuciones o procedimientos de la clase BD_FIREBASE que nos pueden ser utiles para atacar a la base de datos de firebase.
@@ -195,7 +191,6 @@ class BD_Firebase {
             turno: turno
         });
     }
-
 
     /*TABLON*/
 
@@ -402,10 +397,6 @@ class BD_Firebase {
         );
         return getDocs(consulta);
     }
-    
-
-
-
 
     /*CHAT*/
 
@@ -456,7 +447,7 @@ class BD_Firebase {
     actualizarConversacion(idChat, nMsgSinLeer, msg) {
         var chat = doc(this.devolverEnlace("chat"), idChat);
         nMsgSinLeer++;
-        console.log(chat.nMsgSinLeer)
+
         return updateDoc(chat, {
             fLastMsg: msg.fecha,
             nMsgSinLeer: nMsgSinLeer,

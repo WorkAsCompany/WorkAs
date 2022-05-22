@@ -7,9 +7,10 @@ var contadorCollapse = 1;
 
 //Añade el elemento pasado por parámetro a otro elemento con la id pasada por parámetro.
 export const anyadirElemento = (id, elemento) => {
-        doc.getElementById(id).appendChild(elemento);
-    }
-    //Limpia el formulario pasado por parámetro.
+    doc.getElementById(id).appendChild(elemento);
+}
+
+//Limpia el formulario pasado por parámetro.
 export const limpiar = (formulario) => {
     formulario.reset();
 }
@@ -261,26 +262,6 @@ export const devolverEditarEmpleadoForm = () => {
         </div>`;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //Añade al DOM lo que sería la estructura de la página web si se ha iniciado sesión como empresa.
 export const crearPaginaInicialEmpresa = (usu, imgPerfil) => {
     return `<nav id="navBarPrincipal" class="navbar navbar-expand-lg navbar-dark">
@@ -299,20 +280,16 @@ export const crearPaginaInicialEmpresa = (usu, imgPerfil) => {
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <div class="navbar-nav me-auto mb-2 mb-lg-0"></div>
                         <ul class="navbar-nav">
-                            <li id="opNavEmpleados" class="nav-item" data-bs-toggle="collapse"
-                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
+                            <li id="opNavEmpleados" class="nav-item">
                                 <a class="nav-link active" aria-current="page">Empleados</a>
                             </li>
-                            <li id="opNavCalendario" class="nav-item" data-bs-toggle="collapse"
-                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
+                            <li id="opNavCalendario" class="nav-item">
                                 <a class="nav-link active" aria-current="page">Calendario</a>
                             </li>
-                            <li id="opNavTablon" class="nav-item" data-bs-toggle="collapse"
-                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
+                            <li id="opNavTablon" class="nav-item">
                                 <a class="nav-link active" aria-current="page">Tablón</a>
                             </li>
-                            <li id="opNavLogout" class="nav-item" data-bs-toggle="collapse"
-                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
+                            <li id="opNavLogout" class="nav-item">
                                 <a class="nav-link active" aria-current="page">Cerrar sesión</a>
                             </li>                            
                             <li id="iconoPerfil" class="divIconoPerfil collapse navbar-collapse">
@@ -361,16 +338,13 @@ export const crearPaginaInicialEmpleado = (usu, imgPerfil) => {
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <div class="navbar-nav me-auto mb-2 mb-lg-0"></div>
                         <ul class="navbar-nav">
-                            <li id="opNavCalendario" class="nav-item" data-bs-toggle="collapse"
-                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
+                            <li id="opNavCalendario" class="nav-item">
                                 <a class="nav-link active" aria-current="page">Calendario</a>
                             </li>
-                            <li id="opNavTablon" class="nav-item" data-bs-toggle="collapse"
-                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
+                            <li id="opNavTablon" class="nav-item">
                                 <a class="nav-link active" aria-current="page">Tablón</a>
                             </li>
-                            <li id="opNavLogout" class="nav-item" data-bs-toggle="collapse"
-                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent">
+                            <li id="opNavLogout" class="nav-item">
                                 <a class="nav-link active" aria-current="page">Cerrar sesión</a>
                             </li>
                             <li id="iconoPerfil" class="divIconoPerfil collapse navbar-collapse">
@@ -703,18 +677,6 @@ export const crearCardRotarTurno = (turno) => {
             </div>`;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 //Crea plantilla formulario anuncio.
 export const crearFormularioAnuncio = () => {
     return `<form id="formAnuncio" class="row g-3">
@@ -762,7 +724,6 @@ export const crearDivAgregarParrafo = () => {
                          
     return parrafo;
 }
-
 
 //Crea plantilla formulario anuncio.
 export const crearDivCrearAnuncio = () => {
@@ -1248,38 +1209,7 @@ export const crearDivFormSolicitarDias = () => {
             </div>`;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* CHAT */
 //Crea formato hora del chat.
 export const crearFormatoHoraChat = (fecha) => {
     return `${fecha.getHours()}:${(fecha.getMinutes()>=10 ? fecha.getMinutes(): `0${fecha.getMinutes()}`)}`;

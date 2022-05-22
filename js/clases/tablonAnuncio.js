@@ -1,4 +1,3 @@
-import { BD_Firebase } from "./bd_firebase.js";
 import { RotarTurno } from "./rotarTurno.js";
 import * as Plantilla from "../bibliotecas/plantilla.js";  
 import * as General from "../bibliotecas/general.js";

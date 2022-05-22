@@ -1,11 +1,9 @@
 "use strict";
-import { Workas } from "./clases/workas.js";
 import { Formulario } from "./clases/formulario.js";
 import * as Plantilla from "./bibliotecas/plantilla.js";
 window.onload = function() {
     var doc = document;
 
-    var workas = new Workas();
     var formulario = new Formulario();
 
     var btnEmpleado = doc.getElementById("enlaceEmpleado");
