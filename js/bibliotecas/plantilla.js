@@ -1365,7 +1365,7 @@ console.log(chat.data().conversacion)
     var conectadoClass = usuario.data().conectado ? "conectado" : "desconectado";
 
     if(usuario.data().tipoUsu === "empresa") {
-        nombreChat = `${usuario.data().rznSocial}<small> (Fijado)</small>`;
+        nombreChat = usuario.data().rznSocial;
         iconoPerfil = usuario.data().iconoPerfil ? usuario.data().iconoPerfil : "./img/empresaIcono.png";
     } else {
         nombreChat = `${usuario.data().nombre} ${usuario.data().apellidos}`;
@@ -1418,7 +1418,7 @@ export const crearPlantillaMensaje = (msg, esUsuSesion) => {
 }
 
 //Crea una plantilla del chat.
-export const crearPlantillaChat = (tipoUsu) => {
+export const crearPlantillaChat = () => {
     return `<div id="divChat" class="animate__animated animate__fadeIn">
                 <div id="divChatConversacion" class="ocultar">
                     <div id="headerChatUsuario">
@@ -1439,11 +1439,8 @@ export const crearPlantillaChat = (tipoUsu) => {
                         <h2>Chat</h2>
                         <input id="inputBuscarUsuarioChat" type="text" placeholder="Buscar">
                     </div>
-                    <div id="divListadoUsuarioGrupoChat">
-                        <div id="listadoUsuarios">
-                            ${tipoUsu === "empleado" ? "<div id='empresaChat'></div>" : ""}
-                            <div id="listadoUsuariosChat"></div>
-                        </div>
+                    <div id="listadoUsuarios">
+                        <div id="listadoUsuariosChat"></div>
                     </div>
                 </div>
             </div>

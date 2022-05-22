@@ -726,8 +726,7 @@ class Workas extends Calendario {
         const chats = await onSnapshot(this.devolverEnlace("chat"), (chats) => {
             var nMsg = 0;
             chats.docs.map((chat) => {
-
-                if(chat.data().conversacion > 0 && chat.data().arrayUsuariosChat.includes(usuSesion.id) && chat.data().conversacion[chat.data().conversacion.length-1].idUsu != usuSesion.id) {
+                if(chat.data().conversacion != null && chat.data().conversacion.length > 0 && chat.data().arrayUsuariosChat.includes(usuSesion.id) && chat.data().conversacion[chat.data().conversacion.length-1].idUsu != usuSesion.id) {
                     nMsg += chat.data().nMsgSinLeer;
                 }
             });
@@ -801,8 +800,8 @@ class Workas extends Calendario {
             var empleadosArray = await this.devolverEmpleadosEmpresa(this.getUsu().id);
             var usuSesion = await this.devolverEmpresa(this.getUsu().id);
         } else {
-            console.log("asdasdasd")
             var usuSesion = await this.devolverEmpleado(this.getUsu().id);
+            var empresaEmpleado = await this.devolverEmpresa(usuSesion.data().idEmpresa);
             var empleadosArray = await this.devolverEmpleadosEmpresa(usuSesion.data().idEmpresa);
         }
 
@@ -821,13 +820,29 @@ class Workas extends Calendario {
                     var idUsu = chat.data().arrayUsuariosChat;
                     idUsu.splice(chat.data().arrayUsuariosChat.indexOf(usuSesion.id), 1);
                     idUsu = idUsu[0];
-        
+                    console.log(idUsu)
                     var usu = empleadosArray.docs.filter(usu => usu.id === idUsu)[0];
 
-                    doc.getElementById("imgChatSlc").innerHTML = usu.data().iconoPerfil ? `<img src="${usu.data().iconoPerfil}" alt="">` : "<img src='./img/empleadoIcono.png' alt=''>";
-                    doc.getElementById("nombreUsuChatSlc").innerHTML = `${usu.data().nombre} ${usu.data().apellidos}`;
+                    if(tipoUsu === "empresa") {
+                        doc.getElementById("imgChatSlc").innerHTML = usu.data().iconoPerfil ? `<img src="${usu.data().iconoPerfil}" alt="">` : "<img src='./img/empleadoIcono.png' alt=''>";
+                        doc.getElementById("nombreUsuChatSlc").innerHTML = `${usu.data().nombre} ${usu.data().apellidos}`;
 
-                    this.mostrarMsgConversacion(chat, nMsgSinLeer.data().nMsgSinLeer);
+                        this.mostrarMsgConversacion(chat, nMsgSinLeer.data().nMsgSinLeer);     
+
+                    } else if(idUsu !== empresaEmpleado.id) {
+                        doc.getElementById("imgChatSlc").innerHTML = usu.data().iconoPerfil ? `<img src="${usu.data().iconoPerfil}" alt="">` : "<img src='./img/empleadoIcono.png' alt=''>";
+                        doc.getElementById("nombreUsuChatSlc").innerHTML = `${usu.data().nombre} ${usu.data().apellidos}`;
+
+                        this.mostrarMsgConversacion(chat, nMsgSinLeer.data().nMsgSinLeer);
+
+                    } else if(idUsu === empresaEmpleado.id) {
+                        doc.getElementById("imgChatSlc").innerHTML = empresaEmpleado.data().iconoPerfil ? `<img src="${empresaEmpleado.data().iconoPerfil}" alt="">` : "<img src='./img/empresaIcono.png' alt=''>";
+                        doc.getElementById("nombreUsuChatSlc").innerHTML = empresaEmpleado.data().rznSocial;
+
+                        this.mostrarMsgConversacion(chat, nMsgSinLeer.data().nMsgSinLeer);
+                    }
+
+                    
 
                     /*var conversacion = chat.data().conversacion;
 
@@ -866,7 +881,7 @@ class Workas extends Calendario {
 
         }
 
-        doc.getElementById("principal").innerHTML = Plantilla.crearPlantillaChat(tipoUsu);
+        doc.getElementById("principal").innerHTML = Plantilla.crearPlantillaChat();
         this.obtenerListadoUsuariosChat(tipoUsu)
 
         //Emojis
@@ -879,7 +894,6 @@ class Workas extends Calendario {
 
     obtenerListadoUsuariosChat = async (tipoUsu) => {
         var divListadoUsu = doc.getElementById("listadoUsuariosChat");
-        var divChatEmpresa = doc.getElementById("empresaChat");
         this.asignarEvEnviarMensajeChat();
 
         if(tipoUsu === "empresa") {
@@ -918,12 +932,13 @@ class Workas extends Calendario {
 
         } else if(tipoUsu === "empleado") {
             var usuSesion = await this.devolverEmpleado(this.getUsu().id);
+            var empresaEmpleado = await this.devolverEmpresa(usuSesion.data().idEmpresa);
             var empleadosArray = await this.devolverEmpleadosEmpresa(usuSesion.data().idEmpresa);
 
             const usuarios = await onSnapshot(this.devolverEnlace("empleado"), (usuarios) => {
                 usuarios.docs.map((usuario) => {
 
-                    if(doc.getElementById(usuario.id) != undefined) {
+                    if(doc.getElementById("divChat") && doc.getElementById(usuario.id) != undefined) {
      
                         var conectadoClass = usuario.data().conectado ? "conectado" : "desconectado";
                         doc.getElementById(usuario.id).classList.remove("conectado");
@@ -933,6 +948,17 @@ class Workas extends Calendario {
                 })
             });
 
+            const empresa = await onSnapshot(this.devolverEnlace("empresa"), (empresa) => {
+                empresa = empresa.docs[0];
+
+                if(doc.getElementById("divChat") && doc.getElementById(empresa.id) != undefined) {
+                    var conectadoClass = empresa.data().conectado ? "conectado" : "desconectado";
+                    doc.getElementById(empresa.id).classList.remove("conectado");
+                    doc.getElementById(empresa.id).classList.remove("desconectado");
+                    doc.getElementById(empresa.id).classList.add(conectadoClass);
+                }
+            });
+
             const chats = await onSnapshot(this.devolverEnlace("chat"), (chats) => {
                 divListadoUsu.innerHTML = "";
                 chats = chats.docs.sort((a, b) => a.data().fLastMsg < b.data().fLastMsg) 
@@ -940,30 +966,25 @@ class Workas extends Calendario {
                 chats.map((chat) => {
                     var idUsu = chat.data().arrayUsuariosChat;
                     idUsu.splice(chat.data().arrayUsuariosChat.indexOf(usuSesion.id), 1);
-                    console.log(idUsu)
                     var usu = empleadosArray.docs.filter(usu => usu.id === idUsu[0]);
 
-                    if(usu.length > 0) {
+                    if(idUsu[0] === usuSesion.data().idEmpresa) {
+                        usu = empresaEmpleado;
+                        
+                    } else if(usu.length > 0) {
                         usu = usu[0];
-                        if(usuSesion.data().idEmpresa === chat.data().idEmpresa && chat.data().arrayUsuariosChat.includes(usu.id) && chat.data().arrayUsuariosChat.includes(usuSesion.id)) {
-    
-                            divListadoUsu.innerHTML += Plantilla.crearFilaListUsuChat(usu, chat, chatSlc);
-                        }
+                    } else {
+                        usu = null;
                     }
+
+                    if(usu != null && usuSesion.data().idEmpresa === chat.data().idEmpresa && chat.data().arrayUsuariosChat.includes(usu.id) && chat.data().arrayUsuariosChat.includes(usuSesion.id)) {
+                        divListadoUsu.innerHTML += Plantilla.crearFilaListUsuChat(usu, chat, chatSlc);
+                    }
+
                 });  
 
                 this.asignarEvSlcUsuListChat(tipoUsu);
             }); 
-
-            /*const empresa = await onSnapshot(this.devolverEnlace("empresa"), (empresas) => {
-                divChatEmpresa.innerHTML = "";
-                empresas.docs.map((usuario) => {
-                    if(usuSesion.data().idEmpresa === usuario.id) {
-                        divChatEmpresa.innerHTML += Plantilla.crearFilaListUsuChat(usuario, chat, chatSlc);
-                    }
-                });
-                this.asignarEvSlcUsuListChat(tipoUsu)
-            });*/
         }
         
         //Filtrar nombre usuario por input.
