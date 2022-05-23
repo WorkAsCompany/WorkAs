@@ -48,16 +48,16 @@ class Chat extends Calendario {
                         cambioDia = new Date(conversacion[i].fecha.seconds * 1000)
                     }
 
-                    if(nMsgSinLeer !== 0 && nMsgSinLeer === (conversacion.length-i) && chat.data().conversacion[chat.data().conversacion.length-1].idUsu != usuSesion.id && contChat === 0) {
+                    /*if(nMsgSinLeer !== 0 && nMsgSinLeer === (conversacion.length-i) && chat.data().conversacion[chat.data().conversacion.length-1].idUsu) {
                         conver += "<div class='divMsgSinLeer'>Mensajes no leídos</div>";
-                    }
+                    }*/
 
                     var esUsuSesion = conversacion[i].idUsu === usuSesion.id;
 
                     conver += Plantilla.crearPlantillaMensaje(conversacion[i], esUsuSesion);
                 }
             }
-            console.log(contChat)
+
         contChat++;
         doc.getElementById("conversacion").innerHTML = conver;
         doc.getElementById("conversacion").scrollTop = doc.getElementById("conversacion").scrollHeight;
@@ -94,9 +94,6 @@ class Chat extends Calendario {
     slcUsuListChat = async(tipoUsu, idChat) => {
         if(chatSlc !== "") {
             var msg = await this.actualizarNMsgSinLeer(chatSlc, 0);
-            console.log(chatSlc)
-            console.log("eliminado")
-            console.log(msg)
         }
 
         chatSlc = idChat;
