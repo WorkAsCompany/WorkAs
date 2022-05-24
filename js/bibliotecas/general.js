@@ -5,6 +5,18 @@ var doc = document;
 var contadorAlerts = 1;
 var contadorToasts = 1;
 
+    //Permite iniciar sesión o registrarse con la tecla enter.
+    export const evTeclaEnterForm = (idBtn, inputs) => {
+        var inputs = doc.getElementsByClassName(inputs);
+        for (let i = 0; i < inputs.length; i++) {
+            inputs[i].addEventListener("keypress", function onEvent(event) {
+                if (event.key === "Enter") {
+                    doc.getElementById(idBtn).click();
+                }
+            });
+        }
+    }
+
 export const crearAlert = (msg, tipoAlert) => {
     var alert = doc.createElement("div");
     var idAlert = `alert${contadorAlerts}`;

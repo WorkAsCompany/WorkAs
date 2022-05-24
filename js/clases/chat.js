@@ -179,7 +179,7 @@ class Chat extends Calendario {
         }
 
         doc.getElementById("principal").innerHTML = Plantilla.crearPlantillaChat();
-        this.obtenerListadoUsuariosChat(tipoUsu)
+        this.obtenerListadoUsuariosChat(tipoUsu);
 
         //Emojis
         $(doc).ready(function() {

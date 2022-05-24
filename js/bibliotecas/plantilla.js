@@ -149,38 +149,38 @@ export const devolverCrearEmpleadoForm = () => {
                         <form id="formCrearEmpleado">
                             <div class="mb-3">
                                 <label for="txtDni" class="form-label">DNI</label>
-                                <input type="text" class="form-control" id="txtDni" placeholder="Introduce el dni">
+                                <input type="text" class="form-control inputAnyadirEmpleado" id="txtDni" placeholder="Introduce el dni">
                                 <div id="dniMsgError" class="form-text">We'll never share your email with anyone
                                     else.</div>
                             </div>
                             <div class="mb-3">
                                 <label for="txtNombre" class="form-label">Nombre Empleado</label>
-                                <input type="text" class="form-control" id="txtNombre" placeholder="Introduce el nombre">
+                                <input type="text" class="form-control inputAnyadirEmpleado" id="txtNombre" placeholder="Introduce el nombre">
                                 <div id="nombreEmpeladoMsgError" class="form-text">We'll never share your email
                                     with anyone else.</div>
                             </div>
                             <div class="mb-3">
                                 <label for="txtApellidos" class="form-label">Apellidos Empleado</label>
-                                <input type="text" class="form-control" id="txtApellidos" placeholder="Introduce los apellidos">
+                                <input type="text" class="form-control inputAnyadirEmpleado" id="txtApellidos" placeholder="Introduce los apellidos">
                                 <div id="apellidosEmpeladoMsgError" class="form-text">We'll never share your
                                     email with anyone else.</div>
                             </div>
                             <div class="mb-3">
                                 <label for="txtEmail" class="form-label">Correo Electrónico</label>
-                                <input type="email" class="form-control" id="txtEmail" placeholder="Introduce el email">
+                                <input type="email" class="form-control inputAnyadirEmpleado" id="txtEmail" placeholder="Introduce el email">
                                 <div id="emailMsgError" class="form-text">We'll never share your email with
                                     anyone else.</div>
                             </div>
                             <div class="mb-3">
                                 <label for="txtPuestoTrabajo" class="form-label">Puesto trabajo</label>
-                                <input type="text" class="form-control" id="txtPuestoTrabajo"
+                                <input type="text" class="form-control inputAnyadirEmpleado" id="txtPuestoTrabajo"
                                     placeholder="Introduce el puesto de trabajo">
                                 <div id="puestoMsgError" class="form-text">We'll never share your email with
                                     anyone else.</div>
                             </div>
                             <div class="mb-3">
                                 <label for="turnoJornada" class="form-label">Elije el turno</label>
-                                <select id="turnoJornada" class="form-select" aria-label="Select">
+                                <select id="turnoJornada" class="form-select inputAnyadirEmpleado" aria-label="Select">
                                     <option value="noSelec">No seleccionado</option>
                                     <option value="Diurno">Diurno</option>
                                     <option value="Mixto">Mixto</option>
@@ -212,38 +212,38 @@ export const devolverEditarEmpleadoForm = () => {
                         <form id="formEditarEmpleado">
                             <div class="mb-3">
                                 <label for="txtEditarDni" class="form-label">DNI</label>
-                                <input type="text" class="form-control" id="txtEditarDni" placeholder="Introduce el dni">
+                                <input type="text" class="form-control inputEditarEmpleado" id="txtEditarDni" placeholder="Introduce el dni">
                                 <div id="dniMsgError" class="form-text">We'll never share your email with anyone
                                     else.</div>
                             </div>
                             <div class="mb-3">
                                 <label for="txtEditarNombre" class="form-label">Nombre Empleado</label>
-                                <input type="text" class="form-control" id="txtEditarNombre" placeholder="Introduce el nombre">
+                                <input type="text" class="form-control inputEditarEmpleado" id="txtEditarNombre" placeholder="Introduce el nombre">
                                 <div id="nombreEmpeladoMsgError" class="form-text">We'll never share your email
                                     with anyone else.</div>
                             </div>
                             <div class="mb-3">
                                 <label for="txtEditarApellidos" class="form-label">Apellidos Empleado</label>
-                                <input type="text" class="form-control" id="txtEditarApellidos" placeholder="Introduce los apellidos">
+                                <input type="text" class="form-control inputEditarEmpleado" id="txtEditarApellidos" placeholder="Introduce los apellidos">
                                 <div id="apellidosEmpeladoMsgError" class="form-text">We'll never share your
                                     email with anyone else.</div>
                             </div>
                             <div class="mb-3">
                                 <label for="txtEditarEmail" class="form-label">Correo Electrónico</label>
-                                <input type="email" class="form-control" id="txtEditarEmail" placeholder="Introduce el email" disabled>
+                                <input type="email" class="form-control inputEditarEmpleado" id="txtEditarEmail" placeholder="Introduce el email" disabled>
                                 <div id="emailMsgError" class="form-text">We'll never share your email with
                                     anyone else.</div>
                             </div>
                             <div class="mb-3">
                                 <label for="txtEditarPuestoTrabajo" class="form-label">Puesto trabajo</label>
-                                <input type="text" class="form-control" id="txtEditarPuestoTrabajo"
+                                <input type="text" class="form-control inputEditarEmpleado" id="txtEditarPuestoTrabajo"
                                     placeholder="Introduce el puesto de trabajo">
                                 <div id="puestoMsgError" class="form-text">We'll never share your email with
                                     anyone else.</div>
                             </div>
                             <div class="mb-3">
                                 <label for="turnoJornada" class="form-label">Elije el turno</label>
-                                <select id="turnoEditarJornada" class="form-select" aria-label="Select">
+                                <select id="turnoEditarJornada" class="form-select inputEditarEmpleado" aria-label="Select">
                                     <option value="noSelec">No seleccionado</option>
                                     <option value="Diurno">Diurno</option>
                                     <option value="Mixto">Mixto</option>
@@ -600,7 +600,7 @@ export const crearDivRotarTurno = () => {
             <div id="divBuscadorPuesto" class="offset-2 offset-sm-0 col-8 col-sm-3 col-xxl-2">
                 <div id="msgPuestoTrabajo">Mostrando resultados de <span id="spanPuestoTrabajo">.....</span></div>
                 <div class="input-group align-items-center">
-                    <input id="inputBuscarPorPuesto" type="text" placeholder="Buscar puesto"
+                    <input id="inputBuscarPorPuesto" class="inputBuscarPorPuesto" type="text" placeholder="Buscar puesto"
                         aria-label="Recipient's username" aria-describedby="button-addon2">
                     <div id="divBtnBuscarEmpleadoPuesto">
                         <input id="btnBuscarEmpleadoPuesto" type="image" src="./img/lupa.png">
@@ -683,30 +683,30 @@ export const crearFormularioAnuncio = () => {
 
                 <div class="col-12">
                     <label for="inputTitulo" class="form-label">Título*</label>
-                    <input type="text" class="form-control" id="inputTitulo" placeholder="Introduce el título">
+                    <input type="text" class="form-control inputCrearForm" id="inputTitulo" placeholder="Introduce el título">
                 </div>
 
                 <div class="col-12">
                     <label for="inputSubtitulo" class="form-label">Subtítulo</label>
-                    <input type="text" class="form-control" id="inputSubtitulo" placeholder="Introduce el subtítulo">
+                    <input type="text" class="form-control inputCrearForm" id="inputSubtitulo" placeholder="Introduce el subtítulo">
                 </div>
 
                 <div class="col-sm-6">
                     <label for="inputAutor" class="form-label">Autor*</label>
-                    <input type="text" class="form-control" id="inputAutor" placeholder="Introduce el autor">
+                    <input type="text" class="form-control inputCrearForm" id="inputAutor" placeholder="Introduce el autor">
                 </div>
                 <div class="col-sm-6">
                     <label for="inputImg" class="form-label">Imagen*</label>
-                    <input type="file" accept="image/*" class="form-control" id="inputAnyadirImg">
+                    <input type="file" accept="image/*" class="form-control inputCrearForm" id="inputAnyadirImg">
                 </div>
 
                 <div class="col-sm-6">
                     <label for="inputNombreEnl" class="form-label">Nombre enlace</label>
-                    <input type="text" class="form-control" id="inputNombreEnl" placeholder="Introduce el nombre del enlace">
+                    <input type="text" class="form-control inputCrearForm" id="inputNombreEnl" placeholder="Introduce el nombre del enlace">
                 </div>
                 <div class="col-sm-6">
                     <label for="inputEnl" class="form-label">Enlace</label>
-                    <input type="url" class="form-control" id="inputEnl" placeholder="Introduce el enlace">
+                    <input type="url" class="form-control inputCrearForm" id="inputEnl" placeholder="Introduce el enlace">
                 </div>
 
                 <div class="col-12">
@@ -719,7 +719,7 @@ export const crearFormularioAnuncio = () => {
 export const crearDivAgregarParrafo = () => {
     var parrafo = doc.createElement("div");
     parrafo.classList.add("form-floating", "divInputParrafo");
-    parrafo.innerHTML = `<textarea class="form-control inputParrafo" placeholder="Escribe un párrafo"></textarea>
+    parrafo.innerHTML = `<textarea class="form-control inputParrafo inputCrearForm" placeholder="Escribe un párrafo"></textarea>
                          <label>Escribe un párrafo</label>`;
                          
     return parrafo;
@@ -949,7 +949,7 @@ export const crearDivCalendario = () => {
                     <div id="divCalDiasFest"></div>
                 </div>
                 <div class="divCalendarioOp">
-                    <h3>Solicitudes</h3>
+                    <h3>Solicitudes <span id="tituloSolicitud">Pendientes</span></h3>
                     <div id="divMenuDiasSol">
                         <input id="btnSolPendientes" class="btnMenuDiasSol btnMenuDiasSolSlc" type="image" src="././././img/iconoListCheck.png" alt="">
                         <input id="btnSolResueltas" class="btnMenuDiasSol" type="image" src="././././img/iconoHistorial.png" alt="">
@@ -989,11 +989,16 @@ export const crearFilaDiaSolicitado = (diaSol, tipoUsu, empleado) => {
     var claseEstado = `bordePendiente`;
     var estado = `<div class="estadoSol amarillo">Pendiente</div>`;
     var desc = "";
+    var enCurso = "";
 
     if(!diaSol.data().pendiente) {
-        if (diaSol.data().aceptada) {
+        if(fFin < fechaHoy) {
+            claseEstado = `bordeExpirado`;
+            estado = `<div class="estadoSol cianOscuro">Expirada</div>`;
+        } else if (diaSol.data().aceptada) {
             claseEstado = `bordeAceptada`;
             estado = `<div class="estadoSol oliva">Aceptada</div>`;
+            enCurso = "En curso...";
         } else {
             claseEstado = `bordeRechazada`;
             estado = `<div class="estadoSol rojoOscuro">Rechazada</div>`;
@@ -1058,7 +1063,7 @@ export const crearFilaDiaSolicitado = (diaSol, tipoUsu, empleado) => {
     if(tipoUsu === "empresa" && enl === "<div></div>") {
         var enl = tipoUsu === "empresa" && !diaSol.data().pendiente && fComienzo >= fechaHoy
         ? `<a id="${diaSol.id}" class="enlDeshacerSol">Deshacer</a>`
-        : "<div></div>";
+        : `<div>${enCurso !== "" ? enCurso : ""}</div>`;
     }
 
     contadorCollapse++;
@@ -1068,13 +1073,10 @@ export const crearFilaDiaSolicitado = (diaSol, tipoUsu, empleado) => {
                 </div>
                 <div class="divAsunto"><strong>Asunto:</strong> ${diaSol.data().asunto}</div>
                 <div class="divSolicitante"><strong>Solicitante:</strong> ${empleado.data().nombre } ${empleado.data().apellidos }</div>
-                <div class="divFechaComienzo">
+                <div class="divFechaSolicitud">
                     <img src="./img/calendarioDiaSolicitado.png" alt="">
-                    <span><strong>Desde:</strong> ${crearFormatoAnyoChat(fComienzo)}</span>                 
-                </div>
-                <div class="divFechaFin">
-                    <img src="./img/calendarioDiaSolicitado.png" alt="">
-                    <span><strong>Hasta:</strong> ${crearFormatoAnyoChat(fFin)}</span>                 
+                    <span><strong>Desde:</strong> ${crearFormatoAnyoChat(fComienzo)} </span>  
+                    <span><strong> , Hasta:</strong> ${crearFormatoAnyoChat(fFin)}</span>                 
                 </div>
                 <div class="divDescSol">
                     ${desc}
@@ -1100,15 +1102,15 @@ export const crearModalResolucionDiaSol = () => {
                                 <div>
                                     <label for="radioResol" class="form-label">Estado*</label>
                                     <div>
-                                        <input type="radio" class="btn-check" name="radioEstadoSol" value="true" id="aceptarSol" autocomplete="off" checked>
+                                        <input type="radio" class="btn-check inputResolucionDia" name="radioEstadoSol" value="true" id="aceptarSol" autocomplete="off" checked>
                                         <label class="btn btn-outline-success" for="aceptarSol">Aceptar</label>
                                         
-                                        <input type="radio" class="btn-check" name="radioEstadoSol" value="false" id="rechazarSol" autocomplete="off">
+                                        <input type="radio" class="btn-check inputResolucionDia" name="radioEstadoSol" value="false" id="rechazarSol" autocomplete="off">
                                         <label class="btn btn-outline-danger" for="rechazarSol">Rechazar</label>
                                     </div>
                                 </div>
                                 <div>
-                                    <label for="txtAreaDescResol" class="form-label">Descripción resolución</label>
+                                    <label for="txtAreaDescResol" class="form-label inputResolucionDia">Descripción resolución</label>
                                     <textarea class="form-control" id="txtAreaDescResol" rows="2"></textarea>
                                 </div>
                             </form>
@@ -1131,7 +1133,7 @@ export const crearDivFormDiaFest = () => {
     
     for (let i = 0; i < arrayColor.length; i++) {
         contenido += `  <div class="form-check">
-                            <input class="form-check-input ${arrayColor[i]}" type="radio" name="radioColor" value="${arrayColor[i]}" ${i === 0 ? "checked" : ""}>
+                            <input class="form-check-input ${arrayColor[i]} inputAnyadirDiaFest" type="radio" name="radioColor" value="${arrayColor[i]}" ${i === 0 ? "checked" : ""}>
                         </div>`;
     }
     return `<div class="offcanvas offcanvas-end" tabindex="-1" id="formDiaFest" aria-labelledby="formDiaFestLabel">
@@ -1143,15 +1145,15 @@ export const crearDivFormDiaFest = () => {
                     <form id="formCrearDiaFest" class="row g-3">
                         <div class="col-md-6">
                             <label for="inputNomFest" class="form-label">Nombre*</label>
-                            <input type="text" class="form-control" id="inputNomFest" placeholder="Nombre del día festivo">
+                            <input type="text" class="form-control inputAnyadirDiaFest" id="inputNomFest" placeholder="Nombre del día festivo">
                         </div>
                         <div class="col-md-6">
                             <label for="inputFDiaFest" class="form-label">Fecha*</label>
-                            <input type="date" class="form-control" id="inputFDiaFest">
+                            <input type="date" class="form-control inputAnyadirDiaFest" id="inputFDiaFest">
                         </div>
                         <div class="col-12">
                             <label for="inputEnlInteres" class="form-label">Enlace de interés</label>
-                            <input type="url" class="form-control" id="inputEnlInteres" placeholder="Enlace de interés">
+                            <input type="url" class="form-control inputAnyadirDiaFest" id="inputEnlInteres" placeholder="Enlace de interés">
                         </div>
                         <div class="col-12 radioColorCalendario">
                             <label for="radioColor" class="form-label">Color festivo*</label>
@@ -1185,15 +1187,15 @@ export const crearDivFormSolicitarDias = () => {
                     <form id="formSolicitarDiasAsunto" class="row g-3">
                         <div class="col-md-6">
                             <label for="inputFDiaComienzo" class="form-label">Desde*</label>
-                            <input type="date" class="form-control" id="inputFDiaComienzo">
+                            <input type="date" class="form-control inputSolicitarDias" id="inputFDiaComienzo">
                         </div>
                         <div class="col-md-6">
                             <label for="inputFDiaFin" class="form-label">Hasta*</label>
-                            <input type="date" class="form-control" id="inputFDiaFin">
+                            <input type="date" class="form-control inputSolicitarDias" id="inputFDiaFin">
                         </div>
                         <div class="col-12">
                             <label for="slcOpcionesAsuntos" class="form-label">Asunto*</label>
-                            <select id="slcOpcionesAsuntos" class="form-select" aria-label="Select">
+                            <select id="slcOpcionesAsuntos" class="form-select inputSolicitarDias" aria-label="Select">
                                 ${opciones}
                             </select>
                         </div>
@@ -1334,7 +1336,7 @@ export const crearPlantillaChat = () => {
                     </div>
                     <div id="conversacion"></div>
                     <div id="divInputChatUsuario">
-                        <textarea id="inputMsgChat" placeholder="Escribe tu mensaje">
+                        <textarea id="inputMsgChat" class="inputEnviarMsg" placeholder="Escribe tu mensaje">
                         </textarea>
                         <div id="divIconosInputMsg">
                             <input id="inputEnviarMsg" type="image" src="./img/iconoEnviarMsg.svg" alt="">

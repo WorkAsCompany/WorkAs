@@ -371,7 +371,7 @@ class BD_Firebase {
             where("idEmpresa", "==", `${idEmpresa}`),
             where("pendiente", "==", pendiente),
             where("fComienzo", ">=", fecha),
-            orderBy("fComienzo", "desc")
+            orderBy("fComienzo", "asc")
         );
         return getDocs(consulta);
     }
@@ -393,7 +393,7 @@ class BD_Firebase {
             where("idEmpleado", "==", `${idEmpleado}`),
             where("pendiente", "==", pendiente),
             where("fComienzo", ">=", fecha),
-            orderBy("fComienzo", "desc")
+            orderBy("fComienzo", "asc")
         );
         return getDocs(consulta);
     }

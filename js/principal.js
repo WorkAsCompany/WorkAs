@@ -1,6 +1,8 @@
 "use strict";
 import { Formulario } from "./clases/formulario.js";
 import * as Plantilla from "./bibliotecas/plantilla.js";
+import * as General from "./bibliotecas/general.js";
+
 window.onload = function() {
     var doc = document;
 
@@ -24,7 +26,7 @@ window.onload = function() {
             formulario.asignarEvComprobarFormTiempoReal();
             formulario.asignarEvComprobarInputRequeridos();
             formulario.asignarEvIniciarSesionRegistro("inicioEmpleado");
-            formulario.loguearTeclaEnter("btnLoginRegistrar");
+            General.evTeclaEnterForm("btnLoginRegistrar", "inputForm");
         },
         false
     );
@@ -38,14 +40,14 @@ window.onload = function() {
             formulario.asignarEvComprobarFormTiempoReal();
             formulario.asignarEvComprobarInputRequeridos();
             formulario.asignarEvIniciarSesionRegistro("inicioEmpresa");
-            formulario.loguearTeclaEnter("btnLoginRegistrar");
+            General.evTeclaEnterForm("btnLoginRegistrar", "inputForm");
         },
         false
     );
 
     formulario.asignarEvIniciarSesionRegistro("inicioEmpresa");
     formulario.cambiarFormRegistrarLogin();
-    formulario.loguearTeclaEnter("btnLoginRegistrar");
+    General.evTeclaEnterForm("btnLoginRegistrar", "inputForm");
 
     formulario.comprobarSesion();
 };

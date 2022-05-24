@@ -418,6 +418,7 @@ class TablonAnuncio extends RotarTurno {
         doc.getElementById("divFormCrearAnuncio").innerHTML += Plantilla.crearFormularioAnuncio();
 
         this.asignarEvBtnCrearAnuncio();
+        General.evTeclaEnterForm("btnCrearAnuncio", "inputCrearForm");
         this.asignarEvCrearParrafo();
     }
 

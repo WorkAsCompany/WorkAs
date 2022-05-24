@@ -21,6 +21,8 @@ class Calendario extends TablonAnuncio {
             doc.getElementById("principal").innerHTML += Plantilla.crearDivFormDiaFest(); 
             doc.getElementById("principal").innerHTML += Plantilla.crearModalResolucionDiaSol(); 
             this.asignarEvBtnResolverResolucion();
+            General.evTeclaEnterForm("btnResolucionSol", "inputResolucionDia");
+            General.evTeclaEnterForm("btnAnyadirDiaFest", "inputAnyadirDiaFest");
 
         } else {
             doc.getElementById("principal").innerHTML += Plantilla.crearDivFormSolicitarDias();  
@@ -177,17 +179,19 @@ class Calendario extends TablonAnuncio {
     mostrarSolicitudesPendientes = async(tipoUsu) => {
         var div = doc.getElementById("divCalSolicitud");
         div.innerHTML = "";
+        var arrayDias;
 
         var empleado;
 
         if(tipoUsu === "empresa") {
             var diasSol = await this.devolverDiasSolicitadosSegunEstadoEmpresa(this.getUsu().id, true);
+
         } else {
             empleado = await this.devolverEmpleado(this.getUsu().id)
             var diasSol = await this.devolverDiasSolicitadosSegunEstadoEmpleado(empleado.data().idEmpresa, this.getUsu().id, true);
         }
 
-        var arrayDias = diasSol.docs;
+        arrayDias = diasSol.docs.sort((a, b) => a.data().fEnviada > b.data().fEnviada) ;
 
         if (arrayDias.length > 0) {
             arrayDias.map(async(dias) => {
@@ -339,6 +343,7 @@ class Calendario extends TablonAnuncio {
                     this.deshacerResolucion(enl[i].id);
                     doc.getElementById("btnSolPendientes").classList.add("btnMenuDiasSolSlc");
                     doc.getElementById("btnSolResueltas").classList.remove("btnMenuDiasSolSlc");
+                    doc.getElementById("tituloSolicitud").innerHTML = "Pendientes";
                 },
                 false
             );
@@ -355,6 +360,7 @@ class Calendario extends TablonAnuncio {
                 if(!btn.classList.contains("btnMenuDiasSolSlc")) {
                     e.target.classList.add("btnMenuDiasSolSlc");
                     doc.getElementById("btnSolResueltas").classList.remove("btnMenuDiasSolSlc");
+                    doc.getElementById("tituloSolicitud").innerHTML = "Pendientes";
                 }
             },
             false
@@ -363,23 +369,30 @@ class Calendario extends TablonAnuncio {
 
     mostrarSolicitudesResueltas = async(tipoUsu) => {
         var div = doc.getElementById("divCalSolicitud");
+        var arrayDias = [];
+        var arrayDiasExpirados = [];
+        var fechaHoy = new Date();
+        fechaHoy.setDate(fechaHoy.getDate() - 1)
         div.innerHTML = "";
-
         var empleado;
 
         if(tipoUsu === "empresa") {
             var diasSol = await this.devolverDiasSolicitadosSegunEstadoEmpresa(this.getUsu().id, false);
+            var empleados =  await this.devolverEmpleadosEmpresa(this.getUsu().id)
         } else {
             empleado = await this.devolverEmpleado(this.getUsu().id)
             var diasSol = await this.devolverDiasSolicitadosSegunEstadoEmpleado(empleado.data().idEmpresa, this.getUsu().id, false);
         }
 
-        var arrayDias = diasSol.docs;
+        arrayDiasExpirados = diasSol.docs.filter(dia => new Date(dia.data().fFin.seconds * 1000) < fechaHoy);
+        arrayDiasExpirados = arrayDiasExpirados.sort((a, b) => a.data().fFin < b.data().fFin)
+        arrayDias = diasSol.docs.filter(dia => new Date(dia.data().fFin.seconds * 1000) > fechaHoy);
+        arrayDias = arrayDias.concat(arrayDiasExpirados);
 
         if (arrayDias.length > 0) {
             arrayDias.map(async(dias) => {
                 if(tipoUsu === "empresa") {
-                    empleado = await this.devolverEmpleado(dias.data().idEmpleado);
+                    empleado = empleados.docs.filter(empleadoEmpresa => empleadoEmpresa.id ===  dias.data().idEmpleado)[0];
                     div.innerHTML += `${Plantilla.crearFilaDiaSolicitado(dias, tipoUsu, empleado)}`;
                     this.asignarEvEnlDeshacerResolucion();
 
@@ -404,6 +417,7 @@ class Calendario extends TablonAnuncio {
                 if(!btn.classList.contains("btnMenuDiasSolSlc")) {
                     e.target.classList.add("btnMenuDiasSolSlc");
                     doc.getElementById("btnSolPendientes").classList.remove("btnMenuDiasSolSlc");
+                    doc.getElementById("tituloSolicitud").innerHTML = "Resueltas";
                 }
             },
             false

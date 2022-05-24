@@ -194,6 +194,12 @@
     background-color: rgba(139, 0, 0, 0.07);
 }
 
+.bordeExpirado {
+    border-top: 5px solid darkcyan;
+    border-right: 5px solid darkcyan;
+    background-color: rgba(176, 196, 222, 0.07);
+}
+
 /*Calendario Solicitar Días*/
 .divFilaDiaSolicitado {
     position: relative;
@@ -201,7 +207,11 @@
 }
 
 .divFilaDiaSolicitado > * {
-    padding: .5em 1em;
+    padding: .35em 1em;
+}
+
+.divFilaDiaSolicitado .accordion-button, .divFilaDiaSolicitado .accordion-body {
+    padding: 8px 20px;
 }
 
 #divMenuDiasSol {
@@ -227,12 +237,12 @@
     margin-top: 30px;
 }
 
-.divFechaComienzo, .divFechaFin {
+.divFechaSolicitud {
     display: flex;
     flex-direction: row;
 }
 
-.divFechaComienzo img, .divFechaFin img {
+.divFechaSolicitud img {
     width: 30px;
     margin-right: 15px;
     filter: invert(.25);

@@ -173,6 +173,7 @@ class RotarTurno extends BD_Firebase {
             "click",
             (e) => {
                 this.rotarEmpleados();
+                General.evTeclaEnterForm("btnBuscarEmpleadoPuesto", "inputBuscarPorPuesto");
             },
             false
         );

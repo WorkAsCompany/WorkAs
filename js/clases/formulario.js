@@ -1,6 +1,8 @@
 import { Workas } from "./workas.js";
 import * as Plantilla from "../bibliotecas/plantilla.js";  
 import { autentificacion } from "../bibliotecas/datosFirebase.js";
+import * as General from "../bibliotecas/general.js";
+
 import {
     getAuth,
     createUserWithEmailAndPassword,
@@ -51,18 +53,6 @@ class Formulario extends Workas {
                 this.entrarConSesion(usuario);
             }
           });
-    }
-    
-    //Permite iniciar sesión o registrarse con la tecla enter.
-    loguearTeclaEnter(id) {
-        var inputs = doc.getElementsByClassName("inputForm");
-        for (let i = 0; i < inputs.length; i++) {
-            inputs[i].addEventListener("keypress", function onEvent(event) {
-                if (event.key === "Enter") {
-                    doc.getElementById(id).click();
-                }
-            });
-        }
     }
 
     //Muestra el botón empresa como seleccionado y el de empleado como no seleccionado.
@@ -377,11 +367,8 @@ class Formulario extends Workas {
                     cp: "",
                     psswd: psswd,
                     repetirPsswd: "",
-                    tablonAnuncios: [],
                     iconoPerfil: "",
                     conectado: false,
-                    chatSlc: "",
-                    statusChat: null,
                     tipoUsu: "empresa"
                 }
             }
@@ -396,11 +383,8 @@ class Formulario extends Workas {
                     cp: cp,
                     psswd: psswd,
                     repetirPsswd: repPsswd,
-                    tablonAnuncios: [],
                     iconoPerfil: "",
                     conectado: false,
-                    chatSlc: "",
-                    statusChat: null,
                     tipoUsu: "empresa"
                 }
             }
@@ -418,8 +402,6 @@ class Formulario extends Workas {
                     codEmpleado: codEmpleado,
                     iconoPerfil: "",
                     conectado: false,
-                    chatSlc: "",
-                    statusChat: null,
                     tipoUsu: "empleado"
                 }
             }
@@ -437,8 +419,6 @@ class Formulario extends Workas {
                     codEmpleado: codEmpleado,
                     iconoPerfil: "",
                     conectado: false,
-                    chatSlc: "",
-                    statusChat: null,
                     tipoUsu: "empleado"
                 }
             }
@@ -465,7 +445,7 @@ class Formulario extends Workas {
                 this.cambiarFormRegistrarLogin()
                 this.asignarEvComprobarFormTiempoReal();
                 this.asignarEvComprobarInputRequeridos();
-                this.loguearTeclaEnter();
+                General.evTeclaEnterForm("btnLoginRegistrar", "inputForm");
             },
             false
         );
@@ -489,7 +469,7 @@ class Formulario extends Workas {
                 this.cambiarFormRegistrarLoginEmpleado()
                 this.asignarEvComprobarFormTiempoReal();
                 this.asignarEvComprobarInputRequeridos();
-                this.loguearTeclaEnter();
+                General.evTeclaEnterForm("btnLoginRegistrar", "inputForm");
             },
             false
         );

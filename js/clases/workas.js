@@ -76,8 +76,6 @@ class Workas extends Chat {
                 codEmpleado: codEmpleado,
                 iconoPerfil: "",
                 conectado: false,
-                chatSlc: "",
-                statusChat: null,
                 tipoUsu: "empleado"
             }
 
@@ -356,6 +354,9 @@ class Workas extends Chat {
         this.opListarEmpleados();
         this.asignarBtnEvTerminarEditarEmpleado();
         this.asignarEvAnyadirEmpleado();
+
+        General.evTeclaEnterForm("btnCrearEmpleado", "inputAnyadirEmpleado");
+        General.evTeclaEnterForm("btnEditarEmpleado", "inputEditarEmpleado");
     }
 
     asignarEvAdministrarEmpleados() {
@@ -432,6 +433,7 @@ class Workas extends Chat {
     modificarPaginaOpNavCalendario(tipoUsu) {
         opAside.innerHTML = Plantilla.crearOpAsideNavCalendario(tipoUsu);
         this.mostrarDivCalendario(tipoUsu)
+        General.evTeclaEnterForm("btnSolicitarDias", "inputSolicitarDias");
 
         if(tipoUsu === "empresa") {
             this.asignarEvAnyadirFestivo();
@@ -551,7 +553,7 @@ class Workas extends Chat {
 
         this.asignarEvColapsarAside();
         this.mostrarToastAnuncioNuevo();
-        this.modificarPaginaOpNavTablonAnuncio("empleado");
+        this.modificarPaginaOpNavCalendario("empleado");
         this.chatMostrarMsgChat();
 
         for (let i = 0; i < iconoPerfil.length; i++) {
