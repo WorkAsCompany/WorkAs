@@ -79,9 +79,10 @@ class Workas extends Chat {
                 tipoUsu: "empleado"
             }
 
-            var existeEmpleado = await this.devolverConsultaFiltrarEmpleadoCorreo(empleado.correo);
+            var existeEmpleadoCorreo = await this.devolverConsultaFiltrarEmpleadoCorreo(empleado.correo);
+            var existeEmpleadoDni = await this.devolverConsultaFiltrarEmpleadoDni(empleado.dni);
 
-            if (existeEmpleado.docs.length > 0) {
+            if (existeEmpleadoCorreo.docs.length > 0 || existeEmpleadoDni.docs.length > 0) {
                 alert = General.crearAlert("Error, ya existe el empleado.", "errorAlert");
                 div.insertBefore(alert, doc.getElementById("tituloListEmpleado"));
 
@@ -118,7 +119,8 @@ class Workas extends Chat {
 
                 await Promise.all(arrayAnyadirChat);
                 this.opListarEmpleados();
-                div.insertBefore(alert, doc.getElementById("tituloListEmpleado"));            }
+                div.insertBefore(alert, doc.getElementById("tituloListEmpleado"));            
+            }
         } else {
             alert = General.crearAlert("Error en la introducción de datos.", "errorAlert");
             div.insertBefore(alert, doc.getElementById("tituloListEmpleado"));
@@ -544,7 +546,9 @@ class Workas extends Chat {
 
         var imgPerfil = (empleado.data().iconoPerfil === "") ? "./img/empleadoIcono.png" : empleado.data().iconoPerfil;
 
-        doc.getElementById("contenidoFormulario").id = "contenido";
+        if(doc.getElementById("contenidoFormulario") != null) {
+            doc.getElementById("contenidoFormulario").id = "contenido";
+        }
         doc.getElementById("contenido").classList.add("colapsarContenido");
         doc.getElementById("contenido").innerHTML = Plantilla.crearPaginaInicialEmpleado(empleado, imgPerfil);
         opAside = doc.getElementById("asideOpciones");

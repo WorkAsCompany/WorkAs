@@ -8,7 +8,7 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     onAuthStateChanged,
-    signOut
+    signOut,
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
    
    /*  --- CLASE FORMULARIO ---  */
@@ -28,23 +28,20 @@ class Formulario extends Workas {
     }
 
     entrarConSesion = async(usuario) => {
-       /* var empresa = await this.devolverConsultaFiltrarUsuarioId(usuario.uid);
+        var empresa = await this.devolverConsultaFiltrarUsuarioId(usuario.uid);
         doc.body.classList.add("bodyFondo");
         this.setUsu(empresa.docs[0]);
 
         if(this.getUsu() == undefined) {
-            console.log(usuario.uid)
-
             var empleado = await this.devolverConsultaFiltrarEmpleadoId(usuario.uid);
+            this.setUsu(empleado.docs[0])
 
-            this.setUsu(empleado.docs[0]);
-            console.log(this.getUsu())
             if(this.getUsu() != undefined) {
                 this.crearPaginaInicialWorkasEmpleado();
             }
         } else {
             this.crearPaginaInicialWorkasEmpresa();
-        }*/
+        }
     }
 
     comprobarSesion() {
@@ -374,7 +371,7 @@ class Formulario extends Workas {
             }
         } else if (tipoForm === "singup") {
             var checkPoliticas = doc.getElementById("checkAceptarPoliticas");
-            if (this.comprobarCorreo(correo) && this.comprobarRazSocial(rznSocial) && this.comprobarDir(dir) && this.comprobarCP(cp) && this.comprobarContrasenya(psswd) && this.comprobarContrasenyaCorrecta(psswd, repPsswd) && this.comprobarContrasenya(repPsswd) && checkPoliticas.checked) {
+            if (this.comprobarCorreo(correo) && this.comprobarRazSocial(rznSocial) && (this.comprobarDir(dir) || dir === "") && this.comprobarCP(cp) && this.comprobarContrasenya(psswd) && this.comprobarContrasenyaCorrecta(psswd, repPsswd) && this.comprobarContrasenya(repPsswd) && checkPoliticas.checked) {
                 usuario = {
                     id: "",
                     correo: correo,
@@ -486,36 +483,22 @@ class Formulario extends Workas {
     }
 
     //Crea un empleado y lo añade a la bd.
-    crearUsuarioEmpleado(empleado) {
+    crearUsuarioEmpleado = async (empleado) => {
         var idUsu;
         var usuFiltrado;
-        createUserWithEmailAndPassword(autentificacion, empleado.correo, empleado.codEmpleado)
-            .then((credenciales) => {
-                idUsu = credenciales.user.uid;
-                console.log(idUsu)
-                return this.devolverConsultaFiltrarEmpleadoCorreo(empleado.correo);
-            }).then((datos) => {
-                console.log(datos.docs[0])
-                usuFiltrado = datos.docs[0];
-                console.log(usuFiltrado.id)
-                console.log(usuFiltrado.data())
-                usuFiltrado.data().id = usuFiltrado.id;
-                this.setUsu(usuFiltrado);
-                console.log(this.getUsu().id)
-                console.log(usuFiltrado.data())
-                /*ARREGLAR CONECTADO*/
-                return this.actualizarIdEmpleado(this.getUsu().id, usuFiltrado.id);
-            }).then((datos) => {
-                console.log("gfdkljnnlbhsujdfhguyiosdfhibiudflosj")
-                console.log(datos)
-                console.log(datos.id)
-                this.crearPaginaInicialWorkasEmpleado();
-            })
-            .catch((error) => {
-                console.log(error);
-                doc.getElementById("errorLoginSingup").innerHTML = "(*) Error, cuenta ya creada.";
-                doc.getElementById("errorLoginSingup").classList.remove("ocultar");
-            });
+        try {
+            var credenciales = await createUserWithEmailAndPassword(autentificacion, empleado.correo, empleado.codEmpleado)
+            idUsu = credenciales.user.uid;
+            var usuFiltrado = await this.devolverConsultaFiltrarEmpleadoCorreo(empleado.correo);
+            usuFiltrado = usuFiltrado.docs[0];
+
+            await this.actualizarIdEmpleado(usuFiltrado.id, idUsu);
+            this.setUsu(usuFiltrado);
+            this.crearPaginaInicialWorkasEmpleado();
+        } catch (error) {
+            doc.getElementById("errorLoginSingup").innerHTML = "(*) Error, cuenta ya creada.";
+            doc.getElementById("errorLoginSingup").classList.remove("ocultar");
+        }
     };
 
     //Crea un usuario y lo añade a la bd, además de mostrar la interfaz de empresa.
@@ -531,7 +514,6 @@ class Formulario extends Workas {
                 this.crearPaginaInicialWorkasEmpresa();
             })
             .catch((error) => {
-
                 doc.getElementById("errorLoginSingup").innerHTML = "(*) Error, cuenta ya creada.";
                 doc.getElementById("errorLoginSingup").classList.remove("ocultar");
             });

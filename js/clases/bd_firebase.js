@@ -104,6 +104,15 @@ class BD_Firebase {
         return getDocs(consulta);
     }
 
+    //Devuelve un documento de empleado por dni. 
+    devolverConsultaFiltrarEmpleadoDni(dni) {
+        var consulta = query(
+            this.devolverEnlace("empleado"),
+            where("dni", "==", `${dni}`)
+        );
+        return getDocs(consulta);
+    }
+
     //Añade un empleado al array de empleados de una empresa.
     actualizarArrayEmpleadoEmpresa(idEmpresa, empleado) {
         var empresa = doc(this.devolverEnlace("empresa"), idEmpresa);
