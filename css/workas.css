@@ -46,7 +46,7 @@ hr {
     position: relative !important;
 }
 
-@media only screen and (max-width: 991px) {
+@media only screen and (max-width: 992px) {
     #contenido {
         grid-template-rows: 80px repeat(3,1fr) 70px;
         grid-template-columns: repeat(4,1fr);

@@ -1,3 +1,32 @@
+#asidePrincipal.contenidoChat {
+    display: none;
+}
+
+#contenido.contenidoChat {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    height: 100vh;
+
+    grid-template-areas:
+    "menu menu menu menu"
+    "main main main main"
+    "main main main main"
+    "main main main main";  
+}
+
+#contenido.contenidoChat #principal {
+    padding-bottom: 10px;
+
+}
+
+@media (max-width: 992px) {
+    #contenido.contenidoChat #principal {
+        height: 100%;
+        padding: 0px;
+        padding-top: 20px;
+    }
+}
+
 #btnChat .badge {
     width: 38px;
 }
@@ -50,6 +79,20 @@
     z-index: 10;
 }
 
+@media (max-width: 992px) {
+    #contenido.contenidoChat {
+        display: grid;
+        grid-template-rows: 0px repeat(3,1fr);
+        grid-template-columns: repeat(4,1fr);
+        height: 100vh;
+    }
+
+    #contenido.contenidoChat #principal {
+        padding: 10px;
+        padding-top: 70px;
+    }
+}
+
 @media (max-width: 1200px) {
     #divChatListadoUsuarios {
         width: 50%;
@@ -68,66 +111,6 @@
     background-color: powderblue;
 }
 
-@media (max-width: 850px) {
-    #divChat {
-        position: relative;
-    }
-
-    #divChatListadoUsuarios {
-        width: 100%;
-        position: absolute;
-    }
-
-    #divChatConversacion {
-        width: 100%;
-        position: absolute;
-
-    }
-
-    #inputBuscarUsuarioChat {
-        width: 150px;
-    }
-
-    #btnVolverListChat {
-        display: block;
-    }
-
-    #imgChatSlc img {
-        width: 60px;
-        height: 60px;
-    }
-
-    #nombreUsuChatSlc {
-        font-size: 18px;
-    }
-}
-
-#asidePrincipal.contenidoChat {
-    display: none;
-}
-
-#contenido.contenidoChat {
-    grid-template-rows: 80px repeat(3,1fr);
-    grid-template-columns: repeat(4,1fr);
-
-    grid-template-areas:
-    "menu menu menu menu"
-    "main main main main"
-    "main main main main"
-    "main main main main";  
-}
-
-#contenido.contenidoChat #principal {
-    padding-bottom: 10px;
-    height: 100vh;
-}
-
-#headerListadoUsuarios input {
-    border-radius: 10px;
-    border: black;
-    padding: .3em;
-}
-
 /* LISTADO USUARIOS */
 
 #empresaChat {
@@ -135,13 +118,15 @@
     padding-bottom: 10px;
 }
 
-#listadoUsuariosChat {
-    width: 100%;
+#divChatListadoUsuarios {
+    overflow-y: hidden;
+    background-color: white;
 }
 
-#divChatListadoUsuarios {
-
-    background-color: white;
+#listadoUsuarios {
+    overflow-y: scroll;
+    height: 100%;
+    padding-bottom: 80px;
 }
 
 .divUsuarioChat {
@@ -178,6 +163,54 @@
     height: 70px;
     border-radius: 100%;
     background-color: powderblue;
+}
+
+@media (max-width: 850px) {
+    #divChat {
+        position: relative;
+    }
+
+    #divChatListadoUsuarios {
+        width: 100%;
+        position: absolute;
+    }
+
+    #divChatConversacion {
+        width: 100%;
+        position: absolute;
+
+    }
+
+    #inputBuscarUsuarioChat {
+        width: 150px;
+    }
+
+    #btnVolverListChat {
+        display: block;
+    }
+
+    #imgChatSlc img {
+        width: 45px;
+        height: 45px;
+    }
+
+    #nombreUsuChatSlc {
+        font-size: 18px;
+    }
+
+    #headerListadoUsuarios {
+        height: 60px;
+    }
+
+    #listadoUsuarios {
+        padding-bottom: 60px;
+    }
+}
+
+#headerListadoUsuarios input {
+    border-radius: 10px;
+    border: black;
+    padding: .3em;
 }
 
 .iconoConectado {

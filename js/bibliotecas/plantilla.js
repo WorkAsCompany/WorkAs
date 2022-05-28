@@ -279,7 +279,7 @@ export const crearPaginaInicialEmpresa = (usu, imgPerfil) => {
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <div class="navbar-nav me-auto mb-2 mb-lg-0"></div>
-                        <ul class="navbar-nav">
+                        <ul class="navbar-nav navbarNoCollapse">
                             <li id="opNavEmpleados" class="nav-item">
                                 <a class="nav-link active" aria-current="page">Empleados</a>
                             </li>
@@ -291,6 +291,23 @@ export const crearPaginaInicialEmpresa = (usu, imgPerfil) => {
                             </li>
                             <li id="opNavLogout" class="nav-item">
                                 <a class="nav-link active" aria-current="page">Cerrar sesión</a>
+                            </li>                            
+                            <li id="iconoPerfil" class="divIconoPerfil collapse navbar-collapse">
+                                <img class="imgIconoPerfil" src="${imgPerfil}" alt="">
+                            </li>
+                        </ul>
+                        <ul class="navbar-nav navbarCollapse">
+                            <li id="opNavEmpleadosCollapse" class="nav-item">
+                                <a class="nav-link active" aria-current="page" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">Empleados</a>
+                            </li>
+                            <li id="opNavCalendarioCollapse" class="nav-item">
+                                <a class="nav-link active" aria-current="page" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">Calendario</a>
+                            </li>
+                            <li id="opNavTablonCollapse" class="nav-item">
+                                <a class="nav-link active" aria-current="page" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">Tablón</a>
+                            </li>
+                            <li id="opNavLogoutCollapse" class="nav-item">
+                                <a class="nav-link active" aria-current="page" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">Cerrar sesión</a>
                             </li>                            
                             <li id="iconoPerfil" class="divIconoPerfil collapse navbar-collapse">
                                 <img class="imgIconoPerfil" src="${imgPerfil}" alt="">
@@ -337,7 +354,7 @@ export const crearPaginaInicialEmpleado = (usu, imgPerfil) => {
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <div class="navbar-nav me-auto mb-2 mb-lg-0"></div>
-                        <ul class="navbar-nav">
+                        <ul class="navbar-nav navbarNoCollapse">
                             <li id="opNavCalendario" class="nav-item">
                                 <a class="nav-link active" aria-current="page">Calendario</a>
                             </li>
@@ -346,6 +363,20 @@ export const crearPaginaInicialEmpleado = (usu, imgPerfil) => {
                             </li>
                             <li id="opNavLogout" class="nav-item">
                                 <a class="nav-link active" aria-current="page">Cerrar sesión</a>
+                            </li>
+                            <li id="iconoPerfil" class="divIconoPerfil collapse navbar-collapse">
+                                <img class="imgIconoPerfil" src="${imgPerfil}" alt="">
+                            </li>
+                        </ul>
+                        <ul class="navbar-nav navbarCollapse">
+                            <li id="opNavCalendarioCollapse" class="nav-item">
+                                <a class="nav-link active" aria-current="page" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">Calendario</a>
+                            </li>
+                            <li id="opNavTablonCollapse" class="nav-item">
+                                <a class="nav-link active" aria-current="page" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">Tablón</a>
+                            </li>
+                            <li id="opNavLogoutCollapse" class="nav-item">
+                                <a class="nav-link active" aria-current="page" data-bs-toggle="collapse" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">Cerrar sesión</a>
                             </li>
                             <li id="iconoPerfil" class="divIconoPerfil collapse navbar-collapse">
                                 <img class="imgIconoPerfil" src="${imgPerfil}" alt="">

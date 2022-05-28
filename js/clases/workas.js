@@ -478,6 +478,17 @@ class Workas extends Chat {
             false
         );
 
+        doc.getElementById("opNavEmpleadosCollapse").addEventListener(
+            "click",
+            (e) => {
+                divChat.classList.remove("ocultar");
+                doc.getElementById("asidePrincipal").classList.remove("contenidoChat");
+                doc.getElementById("contenido").classList.remove("contenidoChat");
+                this.modificarPaginaOpNavEmpleados();
+            },
+            false
+        );
+
         doc.getElementById("opNavTablon").addEventListener(
             "click",
             (e) => {
@@ -489,7 +500,29 @@ class Workas extends Chat {
             false
         );
 
+        doc.getElementById("opNavTablonCollapse").addEventListener(
+            "click",
+            (e) => {
+                divChat.classList.remove("ocultar");
+                doc.getElementById("asidePrincipal").classList.remove("contenidoChat");
+                doc.getElementById("contenido").classList.remove("contenidoChat");
+                this.modificarPaginaOpNavTablonAnuncio("empresa");
+            },
+            false
+        );
+
         doc.getElementById("opNavCalendario").addEventListener(
+            "click",
+            (e) => {
+                divChat.classList.remove("ocultar");
+                doc.getElementById("asidePrincipal").classList.remove("contenidoChat");
+                doc.getElementById("contenido").classList.remove("contenidoChat");
+                this.modificarPaginaOpNavCalendario("empresa");
+            },
+            false
+        );
+
+        doc.getElementById("opNavCalendarioCollapse").addEventListener(
             "click",
             (e) => {
                 divChat.classList.remove("ocultar");
@@ -520,6 +553,15 @@ class Workas extends Chat {
             false
         );
 
+        doc.getElementById("opNavLogoutCollapse").addEventListener(
+            "click",
+            async(e) => {
+                this.cerrarSesion();
+                await this.actualizarEstadoConectado(empresa.id, false, "empresa");
+            },
+            false
+        );
+
         window.addEventListener(
             "beforeunload", 
             async(e) => {
@@ -532,6 +574,9 @@ class Workas extends Chat {
             iconoPerfil[i].addEventListener(
                 "click",
                 async(e) => {
+                    divChat.classList.remove("ocultar");
+                    doc.getElementById("asidePrincipal").classList.remove("contenidoChat");
+                    doc.getElementById("contenido").classList.remove("contenidoChat");
                     await this.modificarPaginaOpNavIconoPerfil("empresa");
                 },
                 false
@@ -560,16 +605,6 @@ class Workas extends Chat {
         this.modificarPaginaOpNavCalendario("empleado");
         this.chatMostrarMsgChat();
 
-        for (let i = 0; i < iconoPerfil.length; i++) {
-            iconoPerfil[i].addEventListener(
-                "click",
-                async(e) => {
-                    await this.modificarPaginaOpNavIconoPerfil("empleado");
-                },
-                false
-            );
-        }
-
         doc.getElementById("opNavTablon").addEventListener(
             "click",
             (e) => {
@@ -581,7 +616,29 @@ class Workas extends Chat {
             false
         );
 
+        doc.getElementById("opNavTablonCollapse").addEventListener(
+            "click",
+            (e) => {
+                divChat.classList.remove("ocultar");
+                doc.getElementById("asidePrincipal").classList.remove("contenidoChat");
+                doc.getElementById("contenido").classList.remove("contenidoChat");
+                this.modificarPaginaOpNavTablonAnuncio("empleado");
+            },
+            false
+        );
+
         doc.getElementById("opNavCalendario").addEventListener(
+            "click",
+            (e) => {
+                divChat.classList.remove("ocultar");
+                doc.getElementById("asidePrincipal").classList.remove("contenidoChat");
+                doc.getElementById("contenido").classList.remove("contenidoChat");
+                this.modificarPaginaOpNavCalendario("empleado");
+            },
+            false
+        );
+
+        doc.getElementById("opNavCalendarioCollapse").addEventListener(
             "click",
             (e) => {
                 divChat.classList.remove("ocultar");
@@ -612,6 +669,15 @@ class Workas extends Chat {
             false
         );
 
+        doc.getElementById("opNavLogoutCollapse").addEventListener(
+            "click",
+            async(e) => {
+                this.cerrarSesion();
+                await this.actualizarEstadoConectado(empleado.id, false, "empleado");
+            },
+            false
+        );
+
         window.addEventListener(
             "beforeunload", 
             async(e) => {
@@ -619,6 +685,20 @@ class Workas extends Chat {
             },
             false
         );
+
+        for (let i = 0; i < iconoPerfil.length; i++) {
+            iconoPerfil[i].addEventListener(
+                "click",
+                async(e) => {
+                    divChat.classList.remove("ocultar");
+                    doc.getElementById("asidePrincipal").classList.remove("contenidoChat");
+                    doc.getElementById("contenido").classList.remove("contenidoChat");
+                    await this.modificarPaginaOpNavIconoPerfil("empleado");
+                },
+                false
+            );
+        }
+
         await this.actualizarEstadoConectado(empleado.id, true, "empleado");
     }
 }

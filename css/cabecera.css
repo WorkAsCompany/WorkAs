@@ -55,6 +55,10 @@
     #iconoPerfil img:hover {
         cursor: pointer;
     }
+
+    .navbarCollapse {
+        display: none !important;
+    }
 }
 
 @media only screen and (max-width: 991px) {
@@ -75,5 +79,9 @@
 
     #navBarPrincipal .divLogotipo {
         width: 140px;
+    }
+
+    .navbarNoCollapse {
+        display: none !important;
     }
 }

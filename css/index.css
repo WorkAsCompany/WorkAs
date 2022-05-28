@@ -76,6 +76,7 @@
     color: white;
     text-align: center;
     padding: 15px;
+    overflow: hidden;
 }
 
 #contenidoCarrusel {
