@@ -149,7 +149,9 @@ class Chat extends Calendario {
 
     asignarEvSlcUsuListChat(tipoUsu) {
         var divChats = doc.getElementsByClassName("divUsuarioChat");
-        this.asignarEvVolverListChat();
+        if(doc.getElementById("btnVolverListChat")) {
+            this.asignarEvVolverListChat();
+        }
         for (let i = 0; i < divChats.length; i++) {
             divChats[i].addEventListener(
                 "click",
