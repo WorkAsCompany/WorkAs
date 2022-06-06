@@ -491,7 +491,7 @@ class TablonAnuncio extends RotarTurno {
         var usuSesion = await this.devolverEmpleado(this.getUsu().id);
         var divContenedorToast = doc.getElementById("divToastTablonAnuncio");
 
-        const q = query(this.devolverEnlace("tablonAnuncio"), where("idEmpresa", "==", usuSesion.data().idEmpresa), orderBy("fPubli", "desc"), limit(3));
+        const q = query(this.devolverEnlace("tablonAnuncio"), where("idEmpresa", "==", usuSesion.data().idEmpresa), orderBy("fPubli", "desc"), limit(1));
         onSnapshot(q, {includeMetadataChanges: true}, async(snapshot) => {
             var promesas = [];
             snapshot.docChanges().forEach((anuncio) => {

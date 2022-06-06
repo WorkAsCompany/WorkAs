@@ -500,5 +500,5 @@
     top: 100px !important;
     right: 20px;
     padding-left: 30px;
-    z-index: 9 !important;
+    z-index: 999 !important;
 }

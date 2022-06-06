@@ -119,6 +119,7 @@ class Chat extends Calendario {
             chats.docs.map((chat) => {
 
                 if(chatSlc === chat.id) {
+                    if(doc.getElementById("divChatConversacion") == null) return;
                     var idUsu = chat.data().arrayUsuariosChat;
                     idUsu.splice(chat.data().arrayUsuariosChat.indexOf(usuSesion.id), 1);
                     idUsu = idUsu[0];
