@@ -169,7 +169,7 @@ class Formulario extends Workas {
     }
 
     comprobarCorreo(correo) {
-        var expCorreo = /^[ñ]\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/;
+        var expCorreo = /^[\wñÑ]+([\.-]?\wñÑ+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/;
         return correo != null && correo != "" && this.comprobarExpReg(correo, expCorreo);
     }
 
