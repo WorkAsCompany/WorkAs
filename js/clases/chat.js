@@ -93,7 +93,7 @@ class Chat extends Calendario {
 
     slcUsuListChat = async(tipoUsu, idChat) => {
         if(chatSlc !== "") {
-            var msg = await this.actualizarNMsgSinLeer(chatSlc, 0);
+            var msg = await this.actualizarNMsgSinLeer(idChat, 0);
         }
 
         chatSlc = idChat;
