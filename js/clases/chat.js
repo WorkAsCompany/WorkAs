@@ -96,6 +96,7 @@ class Chat extends Calendario {
             var msg = await this.actualizarNMsgSinLeer(chatSlc, 0);
         }*/
 
+        var esSelec = true;
         chatSlc = idChat;
 
         if(tipoUsu === "empresa") {
@@ -115,9 +116,9 @@ class Chat extends Calendario {
         doc.getElementsByClassName("emojionearea-editor")[0].innerHTML = "";
 
         const chats = await onSnapshot(this.devolverEnlace("chat"), (chats) => {
-            chats.docs.map((chat) => {
 
-                if(chatSlc === chat.id && chat._document.documentState === 1) {
+            chats.docs.map((chat) => {
+                if(chatSlc === chat.id && (esSelec || chat._document.documentState === 1)) {
                     if(doc.getElementById("divChatConversacion") == null) return;
                     var idUsu = chat.data().arrayUsuariosChat;
                     idUsu.splice(chat.data().arrayUsuariosChat.indexOf(usuSesion.id), 1);
@@ -143,7 +144,8 @@ class Chat extends Calendario {
                         this.mostrarMsgConversacion(chat, nMsgSinLeer.data().nMsgSinLeer);
                     }
                 }
-            });  
+            }); 
+            esSelec = false; 
         });
     }
 
