@@ -150,8 +150,7 @@ export const devolverCrearEmpleadoForm = () => {
                             <div class="mb-3">
                                 <label for="txtDni" class="form-label">DNI</label>
                                 <input type="text" class="form-control inputAnyadirEmpleado" id="txtDni" placeholder="Introduce el dni">
-                                <div id="dniMsgError" class="form-text">
-                                    else.</div>
+                                <div id="dniMsgError" class="form-text"></div>
                             </div>
                             <div class="mb-3">
                                 <label for="txtNombre" class="form-label">Nombre Empleado</label>
