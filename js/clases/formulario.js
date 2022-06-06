@@ -159,7 +159,7 @@ class Formulario extends Workas {
     }
 
     comprobarDir(dir) {
-        var expDir = /^[a-zA-Z0-9\s,.'-]{5,100}$/;
+        var expDir = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ0-9\s,.'-º/]{5,100}$/;
         return dir != null && dir != "" && this.comprobarExpReg(dir, expDir);
     }
 
