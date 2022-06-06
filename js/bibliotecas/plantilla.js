@@ -1270,6 +1270,8 @@ export const crearDivMostrarDiaConversacion = (fecha) => {
 
 //Crea una fila de usuario del chat.
 export const crearFilaListUsuChat = (usuario, chat, chatSlc) => {
+    if(!usuario) return;
+    
     var nombreChat = "";
     var iconoPerfil = "";
     var nMsg = 0;
