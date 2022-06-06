@@ -150,33 +150,29 @@ export const devolverCrearEmpleadoForm = () => {
                             <div class="mb-3">
                                 <label for="txtDni" class="form-label">DNI</label>
                                 <input type="text" class="form-control inputAnyadirEmpleado" id="txtDni" placeholder="Introduce el dni">
-                                <div id="dniMsgError" class="form-text">We'll never share your email with anyone
+                                <div id="dniMsgError" class="form-text">
                                     else.</div>
                             </div>
                             <div class="mb-3">
                                 <label for="txtNombre" class="form-label">Nombre Empleado</label>
                                 <input type="text" class="form-control inputAnyadirEmpleado" id="txtNombre" placeholder="Introduce el nombre">
-                                <div id="nombreEmpeladoMsgError" class="form-text">We'll never share your email
-                                    with anyone else.</div>
+                                <div id="nombreEmpeladoMsgError" class="form-text"></div>
                             </div>
                             <div class="mb-3">
                                 <label for="txtApellidos" class="form-label">Apellidos Empleado</label>
                                 <input type="text" class="form-control inputAnyadirEmpleado" id="txtApellidos" placeholder="Introduce los apellidos">
-                                <div id="apellidosEmpeladoMsgError" class="form-text">We'll never share your
-                                    email with anyone else.</div>
+                                <div id="apellidosEmpeladoMsgError" class="form-text"></div>
                             </div>
                             <div class="mb-3">
                                 <label for="txtEmail" class="form-label">Correo Electrónico</label>
                                 <input type="email" class="form-control inputAnyadirEmpleado" id="txtEmail" placeholder="Introduce el email">
-                                <div id="emailMsgError" class="form-text">We'll never share your email with
-                                    anyone else.</div>
+                                <div id="emailMsgError" class="form-text"></div>
                             </div>
                             <div class="mb-3">
                                 <label for="txtPuestoTrabajo" class="form-label">Puesto trabajo</label>
                                 <input type="text" class="form-control inputAnyadirEmpleado" id="txtPuestoTrabajo"
                                     placeholder="Introduce el puesto de trabajo">
-                                <div id="puestoMsgError" class="form-text">We'll never share your email with
-                                    anyone else.</div>
+                                <div id="puestoMsgError" class="form-text"></div>
                             </div>
                             <div class="mb-3">
                                 <label for="turnoJornada" class="form-label">Elije el turno</label>
@@ -213,33 +209,28 @@ export const devolverEditarEmpleadoForm = () => {
                             <div class="mb-3">
                                 <label for="txtEditarDni" class="form-label">DNI</label>
                                 <input type="text" class="form-control inputEditarEmpleado" id="txtEditarDni" placeholder="Introduce el dni">
-                                <div id="dniMsgError" class="form-text">We'll never share your email with anyone
-                                    else.</div>
+                                <div id="dniMsgError" class="form-text"></div>
                             </div>
                             <div class="mb-3">
                                 <label for="txtEditarNombre" class="form-label">Nombre Empleado</label>
                                 <input type="text" class="form-control inputEditarEmpleado" id="txtEditarNombre" placeholder="Introduce el nombre">
-                                <div id="nombreEmpeladoMsgError" class="form-text">We'll never share your email
-                                    with anyone else.</div>
+                                <div id="nombreEmpeladoMsgError" class="form-text"></div>
                             </div>
                             <div class="mb-3">
                                 <label for="txtEditarApellidos" class="form-label">Apellidos Empleado</label>
                                 <input type="text" class="form-control inputEditarEmpleado" id="txtEditarApellidos" placeholder="Introduce los apellidos">
-                                <div id="apellidosEmpeladoMsgError" class="form-text">We'll never share your
-                                    email with anyone else.</div>
+                                <div id="apellidosEmpeladoMsgError" class="form-text"></div>
                             </div>
                             <div class="mb-3">
                                 <label for="txtEditarEmail" class="form-label">Correo Electrónico</label>
                                 <input type="email" class="form-control inputEditarEmpleado" id="txtEditarEmail" placeholder="Introduce el email" disabled>
-                                <div id="emailMsgError" class="form-text">We'll never share your email with
-                                    anyone else.</div>
+                                <div id="emailMsgError" class="form-text"></div>
                             </div>
                             <div class="mb-3">
                                 <label for="txtEditarPuestoTrabajo" class="form-label">Puesto trabajo</label>
                                 <input type="text" class="form-control inputEditarEmpleado" id="txtEditarPuestoTrabajo"
                                     placeholder="Introduce el puesto de trabajo">
-                                <div id="puestoMsgError" class="form-text">We'll never share your email with
-                                    anyone else.</div>
+                                <div id="puestoMsgError" class="form-text"></div>
                             </div>
                             <div class="mb-3">
                                 <label for="turnoJornada" class="form-label">Elije el turno</label>
