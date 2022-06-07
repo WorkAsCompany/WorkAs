@@ -92,11 +92,6 @@ class Chat extends Calendario {
     }
 
     slcUsuListChat = async(tipoUsu, idChat) => {
-        /*if(chatSlc !== "") {
-            var msg = await this.actualizarNMsgSinLeer(chatSlc, 0);
-        }*/
-
-        var esSelec = true;
         chatSlc = idChat;
 
         if(tipoUsu === "empresa") {
@@ -118,7 +113,8 @@ class Chat extends Calendario {
         const chats = await onSnapshot(this.devolverEnlace("chat"), (chats) => {
 
             chats.docs.map((chat) => {
-                if(chatSlc === chat.id && (esSelec || chat._document.documentState === 1)) {
+
+                if(chatSlc === chat.id) {
                     if(doc.getElementById("divChatConversacion") == null) return;
                     var idUsu = chat.data().arrayUsuariosChat;
                     idUsu.splice(chat.data().arrayUsuariosChat.indexOf(usuSesion.id), 1);
@@ -144,8 +140,7 @@ class Chat extends Calendario {
                         this.mostrarMsgConversacion(chat, nMsgSinLeer.data().nMsgSinLeer);
                     }
                 }
-            }); 
-            esSelec = false; 
+            });  
         });
     }
 
